@@ -869,7 +869,7 @@ export default function LandingPage() {
                   <h5 className="font-heading font-bold text-slate-900 text-sm">
                     Pengurus Koperasi Sekolah
                   </h5>
-                  <p className="text-xs text-slate-400">SMK Negeri 1 — Ekosistem KantinPay</p>
+                  <p className="text-xs text-slate-400">SMK Negeri 7 Semarang — Ekosistem KantinPay</p>
                 </div>
 
                 <div className="w-10 h-10 rounded-2xl bg-[#5CC0F7] text-white flex items-center justify-center font-heading font-bold text-sm">
@@ -1161,7 +1161,7 @@ export default function LandingPage() {
                   </span>
                 </div>
                 <p className="text-xs text-slate-600 text-left md:text-right">
-                  SMK Negeri 1 — Sistem Pembayaran Digital Kantin Sekolah
+                  SMK Negeri 7 Semarang — Sistem Pembayaran Digital Kantin Sekolah
                 </p>
               </div>
             </div>

@@ -110,7 +110,7 @@ export default function TenantsPage() {
 
   const handleInviteVendor = (canteen: Canteen) => {
     const waText = encodeURIComponent(
-      `Halo ${canteen.ownerName} (${canteen.name}), akun merchant KantinPay Anda telah aktif. Anda dapat memantau penjualan realtime melalui portal KantinPay SMK Negeri 1.`
+      `Halo ${canteen.ownerName} (${canteen.name}), akun merchant KantinPay Anda telah aktif. Anda dapat memantau penjualan realtime melalui portal KantinPay SMK Negeri 7 Semarang.`
     );
     window.open(`https://wa.me/${canteen.whatsappNumber.replace(/\D/g, "")}?text=${waText}`, "_blank");
   };
