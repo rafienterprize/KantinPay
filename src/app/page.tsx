@@ -15,13 +15,11 @@ import {
   Zap,
   Lock,
   Layers,
-  HeartHandshake,
-  QrCode,
   Store,
   Clock,
   Coins,
 } from "lucide-react";
-import { formatRupiah } from "@/lib/utils";
+import { PhoneMockup } from "@/components/ui/PhoneMockup";
 
 export default function LandingPage() {
   // FAQ accordion active item state
@@ -161,7 +159,7 @@ export default function LandingPage() {
       </header>
 
       {/* =========================================================================
-          2. HERO SECTION (Text Left, Realistic Phone Right with Organic Pastel Blobs)
+          2. HERO SECTION (Text Left, Phone Frame Right with Organic Pastel Blobs)
          ========================================================================= */}
       <section className="relative pt-12 pb-20 sm:pt-20 sm:pb-28 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -206,126 +204,123 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Right Column: Phone Mockup with Organic Pastel Background Blob */}
+          {/* Right Column: Phone Mockup with the User's Frame and Organic Pastel Blobs */}
           <div className="lg:col-span-6 flex justify-center relative">
-            {/* Soft Organic Pastel Blobs behind the phone matching reference */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[460px] bg-gradient-to-br from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/50 rounded-[48px] -rotate-3 -z-10 blur-xs" />
-            <div className="absolute top-1/3 -right-6 w-36 h-36 bg-[#5CC0F7]/15 rounded-full blur-2xl -z-10" />
+            {/* Soft Organic Pastel Blobs behind the phone */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-br from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/50 rounded-[56px] -rotate-3 -z-10 blur-xs" />
+            <div className="absolute top-1/3 -right-6 w-36 h-36 bg-[#5CC0F7]/20 rounded-full blur-2xl -z-10" />
 
-            {/* Realistic iPhone Device Frame */}
-            <div className="w-[300px] sm:w-[320px] bg-slate-900 rounded-[48px] p-3 shadow-2xl border-4 border-slate-800">
-              {/* Inner Screen */}
-              <div className="bg-[#FFFFFF] rounded-[40px] overflow-hidden border border-slate-100 flex flex-col h-[580px]">
-                {/* Status Bar & Dynamic Island */}
-                <div className="pt-3 px-6 pb-2 flex items-center justify-between text-[11px] font-heading font-semibold text-slate-800 bg-white">
-                  <span>09:41</span>
-                  <div className="w-20 h-4 bg-slate-900 rounded-full" />
-                  <div className="flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                    <span>100%</span>
+            {/* User's Exact Phone Frame Component */}
+            <PhoneMockup>
+              {/* App Screen Content inside Frame */}
+              <div className="flex-1 p-3.5 bg-[#F8FAFC] overflow-y-auto space-y-3">
+                {/* Top Bar inside app */}
+                <div className="flex items-center justify-between pt-1">
+                  <div>
+                    <p className="text-[9px] text-slate-400 font-heading">Selamat Pagi,</p>
+                    <h4 className="font-heading font-bold text-xs text-slate-900">Ahmad Rifai</h4>
+                  </div>
+                  <span className="text-[9px] font-heading px-2 py-0.5 rounded-full bg-[#D6EFFF] text-[#0284c7] font-bold">
+                    XII SIJA 1
+                  </span>
+                </div>
+
+                {/* Saldo Digital Card */}
+                <div className="rounded-2xl bg-gradient-to-br from-[#5CC0F7] to-[#38bdf8] p-3.5 text-white shadow-2xs space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px] text-white/90">
+                    <span>Saldo KantinPay</span>
+                    <Coins className="w-3.5 h-3.5 text-white/90" />
+                  </div>
+                  <h3 className="font-heading font-bold text-xl sm:text-2xl">Rp 85.000</h3>
+                  <div className="pt-1.5 border-t border-white/20 flex items-center justify-between text-[9px] text-white/90 font-medium">
+                    <span>NIS: 20241001</span>
+                    <span className="font-bold">Koperasi Aktif</span>
                   </div>
                 </div>
 
-                {/* App Screen Content */}
-                <div className="flex-1 p-4 bg-[#F8FAFC] overflow-y-auto space-y-3.5">
-                  {/* Top Bar inside app */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] text-slate-400 font-heading">Selamat Pagi,</p>
-                      <h4 className="font-heading font-bold text-sm text-slate-900">Ahmad Rifai</h4>
-                    </div>
-                    <span className="text-[10px] font-heading px-2 py-0.5 rounded-full bg-[#D6EFFF] text-[#0284c7] font-semibold">
-                      XII SIJA 1
+                {/* Quick Canteen Selection */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] font-heading font-bold text-slate-800">
+                      Pilih 8 Kantin
+                    </span>
+                    <span className="text-[9px] text-[#0284c7] font-heading font-semibold">
+                      Lihat Semua
                     </span>
                   </div>
-
-                  {/* Saldo Digital Card */}
-                  <div className="rounded-3xl bg-gradient-to-br from-[#5CC0F7] to-[#38bdf8] p-4 text-white shadow-xs space-y-2">
-                    <div className="flex items-center justify-between text-xs text-white/90">
-                      <span>Saldo KantinPay</span>
-                      <Coins className="w-4 h-4 text-white/80" />
-                    </div>
-                    <h3 className="font-heading font-bold text-2xl">Rp 85.000</h3>
-                    <div className="pt-2 border-t border-white/20 flex items-center justify-between text-[10px] text-white/90">
-                      <span>NIS: 20241001</span>
-                      <span className="font-semibold">Koperasi Aktif</span>
-                    </div>
+                  <div className="grid grid-cols-4 gap-1.5 text-center">
+                    {[
+                      { name: "Kantin 1", icon: "🍛" },
+                      { name: "Kantin 2", icon: "🍜" },
+                      { name: "Kantin 3", icon: "🍗" },
+                      { name: "Kantin 4", icon: "🥟" },
+                    ].map((k) => (
+                      <div
+                        key={k.name}
+                        className="p-1.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs"
+                      >
+                        <span className="text-sm block">{k.icon}</span>
+                        <span className="text-[8px] font-heading font-semibold text-slate-700 block mt-0.5">
+                          {k.name}
+                        </span>
+                      </div>
+                    ))}
                   </div>
+                </div>
 
-                  {/* Quick Canteen Selection */}
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[11px] font-heading font-bold text-slate-800">
-                        Pilih 8 Kantin
+                {/* Recent Transactions List */}
+                <div>
+                  <span className="text-[10px] font-heading font-bold text-slate-800 block mb-1.5">
+                    Transaksi Terakhir
+                  </span>
+                  <div className="space-y-1.5">
+                    <div className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between text-[10px]">
+                      <div>
+                        <p className="font-heading font-bold text-slate-800 text-[10px]">
+                          Kantin 1 (Bu Nur)
+                        </p>
+                        <p className="text-[8px] text-slate-400">Nasi Rames Ayam • 09:30</p>
+                      </div>
+                      <span className="font-heading font-bold text-rose-500 text-[10px]">
+                        -Rp 15.000
                       </span>
-                      <span className="text-[10px] text-[#0284c7] font-heading">Lihat Semua</span>
                     </div>
-                    <div className="grid grid-cols-4 gap-1.5 text-center">
-                      {[
-                        { name: "Kantin 1", icon: "🍛" },
-                        { name: "Kantin 2", icon: "🍜" },
-                        { name: "Kantin 3", icon: "🍗" },
-                        { name: "Kantin 4", icon: "🥟" },
-                      ].map((k) => (
-                        <div
-                          key={k.name}
-                          className="p-2 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-[#5CC0F7] transition"
-                        >
-                          <span className="text-base block">{k.icon}</span>
-                          <span className="text-[9px] font-heading font-semibold text-slate-700 block mt-0.5">
-                            {k.name}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
 
-                  {/* Recent Transactions List */}
-                  <div>
-                    <span className="text-[11px] font-heading font-bold text-slate-800 block mb-2">
-                      Transaksi Terakhir
-                    </span>
-                    <div className="space-y-1.5">
-                      <div className="p-2.5 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-between text-xs">
-                        <div>
-                          <p className="font-heading font-bold text-slate-800 text-[11px]">Kantin 1 (Bu Nur)</p>
-                          <p className="text-[9px] text-slate-400">Nasi Rames Ayam • 09:30</p>
-                        </div>
-                        <span className="font-heading font-bold text-rose-500 text-xs">-Rp 15.000</span>
+                    <div className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between text-[10px]">
+                      <div>
+                        <p className="font-heading font-bold text-slate-800 text-[10px]">
+                          Top Up Koperasi
+                        </p>
+                        <p className="text-[8px] text-slate-400">Kasir Koperasi • 08:15</p>
                       </div>
-
-                      <div className="p-2.5 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-between text-xs">
-                        <div>
-                          <p className="font-heading font-bold text-slate-800 text-[11px]">Top Up Koperasi</p>
-                          <p className="text-[9px] text-slate-400">Kasir Koperasi • 08:15</p>
-                        </div>
-                        <span className="font-heading font-bold text-emerald-600 text-xs">+Rp 50.000</span>
-                      </div>
+                      <span className="font-heading font-bold text-emerald-600 text-[10px]">
+                        +Rp 50.000
+                      </span>
                     </div>
-                  </div>
-                </div>
-
-                {/* Bottom App Nav */}
-                <div className="h-12 bg-white border-t border-slate-100 grid grid-cols-4 items-center px-4 text-center">
-                  <div className="text-[#5CC0F7] text-[10px] font-heading font-bold flex flex-col items-center">
-                    <Utensils className="w-3.5 h-3.5" />
-                    <span>Home</span>
-                  </div>
-                  <div className="text-slate-400 text-[10px] font-heading flex flex-col items-center">
-                    <Store className="w-3.5 h-3.5" />
-                    <span>Kantin</span>
-                  </div>
-                  <div className="text-slate-400 text-[10px] font-heading flex flex-col items-center">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>Riwayat</span>
-                  </div>
-                  <div className="text-slate-400 text-[10px] font-heading flex flex-col items-center">
-                    <Wallet className="w-3.5 h-3.5" />
-                    <span>Saldo</span>
                   </div>
                 </div>
               </div>
-            </div>
+
+              {/* Bottom App Nav */}
+              <div className="h-10 bg-white border-t border-slate-100 grid grid-cols-4 items-center px-2 text-center shrink-0">
+                <div className="text-[#5CC0F7] text-[9px] font-heading font-bold flex flex-col items-center">
+                  <Utensils className="w-3 h-3" />
+                  <span>Home</span>
+                </div>
+                <div className="text-slate-400 text-[9px] font-heading flex flex-col items-center">
+                  <Store className="w-3 h-3" />
+                  <span>Kantin</span>
+                </div>
+                <div className="text-slate-400 text-[9px] font-heading flex flex-col items-center">
+                  <Clock className="w-3 h-3" />
+                  <span>Riwayat</span>
+                </div>
+                <div className="text-slate-400 text-[9px] font-heading flex flex-col items-center">
+                  <Wallet className="w-3 h-3" />
+                  <span>Saldo</span>
+                </div>
+              </div>
+            </PhoneMockup>
           </div>
         </div>
       </section>
@@ -354,10 +349,8 @@ export default function LandingPage() {
 
           {/* Visual Right: Cooperative Daily Ledger Card with Pastel BG */}
           <div className="lg:col-span-7 flex justify-center relative">
-            {/* Pastel background shape */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#D6EFFF]/40 to-[#EBF7FF]/70 rounded-[40px] -rotate-1 -z-10" />
 
-            {/* Widget Card */}
             <div className="w-full max-w-lg bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 space-y-4 my-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-2.5">
@@ -423,80 +416,69 @@ export default function LandingPage() {
          ========================================================================= */}
       <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Visual Left: Phone showing WhatsApp Bot Conversation */}
+          {/* Visual Left: Phone showing WhatsApp Bot Conversation with New Frame */}
           <div className="lg:col-span-6 flex justify-center relative order-2 lg:order-1">
-            {/* Pastel Blob behind */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[460px] bg-gradient-to-tr from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/60 rounded-[48px] rotate-2 -z-10 blur-xs" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-tr from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/60 rounded-[56px] rotate-2 -z-10 blur-xs" />
 
-            {/* Phone Frame */}
-            <div className="w-[300px] sm:w-[320px] bg-slate-900 rounded-[48px] p-3 shadow-2xl border-4 border-slate-800">
-              <div className="bg-[#FFFFFF] rounded-[40px] overflow-hidden border border-slate-100 flex flex-col h-[540px]">
-                {/* Status Bar */}
-                <div className="pt-3 px-6 pb-2 flex items-center justify-between text-[11px] font-heading font-semibold text-slate-800 bg-white">
-                  <span>09:42</span>
-                  <div className="w-20 h-4 bg-slate-900 rounded-full" />
-                  <span>100%</span>
+            <PhoneMockup>
+              {/* WhatsApp Chat Header */}
+              <div className="bg-emerald-600 text-white p-3 flex items-center gap-2 shrink-0">
+                <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs font-heading">
+                  KP
+                </div>
+                <div>
+                  <h4 className="font-heading font-bold text-[11px]">KantinPay Bot Official</h4>
+                  <p className="text-[8px] text-emerald-100">Akun WhatsApp Sekolah</p>
+                </div>
+              </div>
+
+              {/* WhatsApp Chat Messages */}
+              <div className="flex-1 p-2.5 bg-[#ECE5DD]/40 overflow-y-auto space-y-2 text-[10px]">
+                {/* User message */}
+                <div className="flex justify-end">
+                  <div className="bg-[#DCF8C6] p-2 rounded-xl rounded-tr-xs shadow-2xs max-w-[190px] text-slate-800">
+                    <p className="font-bold">BAYAR</p>
+                    <span className="text-[8px] text-slate-400 block text-right">09:40</span>
+                  </div>
                 </div>
 
-                {/* WhatsApp Chat Header */}
-                <div className="bg-emerald-600 text-white p-3 flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs font-heading">
-                    KP
-                  </div>
-                  <div>
-                    <h4 className="font-heading font-bold text-xs">KantinPay Bot Official</h4>
-                    <p className="text-[9px] text-emerald-100">Akun WhatsApp Sekolah</p>
+                {/* Bot reply: Canteen menu */}
+                <div className="flex justify-start">
+                  <div className="bg-white p-2 rounded-xl rounded-tl-xs shadow-2xs max-w-[210px] text-slate-800 space-y-0.5">
+                    <p className="font-bold text-emerald-700 text-[10px]">Silakan pilih kantin:</p>
+                    <p className="text-[9px] text-slate-600 leading-tight">
+                      1. Kantin 1 (Bu Nur)<br />
+                      2. Kantin 2 (Pak Joko)<br />
+                      3. Kantin 3 (Ibu Siti)<br />
+                      ...s/d Kantin 8
+                    </p>
+                    <span className="text-[8px] text-slate-400 block text-right">09:40</span>
                   </div>
                 </div>
 
-                {/* WhatsApp Chat Messages */}
-                <div className="flex-1 p-3 bg-[#ECE5DD]/40 overflow-y-auto space-y-2.5 text-[11px]">
-                  {/* User message */}
-                  <div className="flex justify-end">
-                    <div className="bg-[#DCF8C6] p-2.5 rounded-2xl rounded-tr-xs shadow-2xs max-w-[210px] text-slate-800">
-                      <p className="font-bold">BAYAR</p>
-                      <span className="text-[9px] text-slate-400 block text-right">09:40</span>
-                    </div>
+                {/* User reply */}
+                <div className="flex justify-end">
+                  <div className="bg-[#DCF8C6] p-1.5 rounded-xl rounded-tr-xs shadow-2xs text-slate-800">
+                    <p className="font-bold">1</p>
+                    <span className="text-[8px] text-slate-400 block text-right">09:41</span>
                   </div>
+                </div>
 
-                  {/* Bot reply: Canteen menu */}
-                  <div className="flex justify-start">
-                    <div className="bg-white p-2.5 rounded-2xl rounded-tl-xs shadow-2xs max-w-[230px] text-slate-800 space-y-1">
-                      <p className="font-bold text-emerald-700">Silakan pilih kantin tujuan:</p>
-                      <p className="text-[10px] text-slate-600 leading-tight">
-                        1. Kantin 1 (Bu Nur)<br />
-                        2. Kantin 2 (Pak Joko)<br />
-                        3. Kantin 3 (Ibu Siti)<br />
-                        ...s/d Kantin 8
-                      </p>
-                      <span className="text-[9px] text-slate-400 block text-right">09:40</span>
-                    </div>
-                  </div>
-
-                  {/* User reply */}
-                  <div className="flex justify-end">
-                    <div className="bg-[#DCF8C6] p-2 rounded-2xl rounded-tr-xs shadow-2xs text-slate-800">
-                      <p className="font-bold">1</p>
-                      <span className="text-[9px] text-slate-400 block text-right">09:41</span>
-                    </div>
-                  </div>
-
-                  {/* Bot reply: Success */}
-                  <div className="flex justify-start">
-                    <div className="bg-white p-2.5 rounded-2xl rounded-tl-xs shadow-2xs max-w-[230px] text-slate-800 space-y-1 border-l-4 border-emerald-500">
-                      <p className="font-bold text-emerald-700">Pembayaran Berhasil! 🎉</p>
-                      <p className="text-[10px] text-slate-600">
-                        Kantin: <strong>Kantin 1</strong><br />
-                        Nominal: <strong>Rp 10.000</strong><br />
-                        Sisa saldo: <strong>Rp 75.000</strong>
-                      </p>
-                      <p className="text-[9px] text-slate-400">Terima kasih telah jajan di kantin.</p>
-                      <span className="text-[9px] text-slate-400 block text-right">09:41</span>
-                    </div>
+                {/* Bot reply: Success */}
+                <div className="flex justify-start">
+                  <div className="bg-white p-2 rounded-xl rounded-tl-xs shadow-2xs max-w-[210px] text-slate-800 space-y-0.5 border-l-3 border-emerald-500">
+                    <p className="font-bold text-emerald-700 text-[10px]">Pembayaran Berhasil! 🎉</p>
+                    <p className="text-[9px] text-slate-600">
+                      Kantin: <strong>Kantin 1</strong><br />
+                      Nominal: <strong>Rp 10.000</strong><br />
+                      Sisa saldo: <strong>Rp 75.000</strong>
+                    </p>
+                    <p className="text-[8px] text-slate-400">Terima kasih telah jajan di kantin.</p>
+                    <span className="text-[8px] text-slate-400 block text-right">09:41</span>
                   </div>
                 </div>
               </div>
-            </div>
+            </PhoneMockup>
           </div>
 
           {/* Text Right */}
@@ -546,66 +528,54 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Phone Right: Easy Payment Screen */}
+          {/* Phone Right: Easy Payment Screen with New Frame */}
           <div className="lg:col-span-6 flex justify-center relative">
-            {/* Pastel Blob behind */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[460px] bg-gradient-to-br from-[#D6EFFF]/60 via-[#EBF7FF] to-[#D6EFFF]/40 rounded-[48px] -rotate-2 -z-10 blur-xs" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-br from-[#D6EFFF]/60 via-[#EBF7FF] to-[#D6EFFF]/40 rounded-[56px] -rotate-2 -z-10 blur-xs" />
 
-            {/* Phone Frame */}
-            <div className="w-[300px] sm:w-[320px] bg-slate-900 rounded-[48px] p-3 shadow-2xl border-4 border-slate-800">
-              <div className="bg-[#FFFFFF] rounded-[40px] overflow-hidden border border-slate-100 flex flex-col h-[540px]">
-                {/* Status Bar */}
-                <div className="pt-3 px-6 pb-2 flex items-center justify-between text-[11px] font-heading font-semibold text-slate-800 bg-white">
-                  <span>09:43</span>
-                  <div className="w-20 h-4 bg-slate-900 rounded-full" />
-                  <span>100%</span>
+            <PhoneMockup>
+              <div className="p-4 flex-1 flex flex-col justify-between bg-white text-center">
+                <div className="space-y-3 pt-2">
+                  <div className="w-11 h-11 rounded-2xl bg-[#D6EFFF] text-[#0284c7] mx-auto flex items-center justify-center font-bold text-base font-heading">
+                    1
+                  </div>
+                  <div>
+                    <h4 className="font-heading font-bold text-sm text-slate-900">
+                      Kantin 1 (Bu Nur)
+                    </h4>
+                    <p className="text-[10px] text-slate-400">Nasi Rames &amp; Sayur Asem</p>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                    <span className="text-[9px] text-slate-400 font-heading block">
+                      Nominal Pembayaran
+                    </span>
+                    <h3 className="font-heading font-bold text-xl text-slate-900 mt-0.5">
+                      Rp 12.000
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {["Rp 5.000", "Rp 10.000", "Rp 15.000"].map((nominal) => (
+                      <div
+                        key={nominal}
+                        className="py-1.5 px-0.5 rounded-xl bg-slate-50 border border-slate-200 text-[9px] font-heading font-semibold text-slate-700"
+                      >
+                        {nominal}
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                {/* Inner Screen */}
-                <div className="p-5 flex-1 flex flex-col justify-between bg-white text-center">
-                  <div className="space-y-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#D6EFFF] text-[#0284c7] mx-auto flex items-center justify-center font-bold text-lg font-heading">
-                      1
-                    </div>
-                    <div>
-                      <h4 className="font-heading font-bold text-base text-slate-900">
-                        Kantin 1 (Bu Nur)
-                      </h4>
-                      <p className="text-xs text-slate-400">Nasi Rames &amp; Sayur Asem</p>
-                    </div>
-
-                    <div className="p-4 rounded-3xl bg-slate-50 border border-slate-100">
-                      <span className="text-[10px] text-slate-400 font-heading block">
-                        Nominal Pembayaran
-                      </span>
-                      <h3 className="font-heading font-bold text-2xl text-slate-900 mt-1">
-                        Rp 12.000
-                      </h3>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-2">
-                      {["Rp 5.000", "Rp 10.000", "Rp 15.000"].map((nominal) => (
-                        <div
-                          key={nominal}
-                          className="py-2 px-1 rounded-xl bg-slate-50 border border-slate-200 text-[10px] font-heading font-semibold text-slate-700"
-                        >
-                          {nominal}
-                        </div>
-                      ))}
-                    </div>
+                <div className="space-y-1.5 pt-2">
+                  <div className="w-full py-2.5 rounded-xl bg-[#5CC0F7] text-white font-heading font-bold text-[11px] shadow-2xs">
+                    Bayar Sekarang
                   </div>
-
-                  <div className="space-y-2 pt-4">
-                    <div className="w-full py-3.5 rounded-2xl bg-[#5CC0F7] text-white font-heading font-bold text-xs shadow-xs">
-                      Bayar Sekarang
-                    </div>
-                    <p className="text-[10px] text-slate-400 font-heading">
-                      Sisa Saldo: Rp 85.000
-                    </p>
-                  </div>
+                  <p className="text-[9px] text-slate-400 font-heading">
+                    Sisa Saldo: Rp 85.000
+                  </p>
                 </div>
               </div>
-            </div>
+            </PhoneMockup>
           </div>
         </div>
       </section>
@@ -615,81 +585,69 @@ export default function LandingPage() {
          ========================================================================= */}
       <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Phone Left: History View */}
+          {/* Phone Left: History View with New Frame */}
           <div className="lg:col-span-6 flex justify-center relative order-2 lg:order-1">
-            {/* Pastel Blob behind */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[460px] bg-gradient-to-tr from-[#EBF7FF] via-[#D6EFFF] to-[#EBF7FF] rounded-[48px] rotate-3 -z-10 blur-xs" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-tr from-[#EBF7FF] via-[#D6EFFF] to-[#EBF7FF] rounded-[56px] rotate-3 -z-10 blur-xs" />
 
-            {/* Phone Frame */}
-            <div className="w-[300px] sm:w-[320px] bg-slate-900 rounded-[48px] p-3 shadow-2xl border-4 border-slate-800">
-              <div className="bg-[#FFFFFF] rounded-[40px] overflow-hidden border border-slate-100 flex flex-col h-[540px]">
-                {/* Status Bar */}
-                <div className="pt-3 px-6 pb-2 flex items-center justify-between text-[11px] font-heading font-semibold text-slate-800 bg-white">
-                  <span>09:45</span>
-                  <div className="w-20 h-4 bg-slate-900 rounded-full" />
-                  <span>100%</span>
+            <PhoneMockup>
+              <div className="p-3.5 bg-slate-50 flex-1 space-y-2.5 overflow-y-auto">
+                <div className="flex items-center justify-between pt-1">
+                  <h4 className="font-heading font-bold text-xs text-slate-900">
+                    Riwayat Transaksi
+                  </h4>
+                  <span className="text-[9px] text-slate-400 font-heading">Semua</span>
                 </div>
 
-                {/* Inner Screen */}
-                <div className="p-4 bg-slate-50 flex-1 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-heading font-bold text-sm text-slate-900">
-                      Riwayat Transaksi
-                    </h4>
-                    <span className="text-[10px] text-slate-400 font-heading">Semua</span>
-                  </div>
-
-                  {/* List of items */}
-                  <div className="space-y-2">
-                    {[
-                      {
-                        title: "Kantin 2 (Pak Joko)",
-                        sub: "Mie Ayam Pangsit • Hari Ini",
-                        amount: "-Rp 14.000",
-                        type: "payment",
-                      },
-                      {
-                        title: "Top Up Kasir Koperasi",
-                        sub: "Setoran Tunai • Hari Ini",
-                        amount: "+Rp 50.000",
-                        type: "topup",
-                      },
-                      {
-                        title: "Kantin 5 (Bu Maya)",
-                        sub: "Jus Alpukat Segar • Kemarin",
-                        amount: "-Rp 8.000",
-                        type: "payment",
-                      },
-                      {
-                        title: "Kantin 4 (Pak Budi)",
-                        sub: "Risol Mayo & Tahu • Kemarin",
-                        amount: "-Rp 6.000",
-                        type: "payment",
-                      },
-                    ].map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="p-3 bg-white rounded-2xl border border-slate-200/70 flex items-center justify-between text-xs"
-                      >
-                        <div>
-                          <p className="font-heading font-bold text-slate-800 text-[11px]">
-                            {item.title}
-                          </p>
-                          <p className="text-[9px] text-slate-400">{item.sub}</p>
-                        </div>
-                        <span
-                          className={`font-heading font-bold text-xs ${
-                            item.type === "topup" ? "text-emerald-600" : "text-slate-800"
-                          }`}
-                        >
-                          {item.amount}
-                        </span>
+                {/* List of items */}
+                <div className="space-y-1.5">
+                  {[
+                    {
+                      title: "Kantin 2 (Pak Joko)",
+                      sub: "Mie Ayam Pangsit • Hari Ini",
+                      amount: "-Rp 14.000",
+                      type: "payment",
+                    },
+                    {
+                      title: "Top Up Kasir Koperasi",
+                      sub: "Setoran Tunai • Hari Ini",
+                      amount: "+Rp 50.000",
+                      type: "topup",
+                    },
+                    {
+                      title: "Kantin 5 (Bu Maya)",
+                      sub: "Jus Alpukat Segar • Kemarin",
+                      amount: "-Rp 8.000",
+                      type: "payment",
+                    },
+                    {
+                      title: "Kantin 4 (Pak Budi)",
+                      sub: "Risol Mayo & Tahu • Kemarin",
+                      amount: "-Rp 6.000",
+                      type: "payment",
+                    },
+                  ].map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="p-2.5 bg-white rounded-xl border border-slate-200/70 flex items-center justify-between text-[10px]"
+                    >
+                      <div>
+                        <p className="font-heading font-bold text-slate-800 text-[10px]">
+                          {item.title}
+                        </p>
+                        <p className="text-[8px] text-slate-400">{item.sub}</p>
                       </div>
-                    ))}
-                  </div>
+                      <span
+                        className={`font-heading font-bold text-[10px] ${
+                          item.type === "topup" ? "text-emerald-600" : "text-slate-800"
+                        }`}
+                      >
+                        {item.amount}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            </PhoneMockup>
           </div>
 
           {/* Text Right with 3 Distinct Color Bullets */}
@@ -808,12 +766,10 @@ export default function LandingPage() {
          ========================================================================= */}
       <section id="catatan" className="py-24 px-4 sm:px-6 bg-gradient-to-b from-[#D6EFFF]/50 via-[#EBF7FF]/80 to-[#D6EFFF]/30 border-y border-[#5CC0F7]/20">
         <div className="max-w-3xl mx-auto text-center">
-          {/* Centered Heading */}
           <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 mb-8">
             Catatan dari Pengurus Koperasi
           </h2>
 
-          {/* Beautiful Centered Paper Card matching reference */}
           <div className="bg-[#FFFDF9] rounded-3xl p-8 sm:p-12 shadow-md border border-slate-200 text-left space-y-4 relative">
             <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-sans">
               Ide awal dari KantinPay lahir dari sebuah pengamatan sederhana di kantin sekolah kami. Setiap kali jam istirahat berbunyi, ratusan siswa berdesakan di depan 8 kantin, antre menghitung uang receh, dan banyak yang batal jajan karena waktu istirahat yang sangat terbatas.
@@ -846,7 +802,7 @@ export default function LandingPage() {
          ========================================================================= */}
       <section id="faq" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left Sticky Sidebar matching reference */}
+          {/* Left Sticky Sidebar */}
           <div className="lg:col-span-4 text-left">
             <div className="lg:sticky lg:top-28 space-y-4">
               <span className="text-xs font-heading font-bold text-[#0284c7] uppercase tracking-wider">
@@ -859,7 +815,7 @@ export default function LandingPage() {
                 Punya pertanyaan seputar cara penggunaan, top-up saldo, atau pendaftaran kantin? Temukan jawabannya di sini.
               </p>
 
-              {/* Category Pills matching reference */}
+              {/* Category Pills */}
               <div className="pt-4 flex flex-wrap lg:flex-col gap-2">
                 {[
                   { id: "all", label: "Semua Kategori" },
@@ -884,7 +840,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Right Accordion List matching reference */}
+          {/* Right Accordion List */}
           <div className="lg:col-span-8 space-y-8">
             {faqData
               .filter(
@@ -942,10 +898,9 @@ export default function LandingPage() {
       </section>
 
       {/* =========================================================================
-          10. BOTTOM CALL TO ACTION (Organic Pastel Blobs with "Mulai Gunakan KantinPay")
+          10. BOTTOM CALL TO ACTION
          ========================================================================= */}
       <section className="relative py-24 px-4 sm:px-6 overflow-hidden bg-gradient-to-b from-white to-[#D6EFFF]/40 text-center">
-        {/* Organic Pastel Shapes */}
         <div className="absolute -top-12 left-1/4 w-72 h-72 bg-[#D6EFFF]/60 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#5CC0F7]/15 rounded-full blur-3xl -z-10" />
 
@@ -974,7 +929,7 @@ export default function LandingPage() {
       </section>
 
       {/* =========================================================================
-          11. FOOTER (Clean Minimalist matching reference)
+          11. FOOTER
          ========================================================================= */}
       <footer className="border-t border-slate-100 bg-white py-10 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500">
