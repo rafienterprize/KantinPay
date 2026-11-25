@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
 import { store } from "@/lib/db/store";
 import { formatRupiah } from "@/lib/utils";
-import { Utensils, Wallet, ArrowRight, ShieldCheck, Clock } from "lucide-react";
+import { Utensils, Wallet, ShieldCheck, Clock } from "lucide-react";
 import { BottomTabBar } from "@/components/navigation/BottomTabBar";
 
 export default async function StudentPage() {

@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Utensils,
-  ArrowRight,
   UserCircle,
   Sparkles,
   Store,
@@ -172,10 +171,9 @@ export function FloatingNavbar() {
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
               <Link
                 href="/login"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-heading font-semibold bg-[#5CC0F7] text-white hover:bg-[#48b1eb] shadow-xs transition"
+                className="inline-flex items-center justify-center px-4 py-2 rounded-full text-xs font-heading font-semibold bg-[#5CC0F7] text-white hover:bg-[#48b1eb] shadow-xs transition"
               >
                 <span>Buka Portal</span>
-                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </motion.div>
           </div>

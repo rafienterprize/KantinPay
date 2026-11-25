@@ -236,7 +236,7 @@ export default function LoginPage() {
 
       <div className="mt-8 text-center text-xs text-slate-400">
         <Link href="/" className="hover:text-slate-600 underline">
-          ← Kembali ke Halaman Utama
+          Kembali ke Halaman Utama
         </Link>
       </div>
     </div>

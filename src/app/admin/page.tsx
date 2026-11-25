@@ -9,7 +9,6 @@ import {
   Receipt,
   TrendingUp,
   UserPlus,
-  ArrowUpRight,
   Sparkles,
   Store,
   Calendar,
