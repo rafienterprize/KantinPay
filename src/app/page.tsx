@@ -1,6 +1,7 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
-import { FloatingNavbar } from "@/components/navigation/FloatingNavbar";
 import {
   Utensils,
   ArrowRight,
@@ -8,368 +9,1002 @@ import {
   Smartphone,
   Wallet,
   MessageSquare,
-  Sparkles,
-  Store,
   CheckCircle2,
-  RefreshCw,
+  ChevronDown,
+  Sparkles,
+  Zap,
+  Lock,
+  Layers,
+  HeartHandshake,
+  QrCode,
+  Store,
   Clock,
   Coins,
 } from "lucide-react";
+import { formatRupiah } from "@/lib/utils";
 
 export default function LandingPage() {
-  const canteensList = [
-    { name: "Kantin 1", menu: "Nasi Rames & Sayur Asem", owner: "Bu Nur" },
-    { name: "Kantin 2", menu: "Mie Ayam & Bakso Sapi", owner: "Pak Joko" },
-    { name: "Kantin 3", menu: "Ayam Geprek & Nasi Goreng", owner: "Ibu Siti" },
-    { name: "Kantin 4", menu: "Aneka Snack & Gorengan", owner: "Pak Budi" },
-    { name: "Kantin 5", menu: "Jus Segar & Minuman Dingin", owner: "Bu Maya" },
-    { name: "Kantin 6", menu: "Soto Ayam & Rawon Daging", owner: "Pak Slamet" },
-    { name: "Kantin 7", menu: "Roti Bakar & Pastry Enak", owner: "Ibu Dewi" },
-    { name: "Kantin 8", menu: "Dimsum Kukus & Salad Buah", owner: "Bu Rita" },
+  // FAQ accordion active item state
+  const [activeFaq, setActiveFaq] = useState<string | null>("faq-1");
+  const [activeFaqCategory, setActiveFaqCategory] = useState<string>("all");
+
+  const toggleFaq = (id: string) => {
+    setActiveFaq(activeFaq === id ? null : id);
+  };
+
+  const faqData = [
+    {
+      category: "Dasar KantinPay",
+      items: [
+        {
+          id: "faq-1",
+          question: "Apa itu KantinPay dan bagaimana cara kerjanya?",
+          answer:
+            "KantinPay adalah ekosistem pembayaran digital tertutup (closed-loop) khusus sekolah. Siswa menyetor tunai di koperasi sekolah untuk mendapatkan saldo digital. Saldo tersebut dapat dibelanjakan langsung di 8 kantin sekolah baik melalui website maupun WhatsApp bot.",
+        },
+        {
+          id: "faq-2",
+          question: "Mengapa menggunakan KantinPay dibanding QRIS umum?",
+          answer:
+            "Banyak siswa tidak memiliki kuota internet reguler saat jam istirahat atau hanya memiliki paket khusus WhatsApp/chat. KantinPay dirancang agar siswa tetap dapat bertransaksi lancar via WhatsApp bot tanpa kuota internet penuh.",
+        },
+        {
+          id: "faq-3",
+          question: "Berapa banyak kantin yang didukung saat ini?",
+          answer:
+            "KantinPay secara resmi mengintegrasikan 8 kantin sekolah (Kantin 1 sampai Kantin 8), mulai dari kantin makanan berat, soto, mie ayam, hingga minuman segar dan aneka snack.",
+        },
+      ],
+    },
+    {
+      category: "Saldo & Top Up",
+      items: [
+        {
+          id: "faq-4",
+          question: "Bagaimana cara siswa mengisi ulang (top-up) saldo?",
+          answer:
+            "Siswa cukup mendatangi loket koperasi sekolah dengan membawa uang tunai. Petugas koperasi akan memasukkan NIS siswa dan saldo akan bertambah seketika secara realtime.",
+        },
+        {
+          id: "faq-5",
+          question: "Apakah saldo siswa bisa menjadi minus?",
+          answer:
+            "Tidak. Mesin pembayaran KantinPay menerapkan validasi atomik di sisi server dengan perlindungan anti-minus. Jika saldo tidak mencukupi, transaksi otomatis ditolak sebelum diproses.",
+        },
+        {
+          id: "faq-6",
+          question: "Apakah ada biaya admin saat top-up atau pembayaran?",
+          answer:
+            "Tidak ada biaya admin sama sekali. Sistem ini dikelola mandiri oleh koperasi sekolah untuk kesejahteraan seluruh warga sekolah.",
+        },
+      ],
+    },
+    {
+      category: "WhatsApp Bot",
+      items: [
+        {
+          id: "faq-7",
+          question: "Bagaimana cara bertransaksi lewat WhatsApp Bot?",
+          answer:
+            "Cukup kirim pesan 'BAYAR' ke nomor resmi WhatsApp KantinPay. Bot akan menampilkan daftar 8 kantin. Balas dengan nomor kantin pilihan dan masukkan nominal pembayaran untuk menyelesaikan transaksi.",
+        },
+        {
+          id: "faq-8",
+          question: "Apakah bot bisa digunakan untuk cek saldo dan riwayat?",
+          answer:
+            "Bisa. Siswa dapat mengirim kata kunci 'SALDO' untuk memeriksa saldo terkini atau 'RIWAYAT' untuk melihat 5 transaksi terakhir.",
+        },
+      ],
+    },
+    {
+      category: "Koperasi & Tenant",
+      items: [
+        {
+          id: "faq-9",
+          question: "Bagaimana pedagang kantin menerima uang hasil penjualan?",
+          answer:
+            "Setiap sore hari setelah jam operasional sekolah selesai, pengurus koperasi melakukan rekap harian settlement dan mencairkan total penjualan langsung ke pedagang kantin sesuai nomor referensi audit.",
+        },
+        {
+          id: "faq-10",
+          question: "Apakah pedagang kantin bisa memantau transaksi harian?",
+          answer:
+            "Ya, setiap pedagang kantin memiliki akses ke Dashboard Merchant mereka sendiri untuk melihat pembeli yang masuk dan total omset harian secara realtime.",
+        },
+      ],
+    },
   ];
 
   return (
-    <div className="relative min-h-screen bg-[#F8FAFC] text-slate-800 overflow-x-hidden selection:bg-[#D6EFFF]">
-      {/* Floating Pill Navigation */}
-      <FloatingNavbar />
-
-      {/* Orbit Background Aura */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[850px] pointer-events-none overflow-hidden -z-10">
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 w-[720px] h-[720px] rounded-full border border-[#5CC0F7]/15" />
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[980px] h-[980px] rounded-full border border-[#D6EFFF]/40" />
-        <div className="absolute top-32 left-1/2 -translate-x-1/2 w-[420px] h-[420px] bg-gradient-to-b from-[#D6EFFF]/60 to-transparent blur-3xl rounded-full" />
-      </div>
-
-      {/* Hero Section */}
-      <section id="hero" className="relative pt-36 pb-20 sm:pt-44 sm:pb-28 px-4 sm:px-6 max-w-6xl mx-auto text-center">
-        {/* Subtle Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#D6EFFF]/80 border border-[#5CC0F7]/40 text-slate-700 text-xs font-heading font-medium mb-6 shadow-2xs">
-          <Sparkles className="w-3.5 h-3.5 text-[#0284c7]" />
-          <span>Solusi Finansial Digital Khusus Lingkungan Sekolah</span>
-        </div>
-
-        {/* Hero Title */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-heading font-bold text-slate-900 tracking-tight leading-[1.1] max-w-4xl mx-auto">
-          Smart Payments, <br className="hidden sm:inline" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0284c7] via-[#5CC0F7] to-[#38bdf8]">
-            Simpler School Life.
-          </span>
-        </h1>
-
-        {/* Hero Subtitle */}
-        <p className="mt-6 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          Solusi pembayaran digital sekolah yang praktis, cepat, dan terintegrasi melalui website maupun WhatsApp. Tetap bisa jajan walau hanya dengan paket chat.
-        </p>
-
-        {/* Minimalist CTA Buttons */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Link
-            href="/login"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-heading font-semibold text-sm bg-[#5CC0F7] text-white hover:bg-[#48b1eb] shadow-md shadow-[#5CC0F7]/25 active:scale-95 transition"
-          >
-            <span>Mulai Sekarang</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <a
-            href="#fitur"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-heading font-semibold text-sm bg-white text-slate-700 border border-[#D1D1D1] hover:bg-slate-50 active:scale-95 transition"
-          >
-            <span>Jelajahi KantinPay</span>
-          </a>
-        </div>
-
-        {/* Centered Hero Graphic with Orbit Floating Elements */}
-        <div className="relative mt-16 max-w-3xl mx-auto">
-          {/* Main Simulated Tablet / Phone Card */}
-          <div className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-200/90 text-left">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-[#5CC0F7] text-white flex items-center justify-center">
-                  <Utensils className="w-4 h-4" />
-                </div>
-                <div>
-                  <h4 className="font-heading font-semibold text-sm text-slate-900">KantinPay Student Hub</h4>
-                  <p className="text-[11px] text-slate-500">SMK Negeri 1 — Ekosistem Finansial Mandiri</p>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-heading font-medium border border-emerald-200">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Sistem Online
-              </span>
+    <div className="min-h-screen bg-[#FFFFFF] text-slate-800 selection:bg-[#D6EFFF]">
+      {/* =========================================================================
+          1. HEADER / NAVBAR (Clean, Editorial Top Bar matching Loaf reference)
+         ========================================================================= */}
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
+          {/* Brand Logo on Left */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-2xl bg-[#5CC0F7] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
+              <Utensils className="w-4 h-4" />
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
-              {/* Saldo Siswa Box */}
-              <div className="rounded-2xl bg-gradient-to-br from-[#D6EFFF]/60 to-white p-4 border border-[#5CC0F7]/30">
-                <p className="text-xs text-slate-500 font-medium">Saldo Tersedia (Closed-Loop)</p>
-                <h3 className="text-2xl sm:text-3xl font-heading font-bold text-slate-900 mt-1">
-                  Rp 85.000
-                </h3>
-                <div className="flex items-center gap-1.5 mt-2 text-[11px] text-slate-600 font-heading">
-                  <Coins className="w-3.5 h-3.5 text-[#0284c7]" />
-                  <span>Dikelola Kas Koperasi Sekolah</span>
-                </div>
-              </div>
-
-              {/* Status Transaksi Hari Ini */}
-              <div className="rounded-2xl bg-slate-50 p-4 border border-slate-200/70">
-                <p className="text-xs text-slate-500 font-medium">Transaksi Terakhir</p>
-                <div className="flex items-center justify-between mt-1">
-                  <div>
-                    <h4 className="font-heading font-semibold text-sm text-slate-800">Kantin 1 (Bu Nur)</h4>
-                    <p className="text-[11px] text-slate-500">Nasi Rames Ayam • 09:45 WIB</p>
-                  </div>
-                  <span className="font-heading font-bold text-sm text-slate-900">-Rp 15.000</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Floating Fintech Pill 1: WhatsApp Bot */}
-          <div className="hidden lg:flex items-center gap-3 absolute -left-12 top-10 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 shadow-lg border border-[#D1D1D1]/70 animate-bounce [animation-duration:4s]">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0">
-              <MessageSquare className="w-5 h-5" />
-            </div>
-            <div className="text-left text-xs">
-              <p className="font-heading font-semibold text-slate-900">WhatsApp Bot Ready</p>
-              <p className="text-slate-500 text-[11px]">Ketik &quot;BAYAR&quot; via paket chat</p>
-            </div>
-          </div>
-
-          {/* Floating Fintech Pill 2: Payment Notification */}
-          <div className="hidden lg:flex items-center gap-3 absolute -right-12 bottom-6 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 shadow-lg border border-[#D1D1D1]/70">
-            <div className="w-10 h-10 rounded-xl bg-[#5CC0F7] text-white flex items-center justify-center shrink-0">
-              <CheckCircle2 className="w-5 h-5" />
-            </div>
-            <div className="text-left text-xs">
-              <p className="font-heading font-semibold text-slate-900">Pembayaran Sukses</p>
-              <p className="text-emerald-600 font-bold text-[11px]">Rp 10.000 ke Kantin 2</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 1: PROBLEM & SOLUTION */}
-      <section id="fitur" className="py-20 bg-white border-y border-slate-200/80 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs font-heading font-bold text-[#0284c7] uppercase tracking-wider">
-              Mengapa KantinPay?
+            <span className="font-heading font-bold text-xl tracking-tight text-slate-900">
+              Kantin<span className="text-[#5CC0F7]">Pay</span>
             </span>
-            <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 mt-2">
-              Bukan Sekadar QRIS Biasa, Dirancang Spesifik untuk Siswa
-            </h2>
-            <p className="mt-3 text-slate-600 text-sm sm:text-base">
-              Banyak siswa memiliki QRIS, namun sering terkendala kuota data internet saat jam istirahat. KantinPay hadir memadukan website modern dan WhatsApp bot.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1 */}
-            <div className="rounded-3xl p-7 bg-[#F8FAFC] border border-[#D1D1D1]/70 hover:border-[#5CC0F7] transition duration-200">
-              <div className="w-12 h-12 rounded-2xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center mb-5">
-                <Smartphone className="w-6 h-6" />
-              </div>
-              <h3 className="font-heading font-bold text-lg text-slate-900">Akses Tanpa Kuota Penuh</h3>
-              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Dapat diakses lewat aplikasi website sekolah maupun integrasi bot WhatsApp yang ramah paket chat.
-              </p>
-            </div>
-
-            {/* Card 2 */}
-            <div className="rounded-3xl p-7 bg-[#F8FAFC] border border-[#D1D1D1]/70 hover:border-[#5CC0F7] transition duration-200">
-              <div className="w-12 h-12 rounded-2xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center mb-5">
-                <Wallet className="w-6 h-6" />
-              </div>
-              <h3 className="font-heading font-bold text-lg text-slate-900">Closed-Loop Ecosystem</h3>
-              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Koperasi sekolah memegang peranan sebagai bendahara sentral, memastikan perputaran uang tetap aman di lingkungan sekolah.
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="rounded-3xl p-7 bg-[#F8FAFC] border border-[#D1D1D1]/70 hover:border-[#5CC0F7] transition duration-200">
-              <div className="w-12 h-12 rounded-2xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center mb-5">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h3 className="font-heading font-bold text-lg text-slate-900">Keamanan Finansial Atomik</h3>
-              <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Setiap transaksi diverifikasi di sisi server dengan integritas ACID, saldo anti-minus, dan catatan audit yang tidak bisa dihapus.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 2: 8 CANTEENS ECOSYSTEM */}
-      <section id="kantin" className="py-20 px-4 sm:px-6 max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-          <div>
-            <span className="text-xs font-heading font-bold text-[#0284c7] uppercase tracking-wider">
-              Tenant Terdaftar
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 mt-2">
-              Mendukung 8 Kantin Sekolah
-            </h2>
-            <p className="mt-2 text-slate-600 text-sm">
-              Siswa dapat memilih kantin favorit dan langsung melakukan pembayaran non-tunai seketika.
-            </p>
-          </div>
-          <Link
-            href="/login"
-            className="mt-4 md:mt-0 inline-flex items-center gap-1 text-xs font-heading font-semibold text-[#0284c7] hover:underline"
-          >
-            <span>Masuk untuk melihat menu lengkap</span>
-            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {canteensList.map((c, i) => (
-            <div
-              key={c.name}
-              className="rounded-3xl bg-white p-5 border border-slate-200 hover:border-[#5CC0F7] transition shadow-2xs group"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center font-heading font-bold text-xs group-hover:bg-[#5CC0F7] group-hover:text-white transition">
-                  #{i + 1}
-                </div>
-                <span className="text-[11px] font-heading px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
-                  {c.owner}
-                </span>
-              </div>
-              <h4 className="font-heading font-bold text-slate-900 text-base">{c.name}</h4>
-              <p className="text-xs text-slate-500 mt-1 line-clamp-1">{c.menu}</p>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
-                <span>Koneksi Realtime</span>
-                <span className="text-emerald-600 font-semibold flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Buka
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+          {/* Center Navigation Links */}
+          <nav className="hidden md:flex items-center gap-8 text-xs font-heading font-semibold text-slate-600">
+            <a href="#fitur" className="hover:text-slate-900 transition-colors">
+              Fitur
+            </a>
+            <a href="#ekosistem" className="hover:text-slate-900 transition-colors">
+              8 Kantin
+            </a>
+            <a href="#catatan" className="hover:text-slate-900 transition-colors">
+              Catatan Koperasi
+            </a>
+            <a href="#faq" className="hover:text-slate-900 transition-colors">
+              FAQ
+            </a>
+          </nav>
 
-      {/* SECTION 3: REKAP DAN SETTLEMENT KOPERASI */}
-      <section id="keamanan" className="py-20 bg-[#D6EFFF]/30 border-y border-[#5CC0F7]/20 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#5CC0F7]/30 text-slate-700 text-xs font-heading font-medium mb-4">
-              <Store className="w-3.5 h-3.5 text-[#0284c7]" />
-              <span>Rekonsiliasi & Settlement</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900">
-              Pencatatan Finansial Transparan dan Otomatis
-            </h2>
-            <p className="mt-4 text-slate-600 text-sm leading-relaxed">
-              Pembayaran siswa dan pencairan pedagang kantin dipisahkan dengan tertib. Setiap sore, koperasi sekolah merekap total transaksi harian dari 8 tenant, memverifikasi nomor referensi, dan mencairkan dana settlement secara tepat.
-            </p>
-
-            <div className="mt-6 space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#5CC0F7] shrink-0 mt-0.5" />
-                <p className="text-sm text-slate-700">
-                  <strong>Pemisahan Rekening Payable:</strong> Saldo pedagang bertambah sesuai transaksi riil yang masuk.
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#5CC0F7] shrink-0 mt-0.5" />
-                <p className="text-sm text-slate-700">
-                  <strong>3 Status Settlement:</strong> Pending, Processing, dan Settled dengan nomor referensi audit.
-                </p>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-[#5CC0F7] shrink-0 mt-0.5" />
-                <p className="text-sm text-slate-700">
-                  <strong>Top-up Fleksibel di Koperasi:</strong> Siswa menyetor tunai di loket koperasi untuk mengisi saldo akun digital.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-slate-200">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <span className="font-heading font-bold text-sm text-slate-800">
-                Alur Transaksi KantinPay
-              </span>
-              <RefreshCw className="w-4 h-4 text-slate-400" />
-            </div>
-
-            <div className="mt-5 space-y-4">
-              <div className="flex items-center gap-4 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
-                <div className="w-8 h-8 rounded-full bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center font-heading font-bold text-xs shrink-0">
-                  1
-                </div>
-                <div className="text-xs">
-                  <p className="font-heading font-bold text-slate-800">Siswa Top-up di Koperasi</p>
-                  <p className="text-slate-500">Petugas memasukkan NIS dan menambahkan saldo digital.</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
-                <div className="w-8 h-8 rounded-full bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center font-heading font-bold text-xs shrink-0">
-                  2
-                </div>
-                <div className="text-xs">
-                  <p className="font-heading font-bold text-slate-800">Beli Makanan di Kantin</p>
-                  <p className="text-slate-500">Pilih salah satu dari 8 kantin lewat web atau WhatsApp bot.</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-3 rounded-2xl bg-slate-50 border border-slate-200/60">
-                <div className="w-8 h-8 rounded-full bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center font-heading font-bold text-xs shrink-0">
-                  3
-                </div>
-                <div className="text-xs">
-                  <p className="font-heading font-bold text-slate-800">Rekap & Settlement Sore Hari</p>
-                  <p className="text-slate-500">Koperasi menyelesaikan pencairan harian ke pemilik kantin.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CALL TO ACTION */}
-      <section className="py-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
-        <div className="bg-gradient-to-br from-[#5CC0F7] to-[#38bdf8] rounded-3xl p-8 sm:p-14 text-white shadow-lg">
-          <h2 className="text-3xl sm:text-5xl font-heading font-bold">
-            Siap Memulai Transaksi Digital di Sekolah?
-          </h2>
-          <p className="mt-4 text-sm sm:text-base text-white/90 max-w-xl mx-auto leading-relaxed">
-            Masuk ke portal siswa, pantau penjualan di dashboard kantin, atau kelola seluruh keuangan koperasi sekarang.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
+          {/* Right CTA Button */}
+          <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-heading font-bold text-sm bg-white text-slate-800 hover:bg-slate-100 shadow-md active:scale-95 transition"
+              className="inline-flex items-center justify-center px-5 py-2.5 rounded-full font-heading font-bold text-xs bg-slate-900 text-white hover:bg-slate-800 active:scale-95 transition shadow-xs"
             >
-              <span>Masuk Portal KantinPay</span>
-              <ArrowRight className="w-4 h-4 text-[#5CC0F7]" />
+              <span>Buka Portal</span>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* =========================================================================
+          2. HERO SECTION (Text Left, Realistic Phone Right with Organic Pastel Blobs)
+         ========================================================================= */}
+      <section className="relative pt-12 pb-20 sm:pt-20 sm:pb-28 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          {/* Left Column: Text & CTA */}
+          <div className="lg:col-span-6 text-left">
+            {/* Pill tag matching reference */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#D6EFFF] border border-[#5CC0F7]/40 text-slate-800 text-xs font-heading font-semibold mb-6">
+              <Sparkles className="w-3.5 h-3.5 text-[#0284c7]" />
+              <span>Ekosistem Finansial Digital Sekolah</span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-slate-900 tracking-tight leading-[1.08]">
+              Jajan di sekolah, <br />
+              <span className="text-slate-900">tercatat rapi.</span>
+            </h1>
+
+            {/* Paragraph Description */}
+            <p className="mt-5 text-base sm:text-lg text-slate-600 max-w-lg leading-relaxed">
+              Solusi pembayaran digital sekolah tertutup yang praktis dan cepat. Tetap bisa bertransaksi di 8 kantin sekolah meski hanya menggunakan paket chat WhatsApp.
+            </p>
+
+            {/* CTA Buttons & Micro badges */}
+            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-2xl bg-slate-900 text-white font-heading font-semibold text-sm hover:bg-slate-800 active:scale-95 transition shadow-sm"
+              >
+                <span>Masuk Portal KantinPay</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <a
+                href="#ekosistem"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#D6EFFF] text-slate-900 font-heading font-semibold text-sm hover:bg-[#c2e5fc] active:scale-95 transition border border-[#5CC0F7]/30"
+              >
+                <span>Jelajahi 8 Kantin</span>
+              </a>
+            </div>
+
+            <p className="mt-4 text-xs text-slate-400 font-heading">
+              Didukung kasir koperasi sekolah • Bebas biaya admin • Aman & instan
+            </p>
+          </div>
+
+          {/* Right Column: Phone Mockup with Organic Pastel Background Blob */}
+          <div className="lg:col-span-6 flex justify-center relative">
+            {/* Soft Organic Pastel Blobs behind the phone matching reference */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[460px] bg-gradient-to-br from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/50 rounded-[48px] -rotate-3 -z-10 blur-xs" />
+            <div className="absolute top-1/3 -right-6 w-36 h-36 bg-[#5CC0F7]/15 rounded-full blur-2xl -z-10" />
+
+            {/* Realistic iPhone Device Frame */}
+            <div className="w-[300px] sm:w-[320px] bg-slate-900 rounded-[48px] p-3 shadow-2xl border-4 border-slate-800">
+              {/* Inner Screen */}
+              <div className="bg-[#FFFFFF] rounded-[40px] overflow-hidden border border-slate-100 flex flex-col h-[580px]">
+                {/* Status Bar & Dynamic Island */}
+                <div className="pt-3 px-6 pb-2 flex items-center justify-between text-[11px] font-heading font-semibold text-slate-800 bg-white">
+                  <span>09:41</span>
+                  <div className="w-20 h-4 bg-slate-900 rounded-full" />
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span>100%</span>
+                  </div>
+                </div>
+
+                {/* App Screen Content */}
+                <div className="flex-1 p-4 bg-[#F8FAFC] overflow-y-auto space-y-3.5">
+                  {/* Top Bar inside app */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] text-slate-400 font-heading">Selamat Pagi,</p>
+                      <h4 className="font-heading font-bold text-sm text-slate-900">Ahmad Rifai</h4>
+                    </div>
+                    <span className="text-[10px] font-heading px-2 py-0.5 rounded-full bg-[#D6EFFF] text-[#0284c7] font-semibold">
+                      XII SIJA 1
+                    </span>
+                  </div>
+
+                  {/* Saldo Digital Card */}
+                  <div className="rounded-3xl bg-gradient-to-br from-[#5CC0F7] to-[#38bdf8] p-4 text-white shadow-xs space-y-2">
+                    <div className="flex items-center justify-between text-xs text-white/90">
+                      <span>Saldo KantinPay</span>
+                      <Coins className="w-4 h-4 text-white/80" />
+                    </div>
+                    <h3 className="font-heading font-bold text-2xl">Rp 85.000</h3>
+                    <div className="pt-2 border-t border-white/20 flex items-center justify-between text-[10px] text-white/90">
+                      <span>NIS: 20241001</span>
+                      <span className="font-semibold">Koperasi Aktif</span>
+                    </div>
+                  </div>
+
+                  {/* Quick Canteen Selection */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-heading font-bold text-slate-800">
+                        Pilih 8 Kantin
+                      </span>
+                      <span className="text-[10px] text-[#0284c7] font-heading">Lihat Semua</span>
+                    </div>
+                    <div className="grid grid-cols-4 gap-1.5 text-center">
+                      {[
+                        { name: "Kantin 1", icon: "🍛" },
+                        { name: "Kantin 2", icon: "🍜" },
+                        { name: "Kantin 3", icon: "🍗" },
+                        { name: "Kantin 4", icon: "🥟" },
+                      ].map((k) => (
+                        <div
+                          key={k.name}
+                          className="p-2 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-[#5CC0F7] transition"
+                        >
+                          <span className="text-base block">{k.icon}</span>
+                          <span className="text-[9px] font-heading font-semibold text-slate-700 block mt-0.5">
+                            {k.name}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Recent Transactions List */}
+                  <div>
+                    <span className="text-[11px] font-heading font-bold text-slate-800 block mb-2">
+                      Transaksi Terakhir
+                    </span>
+                    <div className="space-y-1.5">
+                      <div className="p-2.5 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-between text-xs">
+                        <div>
+                          <p className="font-heading font-bold text-slate-800 text-[11px]">Kantin 1 (Bu Nur)</p>
+                          <p className="text-[9px] text-slate-400">Nasi Rames Ayam • 09:30</p>
+                        </div>
+                        <span className="font-heading font-bold text-rose-500 text-xs">-Rp 15.000</span>
+                      </div>
+
+                      <div className="p-2.5 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-between text-xs">
+                        <div>
+                          <p className="font-heading font-bold text-slate-800 text-[11px]">Top Up Koperasi</p>
+                          <p className="text-[9px] text-slate-400">Kasir Koperasi • 08:15</p>
+                        </div>
+                        <span className="font-heading font-bold text-emerald-600 text-xs">+Rp 50.000</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom App Nav */}
+                <div className="h-12 bg-white border-t border-slate-100 grid grid-cols-4 items-center px-4 text-center">
+                  <div className="text-[#5CC0F7] text-[10px] font-heading font-bold flex flex-col items-center">
+                    <Utensils className="w-3.5 h-3.5" />
+                    <span>Home</span>
+                  </div>
+                  <div className="text-slate-400 text-[10px] font-heading flex flex-col items-center">
+                    <Store className="w-3.5 h-3.5" />
+                    <span>Kantin</span>
+                  </div>
+                  <div className="text-slate-400 text-[10px] font-heading flex flex-col items-center">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>Riwayat</span>
+                  </div>
+                  <div className="text-slate-400 text-[10px] font-heading flex flex-col items-center">
+                    <Wallet className="w-3.5 h-3.5" />
+                    <span>Saldo</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          3. FEATURE 1 (Zig-Zag: Text Left, Cooperative Ledger Card Right)
+         ========================================================================= */}
+      <section id="fitur" className="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Text Left */}
+          <div className="lg:col-span-5 text-left space-y-4">
+            <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 leading-tight">
+              Ekosistem terpadu. <br />
+              Koperasi &amp; kantin selalu selaras.
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              KantinPay bertindak sebagai jembatan keuangan tertutup di sekolah. Koperasi mengelola penerimaan dana setoran tunai siswa, sementara kantin fokus melayani pesanan tanpa repot menyiapkan uang kembalian.
+            </p>
+            <div className="pt-2">
+              <span className="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-[#0284c7]">
+                <CheckCircle2 className="w-4 h-4 text-[#5CC0F7]" />
+                Rekonsiliasi transaksi otomatis setiap saat
+              </span>
+            </div>
+          </div>
+
+          {/* Visual Right: Cooperative Daily Ledger Card with Pastel BG */}
+          <div className="lg:col-span-7 flex justify-center relative">
+            {/* Pastel background shape */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#D6EFFF]/40 to-[#EBF7FF]/70 rounded-[40px] -rotate-1 -z-10" />
+
+            {/* Widget Card */}
+            <div className="w-full max-w-lg bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 space-y-4 my-4">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center font-bold text-xs font-heading">
+                    KP
+                  </div>
+                  <div>
+                    <h4 className="font-heading font-bold text-xs text-slate-900">
+                      Buku Besar Koperasi Sekolah
+                    </h4>
+                    <p className="text-[10px] text-slate-400">Status Pembukuan Harian</p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-heading font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Sinkron Realtime
+                </span>
+              </div>
+
+              {/* Mini ledger rows */}
+              <div className="space-y-2 text-xs">
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="font-heading font-bold text-slate-800 block text-xs">
+                      Kantin 1 (Bu Nurhasanah)
+                    </span>
+                    <span className="text-[11px] text-slate-500">28 transaksi siswa • Nasi Rames</span>
+                  </div>
+                  <span className="font-heading font-bold text-slate-900">Rp 345.000</span>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="font-heading font-bold text-slate-800 block text-xs">
+                      Kantin 2 (Pak Joko Susilo)
+                    </span>
+                    <span className="text-[11px] text-slate-500">22 transaksi siswa • Mie Ayam &amp; Bakso</span>
+                  </div>
+                  <span className="font-heading font-bold text-slate-900">Rp 290.000</span>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="font-heading font-bold text-slate-800 block text-xs">
+                      Kantin 3 (Ibu Siti Fatimah)
+                    </span>
+                    <span className="text-[11px] text-slate-500">31 transaksi siswa • Ayam Geprek</span>
+                  </div>
+                  <span className="font-heading font-bold text-slate-900">Rp 420.000</span>
+                </div>
+              </div>
+
+              <div className="pt-2 flex items-center justify-between text-xs text-slate-500 font-heading">
+                <span>Total Omset 8 Kantin:</span>
+                <span className="font-bold text-slate-900 text-sm">Rp 2.200.000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          4. FEATURE 2 (Zig-Zag: Phone Left, Text Right — WhatsApp Bot Feature)
+         ========================================================================= */}
+      <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Visual Left: Phone showing WhatsApp Bot Conversation */}
+          <div className="lg:col-span-6 flex justify-center relative order-2 lg:order-1">
+            {/* Pastel Blob behind */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[460px] bg-gradient-to-tr from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/60 rounded-[48px] rotate-2 -z-10 blur-xs" />
+
+            {/* Phone Frame */}
+            <div className="w-[300px] sm:w-[320px] bg-slate-900 rounded-[48px] p-3 shadow-2xl border-4 border-slate-800">
+              <div className="bg-[#FFFFFF] rounded-[40px] overflow-hidden border border-slate-100 flex flex-col h-[540px]">
+                {/* Status Bar */}
+                <div className="pt-3 px-6 pb-2 flex items-center justify-between text-[11px] font-heading font-semibold text-slate-800 bg-white">
+                  <span>09:42</span>
+                  <div className="w-20 h-4 bg-slate-900 rounded-full" />
+                  <span>100%</span>
+                </div>
+
+                {/* WhatsApp Chat Header */}
+                <div className="bg-emerald-600 text-white p-3 flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs font-heading">
+                    KP
+                  </div>
+                  <div>
+                    <h4 className="font-heading font-bold text-xs">KantinPay Bot Official</h4>
+                    <p className="text-[9px] text-emerald-100">Akun WhatsApp Sekolah</p>
+                  </div>
+                </div>
+
+                {/* WhatsApp Chat Messages */}
+                <div className="flex-1 p-3 bg-[#ECE5DD]/40 overflow-y-auto space-y-2.5 text-[11px]">
+                  {/* User message */}
+                  <div className="flex justify-end">
+                    <div className="bg-[#DCF8C6] p-2.5 rounded-2xl rounded-tr-xs shadow-2xs max-w-[210px] text-slate-800">
+                      <p className="font-bold">BAYAR</p>
+                      <span className="text-[9px] text-slate-400 block text-right">09:40</span>
+                    </div>
+                  </div>
+
+                  {/* Bot reply: Canteen menu */}
+                  <div className="flex justify-start">
+                    <div className="bg-white p-2.5 rounded-2xl rounded-tl-xs shadow-2xs max-w-[230px] text-slate-800 space-y-1">
+                      <p className="font-bold text-emerald-700">Silakan pilih kantin tujuan:</p>
+                      <p className="text-[10px] text-slate-600 leading-tight">
+                        1. Kantin 1 (Bu Nur)<br />
+                        2. Kantin 2 (Pak Joko)<br />
+                        3. Kantin 3 (Ibu Siti)<br />
+                        ...s/d Kantin 8
+                      </p>
+                      <span className="text-[9px] text-slate-400 block text-right">09:40</span>
+                    </div>
+                  </div>
+
+                  {/* User reply */}
+                  <div className="flex justify-end">
+                    <div className="bg-[#DCF8C6] p-2 rounded-2xl rounded-tr-xs shadow-2xs text-slate-800">
+                      <p className="font-bold">1</p>
+                      <span className="text-[9px] text-slate-400 block text-right">09:41</span>
+                    </div>
+                  </div>
+
+                  {/* Bot reply: Success */}
+                  <div className="flex justify-start">
+                    <div className="bg-white p-2.5 rounded-2xl rounded-tl-xs shadow-2xs max-w-[230px] text-slate-800 space-y-1 border-l-4 border-emerald-500">
+                      <p className="font-bold text-emerald-700">Pembayaran Berhasil! 🎉</p>
+                      <p className="text-[10px] text-slate-600">
+                        Kantin: <strong>Kantin 1</strong><br />
+                        Nominal: <strong>Rp 10.000</strong><br />
+                        Sisa saldo: <strong>Rp 75.000</strong>
+                      </p>
+                      <p className="text-[9px] text-slate-400">Terima kasih telah jajan di kantin.</p>
+                      <span className="text-[9px] text-slate-400 block text-right">09:41</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Text Right */}
+          <div className="lg:col-span-6 text-left space-y-4 order-1 lg:order-2">
+            <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 leading-tight">
+              Ketika kuota reguler habis, <br />
+              jajan tetap jalan lancar.
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Banyak siswa yang paket internetnya hanya aktif untuk WhatsApp. KantinPay mengantisipasi ini dengan menghubungkan bot WhatsApp ke sistem database yang sama.
+            </p>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Siswa cukup membalas pesan teks sederhana untuk memilih kantin dan membayar makanan tanpa perlu membuka aplikasi perbankan yang rakus kuota data.
+            </p>
+            <div className="pt-2">
+              <span className="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-[#0284c7]">
+                <MessageSquare className="w-4 h-4 text-[#5CC0F7]" />
+                Kompatibel dengan paket chat operator seluler apa pun
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          5. FEATURE 3 (Zig-Zag: Text Left, Phone Right — Easy Payment 2 Seconds)
+         ========================================================================= */}
+      <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Text Left */}
+          <div className="lg:col-span-6 text-left space-y-4">
+            <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 leading-tight">
+              Pembayaran instan. <br />
+              Bahkan saat antrean penuh.
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Jam istirahat sekolah hanya berlangsung singkat. KantinPay menghilangkan waktu tunggu mencari uang pas dan uang kembalian receh.
+            </p>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Cukup pilih nomor kantin, ketikkan nominal, dan konfirmasi. Notifikasi masuk seketika ke layar pengelola kantin dalam hitungan 2 detik.
+            </p>
+            <div className="pt-2">
+              <span className="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-[#0284c7]">
+                <Zap className="w-4 h-4 text-[#5CC0F7]" />
+                Rata-rata kecepatan transaksi di bawah 2 detik
+              </span>
+            </div>
+          </div>
+
+          {/* Phone Right: Easy Payment Screen */}
+          <div className="lg:col-span-6 flex justify-center relative">
+            {/* Pastel Blob behind */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[460px] bg-gradient-to-br from-[#D6EFFF]/60 via-[#EBF7FF] to-[#D6EFFF]/40 rounded-[48px] -rotate-2 -z-10 blur-xs" />
+
+            {/* Phone Frame */}
+            <div className="w-[300px] sm:w-[320px] bg-slate-900 rounded-[48px] p-3 shadow-2xl border-4 border-slate-800">
+              <div className="bg-[#FFFFFF] rounded-[40px] overflow-hidden border border-slate-100 flex flex-col h-[540px]">
+                {/* Status Bar */}
+                <div className="pt-3 px-6 pb-2 flex items-center justify-between text-[11px] font-heading font-semibold text-slate-800 bg-white">
+                  <span>09:43</span>
+                  <div className="w-20 h-4 bg-slate-900 rounded-full" />
+                  <span>100%</span>
+                </div>
+
+                {/* Inner Screen */}
+                <div className="p-5 flex-1 flex flex-col justify-between bg-white text-center">
+                  <div className="space-y-4">
+                    <div className="w-12 h-12 rounded-2xl bg-[#D6EFFF] text-[#0284c7] mx-auto flex items-center justify-center font-bold text-lg font-heading">
+                      1
+                    </div>
+                    <div>
+                      <h4 className="font-heading font-bold text-base text-slate-900">
+                        Kantin 1 (Bu Nur)
+                      </h4>
+                      <p className="text-xs text-slate-400">Nasi Rames &amp; Sayur Asem</p>
+                    </div>
+
+                    <div className="p-4 rounded-3xl bg-slate-50 border border-slate-100">
+                      <span className="text-[10px] text-slate-400 font-heading block">
+                        Nominal Pembayaran
+                      </span>
+                      <h3 className="font-heading font-bold text-2xl text-slate-900 mt-1">
+                        Rp 12.000
+                      </h3>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2">
+                      {["Rp 5.000", "Rp 10.000", "Rp 15.000"].map((nominal) => (
+                        <div
+                          key={nominal}
+                          className="py-2 px-1 rounded-xl bg-slate-50 border border-slate-200 text-[10px] font-heading font-semibold text-slate-700"
+                        >
+                          {nominal}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 pt-4">
+                    <div className="w-full py-3.5 rounded-2xl bg-[#5CC0F7] text-white font-heading font-bold text-xs shadow-xs">
+                      Bayar Sekarang
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-heading">
+                      Sisa Saldo: Rp 85.000
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          6. FEATURE 4 (Zig-Zag: Phone Left, Text Right with 3 Bullet Points)
+         ========================================================================= */}
+      <section className="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Phone Left: History View */}
+          <div className="lg:col-span-6 flex justify-center relative order-2 lg:order-1">
+            {/* Pastel Blob behind */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[460px] bg-gradient-to-tr from-[#EBF7FF] via-[#D6EFFF] to-[#EBF7FF] rounded-[48px] rotate-3 -z-10 blur-xs" />
+
+            {/* Phone Frame */}
+            <div className="w-[300px] sm:w-[320px] bg-slate-900 rounded-[48px] p-3 shadow-2xl border-4 border-slate-800">
+              <div className="bg-[#FFFFFF] rounded-[40px] overflow-hidden border border-slate-100 flex flex-col h-[540px]">
+                {/* Status Bar */}
+                <div className="pt-3 px-6 pb-2 flex items-center justify-between text-[11px] font-heading font-semibold text-slate-800 bg-white">
+                  <span>09:45</span>
+                  <div className="w-20 h-4 bg-slate-900 rounded-full" />
+                  <span>100%</span>
+                </div>
+
+                {/* Inner Screen */}
+                <div className="p-4 bg-slate-50 flex-1 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-heading font-bold text-sm text-slate-900">
+                      Riwayat Transaksi
+                    </h4>
+                    <span className="text-[10px] text-slate-400 font-heading">Semua</span>
+                  </div>
+
+                  {/* List of items */}
+                  <div className="space-y-2">
+                    {[
+                      {
+                        title: "Kantin 2 (Pak Joko)",
+                        sub: "Mie Ayam Pangsit • Hari Ini",
+                        amount: "-Rp 14.000",
+                        type: "payment",
+                      },
+                      {
+                        title: "Top Up Kasir Koperasi",
+                        sub: "Setoran Tunai • Hari Ini",
+                        amount: "+Rp 50.000",
+                        type: "topup",
+                      },
+                      {
+                        title: "Kantin 5 (Bu Maya)",
+                        sub: "Jus Alpukat Segar • Kemarin",
+                        amount: "-Rp 8.000",
+                        type: "payment",
+                      },
+                      {
+                        title: "Kantin 4 (Pak Budi)",
+                        sub: "Risol Mayo & Tahu • Kemarin",
+                        amount: "-Rp 6.000",
+                        type: "payment",
+                      },
+                    ].map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="p-3 bg-white rounded-2xl border border-slate-200/70 flex items-center justify-between text-xs"
+                      >
+                        <div>
+                          <p className="font-heading font-bold text-slate-800 text-[11px]">
+                            {item.title}
+                          </p>
+                          <p className="text-[9px] text-slate-400">{item.sub}</p>
+                        </div>
+                        <span
+                          className={`font-heading font-bold text-xs ${
+                            item.type === "topup" ? "text-emerald-600" : "text-slate-800"
+                          }`}
+                        >
+                          {item.amount}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Text Right with 3 Distinct Color Bullets */}
+          <div className="lg:col-span-6 text-left space-y-5 order-1 lg:order-2">
+            <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 leading-tight">
+              Bawa riwayatmu <br />
+              ke mana saja.
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Semua jejak pembayaran terekam kekal dalam basis data sekolah. Siswa dapat memeriksa pengeluaran uang saku secara mandiri, sementara orang tua dan pengurus koperasi mendapatkan transparansi finansial penuh.
+            </p>
+
+            {/* 3 Color Bullet Points matching Loaf reference */}
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#5CC0F7] shrink-0" />
+                <span className="text-sm font-heading font-semibold text-slate-800">
+                  Riwayat transaksi abadi, tidak pernah hilang
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
+                <span className="text-sm font-heading font-semibold text-slate-800">
+                  Proteksi saldo anti-minus pada setiap pembelian
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0" />
+                <span className="text-sm font-heading font-semibold text-slate-800">
+                  Rekap nomor referensi unik untuk setiap transaksi
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          7. "WHAT MATTERS WHEN YOU ACTUALLY USE IT" (2x2 Grid with Clean Props)
+         ========================================================================= */}
+      <section className="py-20 px-4 sm:px-6 max-w-5xl mx-auto border-t border-slate-100">
+        <div className="text-left mb-12">
+          <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900">
+            Hal penting saat Anda menggunakannya
+          </h2>
+          <p className="text-sm text-slate-500 mt-2">
+            Dirancang berdasarkan riset nyata kebutuhan siswa dan pedagang di kantin sekolah.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Prop 1 */}
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-2xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center shrink-0 mt-0.5">
+              <Zap className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-heading font-bold text-base text-slate-900">
+                Kecepatan Transaksi 2 Detik
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                Antrean kantin bergerak cepat tanpa waktu terbuang untuk menghitung uang kertas dan koin.
+              </p>
+            </div>
+          </div>
+
+          {/* Prop 2 */}
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+              <Layers className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-heading font-bold text-base text-slate-900">
+                Pemisahan Rekening Payable
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                Uang siswa dan saldo milik pedagang dipisahkan secara tertib dalam pembukuan koperasi.
+              </p>
+            </div>
+          </div>
+
+          {/* Prop 3 */}
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 mt-0.5">
+              <Smartphone className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-heading font-bold text-base text-slate-900">
+                Ramah Paket WhatsApp
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                Siswa tanpa kuota reguler tetap bisa jajan dengan mudah menggunakan perintah bot WhatsApp.
+              </p>
+            </div>
+          </div>
+
+          {/* Prop 4 */}
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 mt-0.5">
+              <Lock className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-heading font-bold text-base text-slate-900">
+                Integritas Finansial ACID
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                Setiap pemotongan saldo berjalan dalam transaksi database yang dapat di-rollback otomatis jika gagal.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          8. "A NOTE FROM THE COOPERATIVE" (Pastel Full-Width Band + Centered Paper Card)
+         ========================================================================= */}
+      <section id="catatan" className="py-24 px-4 sm:px-6 bg-gradient-to-b from-[#D6EFFF]/50 via-[#EBF7FF]/80 to-[#D6EFFF]/30 border-y border-[#5CC0F7]/20">
+        <div className="max-w-3xl mx-auto text-center">
+          {/* Centered Heading */}
+          <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 mb-8">
+            Catatan dari Pengurus Koperasi
+          </h2>
+
+          {/* Beautiful Centered Paper Card matching reference */}
+          <div className="bg-[#FFFDF9] rounded-3xl p-8 sm:p-12 shadow-md border border-slate-200 text-left space-y-4 relative">
+            <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-sans">
+              Ide awal dari KantinPay lahir dari sebuah pengamatan sederhana di kantin sekolah kami. Setiap kali jam istirahat berbunyi, ratusan siswa berdesakan di depan 8 kantin, antre menghitung uang receh, dan banyak yang batal jajan karena waktu istirahat yang sangat terbatas.
+            </p>
+            <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-sans">
+              Kami juga menemukan fakta bahwa mayoritas siswa memang memiliki ponsel, namun sering kali kuota internet mereka habis atau hanya terbatas pada paket chat WhatsApp. Dari sanalah kami merancang ekosistem ini: sebuah sistem pembayaran tertutup yang dikelola koperasi sekolah, aman dari minus, dan bisa diakses via web maupun bot WhatsApp.
+            </p>
+            <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-sans">
+              Harapan kami, KantinPay bukan hanya mempermudah siswa jajan dan membantu pedagang kantin merekap penjualan, tetapi juga menjadi sarana edukasi literasi keuangan digital yang bertanggung jawab bagi seluruh siswa sekolah.
+            </p>
+
+            <div className="pt-6 border-t border-slate-100 flex items-center justify-between">
+              <div>
+                <h5 className="font-heading font-bold text-slate-900 text-sm">
+                  Pengurus Koperasi Sekolah
+                </h5>
+                <p className="text-xs text-slate-400">SMK Negeri 1 — Ekosistem KantinPay</p>
+              </div>
+
+              <div className="w-10 h-10 rounded-2xl bg-[#5CC0F7] text-white flex items-center justify-center font-heading font-bold text-sm">
+                KP
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          9. "YOUR QUESTIONS, ANSWERED." (FAQ with Left Sticky Sidebar & Right Accordions)
+         ========================================================================= */}
+      <section id="faq" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Left Sticky Sidebar matching reference */}
+          <div className="lg:col-span-4 text-left">
+            <div className="lg:sticky lg:top-28 space-y-4">
+              <span className="text-xs font-heading font-bold text-[#0284c7] uppercase tracking-wider">
+                Bantuan &amp; Panduan
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 leading-tight">
+                Pertanyaan yang sering diajukan.
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                Punya pertanyaan seputar cara penggunaan, top-up saldo, atau pendaftaran kantin? Temukan jawabannya di sini.
+              </p>
+
+              {/* Category Pills matching reference */}
+              <div className="pt-4 flex flex-wrap lg:flex-col gap-2">
+                {[
+                  { id: "all", label: "Semua Kategori" },
+                  { id: "Dasar KantinPay", label: "Dasar KantinPay" },
+                  { id: "Saldo & Top Up", label: "Saldo & Top Up" },
+                  { id: "WhatsApp Bot", label: "WhatsApp Bot" },
+                  { id: "Koperasi & Tenant", label: "Koperasi & Tenant" },
+                ].map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setActiveFaqCategory(cat.id)}
+                    className={`text-left px-3.5 py-2 rounded-xl text-xs font-heading font-semibold transition cursor-pointer ${
+                      activeFaqCategory === cat.id
+                        ? "bg-[#D6EFFF] text-[#0284c7] font-bold"
+                        : "text-slate-600 hover:bg-slate-100"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Accordion List matching reference */}
+          <div className="lg:col-span-8 space-y-8">
+            {faqData
+              .filter(
+                (section) =>
+                  activeFaqCategory === "all" || section.category === activeFaqCategory
+              )
+              .map((section) => (
+                <div key={section.category} className="space-y-3">
+                  <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                    <span className="w-2 h-2 rounded-full bg-[#5CC0F7]" />
+                    <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-slate-400">
+                      {section.category}
+                    </h4>
+                  </div>
+
+                  <div className="space-y-2">
+                    {section.items.map((item) => {
+                      const isOpen = activeFaq === item.id;
+                      return (
+                        <div
+                          key={item.id}
+                          className="rounded-2xl border border-slate-200/80 bg-white overflow-hidden transition-all duration-200"
+                        >
+                          <button
+                            onClick={() => toggleFaq(item.id)}
+                            className="w-full p-4 sm:p-5 flex items-center justify-between text-left gap-4 cursor-pointer"
+                          >
+                            <span className="font-heading font-bold text-sm text-slate-900">
+                              {item.question}
+                            </span>
+                            <span
+                              className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform ${
+                                isOpen
+                                  ? "bg-[#D6EFFF] text-[#0284c7] rotate-180"
+                                  : "bg-slate-100 text-slate-500"
+                              }`}
+                            >
+                              <ChevronDown className="w-4 h-4" />
+                            </span>
+                          </button>
+
+                          {isOpen && (
+                            <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-50">
+                              {item.answer}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          10. BOTTOM CALL TO ACTION (Organic Pastel Blobs with "Mulai Gunakan KantinPay")
+         ========================================================================= */}
+      <section className="relative py-24 px-4 sm:px-6 overflow-hidden bg-gradient-to-b from-white to-[#D6EFFF]/40 text-center">
+        {/* Organic Pastel Shapes */}
+        <div className="absolute -top-12 left-1/4 w-72 h-72 bg-[#D6EFFF]/60 rounded-full blur-3xl -z-10" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#5CC0F7]/15 rounded-full blur-3xl -z-10" />
+
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="w-14 h-14 rounded-3xl bg-[#5CC0F7] text-white mx-auto flex items-center justify-center shadow-md">
+            <Utensils className="w-7 h-7" />
+          </div>
+
+          <h2 className="text-3xl sm:text-5xl font-heading font-bold text-slate-900 tracking-tight">
+            Mulai Gunakan KantinPay Hari Ini &rarr;
+          </h2>
+          <p className="text-sm sm:text-base text-slate-600 max-w-lg mx-auto leading-relaxed">
+            Satu akun untuk siswa, 8 kantin terintegrasi, dan pengelolaan keuangan koperasi sekolah yang transparan.
+          </p>
+
+          <div className="pt-2 flex justify-center">
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-slate-900 text-white font-heading font-bold text-sm hover:bg-slate-800 active:scale-95 transition shadow-md"
+            >
+              <span>Buka Portal KantinPay</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-slate-200 bg-white py-10 px-4 sm:px-6">
+      {/* =========================================================================
+          11. FOOTER (Clean Minimalist matching reference)
+         ========================================================================= */}
+      <footer className="border-t border-slate-100 bg-white py-10 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-[#5CC0F7] flex items-center justify-center text-white">
+            <div className="w-7 h-7 rounded-2xl bg-[#5CC0F7] flex items-center justify-center text-white">
               <Utensils className="w-3.5 h-3.5" />
             </div>
-            <span className="font-heading font-bold text-slate-800 text-sm">
+            <span className="font-heading font-bold text-slate-900 text-sm">
               Kantin<span className="text-[#5CC0F7]">Pay</span>
             </span>
           </div>
+
           <p>© 2026 KantinPay Ecosystem. Closed-loop School Payment System. Hak Cipta Dilindungi.</p>
-          <div className="flex items-center gap-4">
-            <span className="inline-flex items-center gap-1 text-slate-600">
-              <Clock className="w-3.5 h-3.5 text-slate-400" />
-              07:00 - 16:00 WIB
-            </span>
+
+          <div className="flex items-center gap-6 font-heading font-semibold text-slate-600">
+            <a href="#fitur" className="hover:text-slate-900">
+              Fitur
+            </a>
+            <a href="#ekosistem" className="hover:text-slate-900">
+              8 Kantin
+            </a>
+            <a href="#catatan" className="hover:text-slate-900">
+              Catatan Koperasi
+            </a>
+            <a href="#faq" className="hover:text-slate-900">
+              FAQ
+            </a>
+            <Link href="/login" className="text-[#0284c7] hover:underline">
+              Masuk
+            </Link>
           </div>
         </div>
       </footer>
