@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KantinPay — School Digital Payment Ecosystem
 
-## Getting Started
+**KantinPay** adalah ekosistem pembayaran digital tertutup (*closed-loop payment system*) yang dirancang khusus untuk lingkungan sekolah. Sistem ini hadir sebagai alternatif praktis bagi siswa yang sering terkendala kuota reguler internet saat jam istirahat sekolah, mendukung akses melalui portal Website modern dan integrasi WhatsApp Bot.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🏗️ Arsitektur & Pemisahan Modular
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Sesuai instruksi pengembangan, kode dan modul disusun secara terpisah (*decoupled architecture*):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Database Layer (`src/lib/db/` & `src/services/`)**:
+   - Sumber kebenaran tunggal (*single source of truth*) yang mendukung **Neon PostgreSQL** melalui Drizzle ORM.
+   - Menyediakan integritas transaksi atomik ACID, pencegahan saldo negatif, validasi sisi server, dan catatan riwayat audit yang kekal (*immutable audit trails*).
+   - Dilengkapi in-memory fallback store siap uji dengan 10 siswa aktif, 8 kantin resmi, riwayat transaksi, dan rekap harian settlement.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Landing Page & Public Website (`src/app/` & `src/components/landing/`)**:
+   - Mengadaptasi estetika visual Deflexai SaaS: *floating pill navbar*, *orbit-style decorations*, kartu preview saldo realtime, visualisasi paket WhatsApp bot, dan informasi ekosistem 8 kantin.
+   - Halaman Autentikasi (`/login`) dengan pemilih peran (*Role Picker*), validasi kredensial, dan perlindungan rute berbasis peran.
 
-## Learn More
+3. **Admin / Cooperative Dashboard (`src/app/admin/`)**:
+   - Layout bersama (*Shared Admin Layout*) dengan desktop sidebar dan mobile bottom tab bar.
+   - **Dashboard Utama (`/admin`)**: Salam pengurus, 4 KPI finansial, 2 Quick Actions, dan grafik aktivitas transaksi harian.
+   - **Manajemen Siswa (`/admin/students`)**: Tabel data 10 siswa, filter kelas/status/saldo, pagination, modal pendaftaran siswa baru, dan modal eksekusi **Top Up Saldo** tunai koperasi dengan validasi server.
+   - **Manajemen Tenant (`/admin/tenants`)**: Kartu 8 unit kantin sekolah, toggle *Box/List view*, monitoring penjualan harian, modal tambah tenant, serta integrasi *Invite Vendor WhatsApp*.
+   - **Rekap & Settlement (`/admin/settlement`)**: Monitoring rekap harian 8 kantin, status *Pending / Processing / Settled*, dan aksi pencairan dana sore hari.
 
-To learn more about Next.js, take a look at the following resources:
+4. **Modul WhatsApp Bot (`src/bot/`)**:
+   - Dibuat dalam modul terpisah (`src/bot/`) dan webhook handler terisolasi (`src/app/api/whatsapp/`).
+   - Sesuai arahan pengguna, implementasi skrip interaksi WhatsApp Bot dikembangkan pada fase khusus tersendiri setelah modul website, landing page, dan admin dashboard selesai secara solid.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎨 Identitas Visual & Tipografi
 
-## Deploy on Vercel
+- **Palet Warna Utama**:
+  - `Primary Blue`: `#5CC0F7`
+  - `White Blue`: `#D6EFFF`
+  - `White`: `#FFFFFF`
+  - `Grey`: `#D1D1D1`
+- **Tipografi**:
+  - Headings & Navigasi: **Fredoka** (Google Fonts)
+  - Isi & Form: **Balsamiq Sans** (Google Fonts)
+- **Ikonografi**: Lucide React
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔑 Akun Demo Pengujian
+
+Anda dapat langsung menguji aplikasi menggunakan kredensial bawaan berikut:
+
+| Peran Akun | Email / Username | Kata Sandi | Halaman Tujuan |
+|---|---|---|---|
+| **Pengurus Koperasi (Admin)** | `admin@kantinpay.sch.id` | `admin123` | `/admin` |
+| **Siswa (Ahmad Rifai - XII SIJA 1)** | `ahmad@kantinpay.sch.id` | `password123` | `/student` |
+| **Merchant (Kantin 1 - Bu Nur)** | `kantin1@kantinpay.sch.id` | `password123` | `/merchant` |
+
+---
+
+## 🚀 Menjalankan Aplikasi
+
+1. **Instalasi Dependensi**:
+   ```bash
+   npm install
+   ```
+
+2. **Konfigurasi Database (Opsional)**:
+   Salin `.env.example` ke `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Masukkan `DATABASE_URL` dari project Neon PostgreSQL Anda. Jika belum diisi, sistem otomatis berjalan dengan in-memory state yang tersimpan selama server aktif.
+
+3. **Jalankan Mode Pengembangan**:
+   ```bash
+   npm run dev
+   ```
+   Aplikasi akan berjalan di `http://localhost:3000`.
+
+4. **Build Produksi**:
+   ```bash
+   npm run build
+   npm run start
+   ```
+
+---
+
+## 📱 Responsivitas Mobile
+
+- **Desktop**: *Floating Pill Navbar* di bagian atas untuk landing page, serta *Admin Sidebar* vertikal di panel koperasi.
+- **Mobile / Smartphone**: *Native Bottom Tab Bar* 5 tombol yang ergonomis dan mendukung *safe-area-inset-bottom*.
