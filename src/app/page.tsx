@@ -1039,67 +1039,137 @@ export default function LandingPage() {
       </section>
 
       {/* =========================================================================
-          12. FOOTER
+          12. FOOTER (Reference-style: dark top bar, colored body, 3-col nav, bottom credits)
          ========================================================================= */}
-      <footer className="border-t border-slate-100 bg-white py-10 pb-28 md:pb-10 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-2xl bg-[#5CC0F7] flex items-center justify-center text-white">
-              <Utensils className="w-3.5 h-3.5" />
+      <footer className="pb-28 md:pb-0">
+        {/* Dark Top Bar */}
+        <div className="h-3 bg-slate-900" />
+
+        {/* Main Footer Body */}
+        <div className="bg-[#D6EFFF] px-4 sm:px-6 pt-12 pb-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Top Row: Brand | Nav Links | CTA Button */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 items-start">
+              {/* Brand */}
+              <div className="md:col-span-3 flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-2xl bg-[#5CC0F7] flex items-center justify-center text-white shadow-sm">
+                  <Utensils className="w-4 h-4" />
+                </div>
+                <span className="font-heading font-bold text-slate-900 text-lg tracking-tight">
+                  Kantin<span className="text-[#5CC0F7]">Pay</span>
+                </span>
+              </div>
+
+              {/* Navigation Links — 2 Columns */}
+              <div className="md:col-span-5 grid grid-cols-2 gap-x-10 gap-y-3 text-sm font-heading font-semibold text-slate-700">
+                <a
+                  href="#fitur"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollTo("#fitur", { offset: -85, duration: 1.25 });
+                  }}
+                  className="hover:text-slate-900 cursor-pointer transition"
+                >
+                  Fitur
+                </a>
+                <a
+                  href="#catatan"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollTo("#catatan", { offset: -85, duration: 1.25 });
+                  }}
+                  className="hover:text-slate-900 cursor-pointer transition"
+                >
+                  Catatan Koperasi
+                </a>
+                <a
+                  href="#kantin"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollTo("#kantin", { offset: -85, duration: 1.25 });
+                  }}
+                  className="hover:text-slate-900 cursor-pointer transition"
+                >
+                  8 Kantin
+                </a>
+                <Link href="/login" className="hover:text-slate-900 transition">
+                  Portal Login
+                </Link>
+                <a
+                  href="#faq"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollTo("#faq", { offset: -85, duration: 1.25 });
+                  }}
+                  className="hover:text-slate-900 cursor-pointer transition"
+                >
+                  FAQ
+                </a>
+              </div>
+
+              {/* CTA Button */}
+              <div className="md:col-span-4 flex md:justify-end">
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-slate-900 text-white font-heading font-bold text-sm hover:bg-slate-800 transition shadow-sm"
+                  >
+                    Buka Portal KantinPay
+                  </Link>
+                </motion.div>
+              </div>
             </div>
-            <span className="font-heading font-bold text-slate-900 text-sm">
-              Kantin<span className="text-[#5CC0F7]">Pay</span>
-            </span>
-          </div>
 
-          <p>© 2026 KantinPay Ecosystem. Closed-loop School Payment System. Hak Cipta Dilindungi.</p>
+            {/* Divider */}
+            <div className="border-t border-[#5CC0F7]/30 mt-10 mb-8" />
 
-          <div className="flex flex-wrap justify-center md:justify-end items-center gap-4 sm:gap-6 font-heading font-semibold text-slate-600">
-            <a
-              href="#fitur"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollTo("#fitur", { offset: -85, duration: 1.25 });
-              }}
-              className="hover:text-slate-900 cursor-pointer"
-            >
-              Fitur
-            </a>
-            <a
-              href="#kantin"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollTo("#kantin", { offset: -85, duration: 1.25 });
-              }}
-              className="hover:text-slate-900 cursor-pointer"
-            >
-              8 Kantin
-            </a>
-            <a
-              href="#catatan"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollTo("#catatan", { offset: -85, duration: 1.25 });
-              }}
-              className="hover:text-slate-900 cursor-pointer"
-            >
-              Catatan Koperasi
-            </a>
-            <a
-              href="#faq"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollTo("#faq", { offset: -85, duration: 1.25 });
-              }}
-              className="hover:text-slate-900 cursor-pointer"
-            >
-              FAQ
-            </a>
-            <Link href="/login" className="text-[#0284c7] hover:underline">
-              Masuk
-            </Link>
+            {/* Bottom Row: Credits Left | Logo + Info Right */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+              {/* Left: Built with + Credits */}
+              <div className="space-y-4">
+                <div>
+                  <h5 className="font-heading font-bold text-slate-900 text-sm uppercase tracking-wider">
+                    Closed-Loop Payment
+                  </h5>
+                  <p className="font-heading font-bold text-slate-900 text-xs">
+                    Ekosistem Digital Kantin Sekolah
+                  </p>
+                </div>
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Dikelola oleh Koperasi Sekolah untuk kemudahan transaksi seluruh warga sekolah.
+                </p>
+                <div className="space-y-1 text-[11px] text-slate-500">
+                  <p>© 2026 KantinPay Ecosystem. Hak Cipta Dilindungi.</p>
+                  <p>
+                    <span className="text-slate-600">Copyright &amp; stuff..</span>
+                    {" • "}
+                    <a href="#" className="hover:underline">Syarat Ketentuan</a>
+                    {" • "}
+                    <a href="#" className="hover:underline">Kebijakan Privasi</a>
+                  </p>
+                </div>
+              </div>
+
+              {/* Right: KP Logo + School Info */}
+              <div className="flex flex-col items-start md:items-end gap-4">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-2xl border border-[#5CC0F7]/40 bg-white/60">
+                  <div className="w-8 h-8 rounded-xl bg-[#5CC0F7] flex items-center justify-center text-white font-heading font-bold text-xs">
+                    KP
+                  </div>
+                  <span className="font-heading font-bold text-slate-900 text-sm">
+                    KantinPay
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600 text-left md:text-right">
+                  SMK Negeri 1 — Sistem Pembayaran Digital Kantin Sekolah
+                </p>
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Dark Bottom Bar */}
+        <div className="h-2 bg-slate-900" />
       </footer>
     </div>
   );
