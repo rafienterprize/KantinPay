@@ -18,7 +18,7 @@ interface AdminNavbarProps {
 }
 
 export function AdminNavbar({
-  pageTitle = "{brandName}",
+  pageTitle = "Panel Koperasi",
   searchTerm = "",
   onSearchChange,
   onFilterClick,
@@ -26,20 +26,15 @@ export function AdminNavbar({
 }: AdminNavbarProps) {
   return (
     <header className="sticky top-0 z-30 h-16 bg-white border-b border-[#D1D1D1]/60 px-4 sm:px-6 flex items-center justify-between gap-4">
-      {/* Brand Logo & Brand Name / Page Title */}
+      {/* Brand Logo & Brand Name */}
       <div className="flex items-center gap-3 shrink-0">
         <Link href="/admin" className="flex items-center gap-2.5 group">
           <div className="w-10 h-10 rounded-2xl bg-[#5CC0F7] flex items-center justify-center text-white shadow-2xs group-hover:scale-105 transition-transform">
             <Utensils className="w-5 h-5" />
           </div>
-          <div>
-            <span className="font-heading font-bold text-lg tracking-tight text-slate-900 block leading-none">
-              Kantin<span className="text-[#5CC0F7]">Pay</span>
-            </span>
-            <span className="text-[11px] font-heading font-medium text-slate-500 block leading-tight mt-0.5">
-              {pageTitle}
-            </span>
-          </div>
+          <span className="font-heading font-bold text-xl tracking-tight text-slate-900">
+            Kantin<span className="text-[#5CC0F7]">Pay</span>
+          </span>
         </Link>
       </div>
 

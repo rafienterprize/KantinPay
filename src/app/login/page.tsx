@@ -7,7 +7,6 @@ import {
   Utensils,
   Mail,
   Lock,
-  ArrowRight,
   Shield,
   GraduationCap,
   Store,
@@ -212,7 +211,6 @@ export default function LoginPage() {
             className="w-full mt-4"
           >
             <span>Masuk Sekarang</span>
-            <ArrowRight className="w-4 h-4" />
           </Button>
         </form>
 

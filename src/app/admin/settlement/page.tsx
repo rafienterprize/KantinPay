@@ -7,7 +7,6 @@ import {
   Store,
   CheckCircle2,
   Clock,
-  ArrowRight,
   ShieldCheck,
   Calendar,
   AlertCircle,
@@ -109,7 +108,7 @@ export default function SettlementPage() {
 
   return (
     <AdminLayout
-      pageTitle="{settlementPage}"
+      pageTitle="Rekap Settlement"
       searchTerm={searchTerm}
       onSearchChange={setSearchTerm}
       onFilterClick={() => alert("Filter settlement dibuka.")}
@@ -224,7 +223,6 @@ export default function SettlementPage() {
                       className="rounded-2xl text-xs px-3.5 h-8 font-heading"
                     >
                       <span>{s.status === "settled" ? "Lihat Bukti" : "Proses Cair"}</span>
-                      <ArrowRight className="w-3 h-3 ml-1" />
                     </Button>
                   </div>
                 </div>

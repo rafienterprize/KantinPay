@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "motion/react";
 import { AdminNavbar } from "./AdminNavbar";
 import { AdminSidebar } from "./AdminSidebar";
 import { BottomTabBar } from "@/components/navigation/BottomTabBar";
@@ -22,7 +23,7 @@ interface AdminLayoutProps {
 
 export function AdminLayout({
   children,
-  pageTitle = "{brandName}",
+  pageTitle = "Panel Koperasi",
   searchTerm,
   onSearchChange,
   onFilterClick,
@@ -44,7 +45,10 @@ export function AdminLayout({
 
       {/* Main Container with Sidebar + Content */}
       <div className="flex flex-1">
-        {/* Desktop Sidebar matching wireframe */}
+        {/* Desktop Sidebar Spacer (reserves 16rem space for the fixed sidebar) */}
+        <div className="hidden md:block w-64 shrink-0" aria-hidden="true" />
+        
+        {/* Desktop Fixed Sidebar */}
         <div className="hidden md:block">
           <AdminSidebar
             onOpenNotification={() => setNotificationOpen(true)}
@@ -52,9 +56,20 @@ export function AdminLayout({
           />
         </div>
 
-        {/* Dynamic Content Area */}
-        <main className="flex-1 p-4 sm:p-6 pb-24 md:pb-8 max-w-7xl w-full mx-auto overflow-x-hidden">
-          {children}
+        {/* Dynamic Content Area with smooth transition */}
+        <main className="flex-1 p-4 sm:p-6 pb-24 md:pb-8 max-w-7xl w-full mx-auto overflow-x-hidden min-h-[calc(100vh-4rem)]">
+          <motion.div
+            key={pageTitle}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.32,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="w-full"
+          >
+            {children}
+          </motion.div>
         </main>
       </div>
 

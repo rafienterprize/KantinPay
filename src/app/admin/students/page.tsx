@@ -179,7 +179,7 @@ export default function StudentsPage() {
 
   return (
     <AdminLayout
-      pageTitle="{studentsPage}"
+      pageTitle="Data Siswa"
       searchTerm={searchTerm}
       onSearchChange={setSearchTerm}
       onFilterClick={() => setClassFilter((prev) => (prev === "all" ? "XII" : "all"))}

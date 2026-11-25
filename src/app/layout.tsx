@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fredoka, Balsamiq_Sans } from "next/font/google";
 import "./globals.css";
+import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -30,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${fredoka.variable} ${balsamiqSans.variable}`}>
       <body className="min-h-screen bg-[#F8FAFC] text-slate-800 antialiased selection:bg-[#D6EFFF] selection:text-slate-900">
-        {children}
+        <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>
     </html>
   );

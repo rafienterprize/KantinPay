@@ -15,7 +15,7 @@ export function PhoneMockup({
   return (
     <div
       className={cn(
-        "relative w-[280px] sm:w-[310px] md:w-[325px] aspect-[388/800] select-none",
+        "relative w-[260px] xs:w-[280px] sm:w-[310px] md:w-[325px] max-w-full aspect-[388/800] select-none mx-auto",
         className
       )}
     >
@@ -30,14 +30,14 @@ export function PhoneMockup({
           bottom: "1.75%",
           left: "4.38%",
           right: "4.38%",
-          borderRadius: "38px",
+          borderRadius: "36px",
         }}
       >
         {/* Status bar row aligned with the Dynamic Island */}
-        <div className="pt-2 px-5 pb-1 flex items-center justify-between text-[10px] sm:text-[11px] font-heading font-semibold text-slate-800 shrink-0 select-none z-10">
+        <div className="pt-2 px-4 sm:px-5 pb-1 flex items-center justify-between text-[10px] sm:text-[11px] font-heading font-semibold text-slate-800 shrink-0 select-none z-10">
           <span>09:41</span>
           {/* Spacer for dynamic island */}
-          <div className="w-20" />
+          <div className="w-16 sm:w-20" />
           <div className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span>100%</span>

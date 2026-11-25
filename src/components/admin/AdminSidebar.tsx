@@ -36,19 +36,19 @@ export function AdminSidebar({
       badge: null,
     },
     {
-      label: "students page",
+      label: "Data Siswa",
       href: "/admin/students",
       icon: Users,
       badge: "Siswa",
     },
     {
-      label: "tenants page",
+      label: "Data Tenant",
       href: "/admin/tenants",
       icon: Store,
       badge: "Kantin",
     },
     {
-      label: "settlement page",
+      label: "Rekap Settlement",
       href: "/admin/settlement",
       icon: Receipt,
       badge: "Rekap",
@@ -64,9 +64,9 @@ export function AdminSidebar({
   };
 
   return (
-    <aside className="w-64 border-r border-[#D1D1D1]/60 bg-white flex flex-col justify-between shrink-0 min-h-[calc(100vh-65px)] p-4 select-none">
+    <aside className="fixed top-16 left-0 bottom-0 w-64 border-r border-[#D1D1D1]/60 bg-white flex flex-col justify-between shrink-0 p-4 select-none z-20">
       {/* Top Navigation Items */}
-      <div className="space-y-1.5">
+      <div className="space-y-1.5 overflow-y-auto">
         <p className="px-3 py-1 text-[10px] font-heading font-semibold text-slate-400 uppercase tracking-wider">
           Menu Utama Koperasi
         </p>
@@ -76,7 +76,7 @@ export function AdminSidebar({
 
           return (
             <Link
-              key={item.label}
+              key={item.href}
               href={item.href}
               className={cn(
                 "flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-heading font-semibold transition-all duration-150",
@@ -92,7 +92,7 @@ export function AdminSidebar({
                     isActive ? "text-[#0284c7]" : "text-slate-400"
                   )}
                 />
-                <span className="capitalize">{item.label}</span>
+                <span>{item.label}</span>
               </div>
               {item.badge && (
                 <span
@@ -112,7 +112,7 @@ export function AdminSidebar({
       </div>
 
       {/* Bottom Items: Notification & Account */}
-      <div className="pt-4 border-t border-slate-100 space-y-1.5">
+      <div className="pt-4 border-t border-slate-100 space-y-1.5 mt-auto shrink-0">
         <p className="px-3 py-1 text-[10px] font-heading font-semibold text-slate-400 uppercase tracking-wider">
           Pengaturan
         </p>

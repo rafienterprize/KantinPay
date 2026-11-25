@@ -12,7 +12,6 @@ import {
   ArrowUpRight,
   Sparkles,
   Store,
-  ChevronRight,
   Calendar,
   CheckCircle2,
 } from "lucide-react";
@@ -57,7 +56,7 @@ export default function AdminDashboardPage() {
 
   return (
     <AdminLayout
-      pageTitle="{brandName}"
+      pageTitle="Dashboard Koperasi"
       searchTerm={searchTerm}
       onSearchChange={setSearchTerm}
       onFilterClick={() => alert("Filter aktivitas koperasi dibuka.")}
@@ -212,10 +211,9 @@ export default function AdminDashboardPage() {
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
                 <Link
                   href="/admin/students"
-                  className="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-[#5CC0F7] hover:text-[#48b1eb] group"
+                  className="inline-flex items-center text-xs font-heading font-semibold text-[#5CC0F7] hover:text-[#48b1eb]"
                 >
                   <span>Buka Tabel Siswa & Top Up</span>
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </div>
@@ -239,10 +237,9 @@ export default function AdminDashboardPage() {
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
                 <Link
                   href="/admin/settlement"
-                  className="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-[#5CC0F7] hover:text-[#48b1eb] group"
+                  className="inline-flex items-center text-xs font-heading font-semibold text-[#5CC0F7] hover:text-[#48b1eb]"
                 >
                   <span>Lihat Rekap Harian 8 Tenant</span>
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             </div>

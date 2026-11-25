@@ -31,6 +31,8 @@ body {
 
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: var(--font-fredoka), sans-serif;
+  overflow-wrap: break-word;
+  text-rendering: optimizeLegibility;
 }
 
 /* Skeleton shimmer animation */
@@ -78,3 +80,26 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }
+
+/* Lenis Smooth Scrolling */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+

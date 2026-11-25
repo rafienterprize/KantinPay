@@ -117,7 +117,7 @@ export default function TenantsPage() {
 
   return (
     <AdminLayout
-      pageTitle="{tenantsPage}"
+      pageTitle="Data Tenant"
       searchTerm={searchTerm}
       onSearchChange={setSearchTerm}
       onFilterClick={() => setCategoryFilter((prev) => (prev === "all" ? "Makanan" : "all"))}
