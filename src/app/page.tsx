@@ -117,13 +117,25 @@ export default function LandingPage() {
     },
   ];
 
+  // Marquee items for the ticker strip
+  const marqueeItems = [
+    "PEMBAYARAN DIGITAL",
+    "8 KANTIN TERINTEGRASI",
+    "WHATSAPP BOT",
+    "SALDO REALTIME",
+    "ANTI MINUS",
+    "KOPERASI SEKOLAH",
+    "SETTLEMENT HARIAN",
+    "CLOSED-LOOP SYSTEM",
+  ];
+
   return (
     <div className="min-h-screen bg-[#FFFFFF] text-slate-800 selection:bg-[#D6EFFF] pb-24 md:pb-0 overflow-x-hidden">
       {/* Floating Pill Navigation */}
       <FloatingNavbar />
 
       {/* =========================================================================
-          2. HERO SECTION (Text Left, Phone Frame Right with Organic Pastel Blobs)
+          1. HERO SECTION (Text Left, Phone Frame Right with Organic Pastel Blobs)
          ========================================================================= */}
       <section className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center pt-28 pb-16 sm:pt-32 sm:pb-20 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -309,22 +321,39 @@ export default function LandingPage() {
       </section>
 
       {/* =========================================================================
-          3. FEATURE 1 (Zig-Zag: Text Left, Cooperative Ledger Card Right)
+          2. MARQUEE TICKER STRIP (Horizontal infinite scroll text band)
          ========================================================================= */}
-      <section id="fitur" className="min-h-screen flex flex-col justify-center py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100 scroll-mt-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Text Left */}
-          <div className="lg:col-span-5 text-left space-y-4">
+      <div className="relative overflow-hidden border-y border-[#D1D1D1]/40 bg-[#D6EFFF]/30 py-4">
+        <div className="flex animate-marquee whitespace-nowrap">
+          {[...marqueeItems, ...marqueeItems].map((item, idx) => (
+            <span
+              key={idx}
+              className="mx-6 sm:mx-10 text-xs sm:text-sm font-heading font-bold text-slate-500 uppercase tracking-widest"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* =========================================================================
+          3. SPLIT SECTION — Text Left, Cooperative Ledger Card Right
+             (Referensi: "Crafting brand experiences" layout)
+         ========================================================================= */}
+      <section id="fitur" className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto scroll-mt-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          {/* Left: Large headline + sub-text */}
+          <div className="space-y-6">
             <AnimatedHeading
               as="h2"
               text="Ekosistem terpadu. Koperasi & kantin selalu selaras."
-              className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 leading-tight pb-1"
+              className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-slate-900 leading-[1.12] pb-1"
               scrub={true}
             />
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-md">
               KantinPay bertindak sebagai jembatan keuangan tertutup di sekolah. Koperasi mengelola penerimaan dana setoran tunai siswa, sementara kantin fokus melayani pesanan tanpa repot menyiapkan uang kembalian.
             </p>
-            <div className="pt-2">
+            <div className="pt-1">
               <span className="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-[#0284c7]">
                 <CheckCircle2 className="w-4 h-4 text-[#5CC0F7]" />
                 Rekonsiliasi transaksi otomatis setiap saat
@@ -332,79 +361,76 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Visual Right: Cooperative Daily Ledger Card with Motion */}
-          <div className="lg:col-span-7 flex justify-center relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#D6EFFF]/40 to-[#EBF7FF]/70 rounded-[40px] -rotate-1 -z-10" />
-
-            <AnimatedCard hoverEffect={true} delay={0.1} className="w-full max-w-lg">
-              <div className="w-full bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 space-y-4 my-4">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center font-bold text-xs font-heading">
-                      KP
-                    </div>
-                    <div>
-                      <h4 className="font-heading font-bold text-xs text-slate-900">
-                        Buku Besar Koperasi Sekolah
-                      </h4>
-                      <p className="text-[10px] text-slate-400">Status Pembukuan Harian</p>
-                    </div>
+          {/* Right: Visual Ledger Card */}
+          <AnimatedCard hoverEffect={true} delay={0.1} className="w-full">
+            <div className="w-full bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center font-bold text-xs font-heading">
+                    KP
                   </div>
-                  <span className="text-[10px] font-heading font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    Sinkron Realtime
-                  </span>
-                </div>
-
-                {/* Mini ledger rows */}
-                <div className="space-y-2 text-xs">
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
-                    <div>
-                      <span className="font-heading font-bold text-slate-800 block text-xs">
-                        Kantin 1 (Bu Nurhasanah)
-                      </span>
-                      <span className="text-[11px] text-slate-500">28 transaksi siswa • Nasi Rames</span>
-                    </div>
-                    <span className="font-heading font-bold text-slate-900">Rp 345.000</span>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
-                    <div>
-                      <span className="font-heading font-bold text-slate-800 block text-xs">
-                        Kantin 2 (Pak Joko Susilo)
-                      </span>
-                      <span className="text-[11px] text-slate-500">22 transaksi siswa • Mie Ayam &amp; Bakso</span>
-                    </div>
-                    <span className="font-heading font-bold text-slate-900">Rp 290.000</span>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
-                    <div>
-                      <span className="font-heading font-bold text-slate-800 block text-xs">
-                        Kantin 3 (Ibu Siti Fatimah)
-                      </span>
-                      <span className="text-[11px] text-slate-500">31 transaksi siswa • Ayam Geprek</span>
-                    </div>
-                    <span className="font-heading font-bold text-slate-900">Rp 420.000</span>
+                  <div>
+                    <h4 className="font-heading font-bold text-xs text-slate-900">
+                      Buku Besar Koperasi Sekolah
+                    </h4>
+                    <p className="text-[10px] text-slate-400">Status Pembukuan Harian</p>
                   </div>
                 </div>
+                <span className="text-[10px] font-heading font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Sinkron Realtime
+                </span>
+              </div>
 
-                <div className="pt-2 flex items-center justify-between text-xs text-slate-500 font-heading">
-                  <span>Total Omset 8 Kantin:</span>
-                  <span className="font-bold text-slate-900 text-sm">Rp 2.200.000</span>
+              {/* Mini ledger rows */}
+              <div className="space-y-2 text-xs">
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="font-heading font-bold text-slate-800 block text-xs">
+                      Kantin 1 (Bu Nurhasanah)
+                    </span>
+                    <span className="text-[11px] text-slate-500">28 transaksi siswa • Nasi Rames</span>
+                  </div>
+                  <span className="font-heading font-bold text-slate-900">Rp 345.000</span>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="font-heading font-bold text-slate-800 block text-xs">
+                      Kantin 2 (Pak Joko Susilo)
+                    </span>
+                    <span className="text-[11px] text-slate-500">22 transaksi siswa • Mie Ayam &amp; Bakso</span>
+                  </div>
+                  <span className="font-heading font-bold text-slate-900">Rp 290.000</span>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="font-heading font-bold text-slate-800 block text-xs">
+                      Kantin 3 (Ibu Siti Fatimah)
+                    </span>
+                    <span className="text-[11px] text-slate-500">31 transaksi siswa • Ayam Geprek</span>
+                  </div>
+                  <span className="font-heading font-bold text-slate-900">Rp 420.000</span>
                 </div>
               </div>
-            </AnimatedCard>
-          </div>
+
+              <div className="pt-2 flex items-center justify-between text-xs text-slate-500 font-heading">
+                <span>Total Omset 8 Kantin:</span>
+                <span className="font-bold text-slate-900 text-sm">Rp 2.200.000</span>
+              </div>
+            </div>
+          </AnimatedCard>
         </div>
       </section>
 
       {/* =========================================================================
-          4. FEATURE 2 (Zig-Zag: Phone Left, Text Right — WhatsApp Bot Feature)
+          4. SPLIT SECTION — Phone Left, Service List Right
+             (Referensi: "Deep into brand experience" layout — image kiri, list kanan)
          ========================================================================= */}
-      <section id="kantin" className="min-h-screen flex flex-col justify-center py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100 scroll-mt-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Visual Left: Phone showing WhatsApp Bot Conversation with Motion */}
-          <div className="lg:col-span-6 flex justify-center relative order-2 lg:order-1">
+      <section id="kantin" className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100 scroll-mt-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          {/* Left: Phone showing WhatsApp Bot */}
+          <div className="flex justify-center relative order-2 lg:order-1">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-tr from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/60 rounded-[56px] rotate-2 -z-10 blur-xs" />
 
             <AnimatedCard hoverEffect={true} delay={0.1}>
@@ -455,7 +481,7 @@ export default function LandingPage() {
                   {/* Bot reply: Success */}
                   <div className="flex justify-start">
                     <div className="bg-white p-2 rounded-xl rounded-tl-xs shadow-2xs max-w-[210px] text-slate-800 space-y-0.5 border-l-3 border-emerald-500">
-                      <p className="font-bold text-emerald-700 text-[10px]">Pembayaran Berhasil! 🎉</p>
+                      <p className="font-bold text-emerald-700 text-[10px]">Pembayaran Berhasil!</p>
                       <p className="text-[9px] text-slate-600">
                         Kantin: <strong>Kantin 1</strong><br />
                         Nominal: <strong>Rp 10.000</strong><br />
@@ -470,59 +496,159 @@ export default function LandingPage() {
             </AnimatedCard>
           </div>
 
-          {/* Text Right with GSAP */}
-          <div className="lg:col-span-6 text-left space-y-4 order-1 lg:order-2">
+          {/* Right: Service list (like reference — vertical stacked items with separator) */}
+          <div className="space-y-6 order-1 lg:order-2">
             <AnimatedHeading
               as="h2"
               text="Ketika kuota reguler habis, jajan tetap jalan lancar."
-              className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 leading-tight pb-1"
+              className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-slate-900 leading-[1.12] pb-1"
               scrub={true}
             />
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Banyak siswa yang paket internetnya hanya aktif untuk WhatsApp. KantinPay mengantisipasi ini dengan menghubungkan bot WhatsApp ke sistem database yang sama.
-            </p>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Siswa cukup membalas pesan teks sederhana untuk memilih kantin dan membayar makanan tanpa perlu membuka aplikasi perbankan yang rakus kuota data.
-            </p>
-            <div className="pt-2">
-              <span className="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-[#0284c7]">
-                <MessageSquare className="w-4 h-4 text-[#5CC0F7]" />
-                Kompatibel dengan paket chat operator seluler apa pun
-              </span>
+
+            {/* Stacked service items (like reference layout) */}
+            <div className="space-y-0 divide-y divide-slate-100">
+              {[
+                { label: "WHATSAPP BOT", desc: "Bayar lewat pesan teks, tanpa perlu kuota reguler" },
+                { label: "PORTAL WEB", desc: "Dashboard lengkap untuk siswa, kantin, dan koperasi" },
+                { label: "SALDO DIGITAL", desc: "Setoran tunai berubah instan menjadi saldo digital" },
+                { label: "SETTLEMENT HARIAN", desc: "Pencairan dana ke pedagang kantin setiap sore hari" },
+              ].map((item, idx) => (
+                <AnimatedFadeIn key={item.label} direction="up" delay={idx * 0.08}>
+                  <div className="py-5 flex items-center justify-between group cursor-default">
+                    <div>
+                      <h4 className="font-heading font-bold text-sm sm:text-base text-slate-900 uppercase tracking-wider">
+                        {item.label}
+                      </h4>
+                      <p className="text-xs sm:text-sm text-slate-500 mt-0.5">{item.desc}</p>
+                    </div>
+                    <div className="w-2 h-2 rounded-full bg-[#5CC0F7] shrink-0 opacity-0 group-hover:opacity-100 transition" />
+                  </div>
+                </AnimatedFadeIn>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          5. FEATURE 3 (Zig-Zag: Text Left, Phone Right — Easy Payment 2 Seconds)
+          5. CENTERED HEADING + VERTICAL STACKED CARDS
+             (Referensi: "Helping brands thrive" layout — heading di tengah, item cards vertikal)
          ========================================================================= */}
-      <section className="min-h-screen flex flex-col justify-center py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Text Left with GSAP */}
-          <div className="lg:col-span-6 text-left space-y-4">
-            <AnimatedHeading
-              as="h2"
-              text="Pembayaran instan. Bahkan saat antrean penuh."
-              className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 leading-tight pb-1"
-              scrub={true}
-            />
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Jam istirahat sekolah hanya berlangsung singkat. KantinPay menghilangkan waktu tunggu mencari uang pas dan uang kembalian receh.
-            </p>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Cukup pilih nomor kantin, ketikkan nominal, dan konfirmasi. Notifikasi masuk seketika ke layar pengelola kantin dalam hitungan 2 detik.
-            </p>
-            <div className="pt-2">
-              <span className="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-[#0284c7]">
-                <Zap className="w-4 h-4 text-[#5CC0F7]" />
-                Rata-rata kecepatan transaksi di bawah 2 detik
-              </span>
-            </div>
-          </div>
+      <section className="py-20 sm:py-28 px-4 sm:px-6 max-w-5xl mx-auto border-t border-slate-100">
+        <div className="text-center mb-14">
+          <AnimatedHeading
+            as="h2"
+            text="Hal penting saat Anda menggunakannya"
+            className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-slate-900 leading-[1.12] pb-1"
+            scrub={true}
+          />
+          <p className="text-sm text-slate-500 mt-3 max-w-xl mx-auto">
+            Dirancang berdasarkan riset nyata kebutuhan siswa dan pedagang di kantin sekolah.
+          </p>
+        </div>
 
-          {/* Phone Right: Easy Payment Screen with Motion */}
-          <div className="lg:col-span-6 flex justify-center relative">
+        {/* Stacked vertical cards (like reference project list) */}
+        <div className="space-y-4">
+          {[
+            {
+              icon: <Zap className="w-5 h-5" />,
+              iconBg: "bg-[#D6EFFF] text-[#0284c7]",
+              title: "Kecepatan Transaksi 2 Detik",
+              desc: "Antrean kantin bergerak cepat tanpa waktu terbuang untuk menghitung uang kertas dan koin.",
+              tag: "PERFORMA",
+            },
+            {
+              icon: <Layers className="w-5 h-5" />,
+              iconBg: "bg-emerald-50 text-emerald-600",
+              title: "Pemisahan Rekening Payable",
+              desc: "Uang siswa dan saldo milik pedagang dipisahkan secara tertib dalam pembukuan koperasi.",
+              tag: "KEAMANAN",
+            },
+            {
+              icon: <Smartphone className="w-5 h-5" />,
+              iconBg: "bg-amber-50 text-amber-600",
+              title: "Ramah Paket WhatsApp",
+              desc: "Siswa tanpa kuota reguler tetap bisa jajan dengan mudah menggunakan perintah bot WhatsApp.",
+              tag: "AKSESIBILITAS",
+            },
+            {
+              icon: <Lock className="w-5 h-5" />,
+              iconBg: "bg-sky-50 text-sky-600",
+              title: "Integritas Finansial ACID",
+              desc: "Setiap pemotongan saldo berjalan dalam transaksi database yang dapat di-rollback otomatis jika gagal.",
+              tag: "RELIABILITAS",
+            },
+          ].map((item, idx) => (
+            <AnimatedCard
+              key={item.title}
+              hoverEffect={true}
+              delay={idx * 0.06}
+              className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-[#5CC0F7]/50 hover:shadow-md transition-all"
+            >
+              <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+                <div className={`w-11 h-11 rounded-2xl ${item.iconBg} flex items-center justify-center shrink-0`}>
+                  {item.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4 mb-1.5">
+                    <h4 className="font-heading font-bold text-base sm:text-lg text-slate-900">
+                      {item.title}
+                    </h4>
+                    <span className="text-[10px] font-heading font-bold text-slate-400 uppercase tracking-widest shrink-0">
+                      {item.tag}
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            </AnimatedCard>
+          ))}
+        </div>
+      </section>
+
+      {/* =========================================================================
+          6. SECOND MARQUEE TICKER STRIP
+         ========================================================================= */}
+      <div className="relative overflow-hidden border-y border-[#D1D1D1]/40 bg-[#D6EFFF]/20 py-4">
+        <div className="flex animate-marquee-reverse whitespace-nowrap">
+          {[
+            "TRANSAKSI INSTAN",
+            "REKAP OTOMATIS",
+            "BEBAS BIAYA ADMIN",
+            "BOT WHATSAPP",
+            "SALDO AMAN",
+            "AUDIT TRAIL",
+            "DASHBOARD REALTIME",
+            "KOPERASI DIGITAL",
+            "TRANSAKSI INSTAN",
+            "REKAP OTOMATIS",
+            "BEBAS BIAYA ADMIN",
+            "BOT WHATSAPP",
+            "SALDO AMAN",
+            "AUDIT TRAIL",
+            "DASHBOARD REALTIME",
+            "KOPERASI DIGITAL",
+          ].map((item, idx) => (
+            <span
+              key={idx}
+              className="mx-6 sm:mx-10 text-xs sm:text-sm font-heading font-bold text-slate-400 uppercase tracking-widest"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* =========================================================================
+          7. SPLIT — Phone Left, Bullet Points Right (Payment Speed)
+             (Referensi: tetap zig-zag, tapi lebih spaced)
+         ========================================================================= */}
+      <section className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          {/* Phone Left: Easy Payment Screen */}
+          <div className="flex justify-center relative order-2 lg:order-1">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-br from-[#D6EFFF]/60 via-[#EBF7FF] to-[#D6EFFF]/40 rounded-[56px] -rotate-2 -z-10 blur-xs" />
 
             <AnimatedCard hoverEffect={true} delay={0.1}>
@@ -572,16 +698,80 @@ export default function LandingPage() {
               </PhoneMockup>
             </AnimatedCard>
           </div>
+
+          {/* Right: Text + Bullet Points */}
+          <div className="space-y-5 order-1 lg:order-2">
+            <AnimatedHeading
+              as="h2"
+              text="Pembayaran instan. Bahkan saat antrean penuh."
+              className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-slate-900 leading-[1.12] pb-1"
+              scrub={true}
+            />
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Jam istirahat sekolah hanya berlangsung singkat. KantinPay menghilangkan waktu tunggu mencari uang pas dan uang kembalian receh.
+            </p>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Cukup pilih nomor kantin, ketikkan nominal, dan konfirmasi. Notifikasi masuk seketika ke layar pengelola kantin dalam hitungan 2 detik.
+            </p>
+
+            {/* 3 Bullet Points */}
+            <div className="space-y-3 pt-2">
+              <AnimatedFadeIn direction="up" delay={0.1}>
+                <div className="flex items-center gap-3">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#5CC0F7] shrink-0" />
+                  <span className="text-sm font-heading font-semibold text-slate-800">
+                    Riwayat transaksi abadi, tidak pernah hilang
+                  </span>
+                </div>
+              </AnimatedFadeIn>
+              <AnimatedFadeIn direction="up" delay={0.2}>
+                <div className="flex items-center gap-3">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
+                  <span className="text-sm font-heading font-semibold text-slate-800">
+                    Proteksi saldo anti-minus pada setiap pembelian
+                  </span>
+                </div>
+              </AnimatedFadeIn>
+              <AnimatedFadeIn direction="up" delay={0.3}>
+                <div className="flex items-center gap-3">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0" />
+                  <span className="text-sm font-heading font-semibold text-slate-800">
+                    Rekap nomor referensi unik untuk setiap transaksi
+                  </span>
+                </div>
+              </AnimatedFadeIn>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* =========================================================================
-          6. FEATURE 4 (Zig-Zag: Phone Left, Text Right with 3 Bullet Points)
+          8. HISTORY PHONE + TEXT (zig-zag: Text Left, Phone Right)
          ========================================================================= */}
-      <section className="min-h-screen flex flex-col justify-center py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Phone Left: History View with Motion */}
-          <div className="lg:col-span-6 flex justify-center relative order-2 lg:order-1">
+      <section className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          {/* Left: Text */}
+          <div className="space-y-5">
+            <AnimatedHeading
+              as="h2"
+              text="Bawa riwayatmu ke mana saja."
+              className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-slate-900 leading-[1.12] pb-1"
+              scrub={true}
+            />
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              Semua jejak pembayaran terekam kekal dalam basis data sekolah. Siswa dapat memeriksa pengeluaran uang saku secara mandiri, sementara orang tua dan pengurus koperasi mendapatkan transparansi finansial penuh.
+            </p>
+
+            <div className="pt-1">
+              <span className="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-[#0284c7]">
+                <Zap className="w-4 h-4 text-[#5CC0F7]" />
+                Rata-rata kecepatan transaksi di bawah 2 detik
+              </span>
+            </div>
+          </div>
+
+          {/* Right: Phone History View */}
+          <div className="flex justify-center relative">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-tr from-[#EBF7FF] via-[#D6EFFF] to-[#EBF7FF] rounded-[56px] rotate-3 -z-10 blur-xs" />
 
             <AnimatedCard hoverEffect={true} delay={0.1}>
@@ -646,162 +836,19 @@ export default function LandingPage() {
               </PhoneMockup>
             </AnimatedCard>
           </div>
-
-          {/* Text Right with GSAP & Motion */}
-          <div className="lg:col-span-6 text-left space-y-5 order-1 lg:order-2">
-            <AnimatedHeading
-              as="h2"
-              text="Bawa riwayatmu ke mana saja."
-              className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 leading-tight pb-1"
-              scrub={true}
-            />
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Semua jejak pembayaran terekam kekal dalam basis data sekolah. Siswa dapat memeriksa pengeluaran uang saku secara mandiri, sementara orang tua dan pengurus koperasi mendapatkan transparansi finansial penuh.
-            </p>
-
-            {/* 3 Color Bullet Points matching Loaf reference */}
-            <div className="space-y-3 pt-2">
-              <AnimatedFadeIn direction="up" delay={0.1}>
-                <div className="flex items-center gap-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#5CC0F7] shrink-0" />
-                  <span className="text-sm font-heading font-semibold text-slate-800">
-                    Riwayat transaksi abadi, tidak pernah hilang
-                  </span>
-                </div>
-              </AnimatedFadeIn>
-              <AnimatedFadeIn direction="up" delay={0.2}>
-                <div className="flex items-center gap-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
-                  <span className="text-sm font-heading font-semibold text-slate-800">
-                    Proteksi saldo anti-minus pada setiap pembelian
-                  </span>
-                </div>
-              </AnimatedFadeIn>
-              <AnimatedFadeIn direction="up" delay={0.3}>
-                <div className="flex items-center gap-3">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0" />
-                  <span className="text-sm font-heading font-semibold text-slate-800">
-                    Rekap nomor referensi unik untuk setiap transaksi
-                  </span>
-                </div>
-              </AnimatedFadeIn>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* =========================================================================
-          7. "WHAT MATTERS WHEN YOU ACTUALLY USE IT" (2x2 Grid with Motion Cards)
+          9. CATATAN KOPERASI (Full-Width Pastel Band + Centered Paper Card)
+             (Referensi: "Kind words, big ego boost" testimonial style)
          ========================================================================= */}
-      <section className="min-h-screen flex flex-col justify-center py-16 sm:py-24 px-4 sm:px-6 max-w-5xl mx-auto border-t border-slate-100">
-        <div className="text-left mb-12">
-          <AnimatedHeading
-            as="h2"
-            text="Hal penting saat Anda menggunakannya"
-            className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 leading-tight pb-1"
-            scrub={true}
-          />
-          <p className="text-sm text-slate-500 mt-2">
-            Dirancang berdasarkan riset nyata kebutuhan siswa dan pedagang di kantin sekolah.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Prop 1 */}
-          <AnimatedCard
-            hoverEffect={true}
-            delay={0.05}
-            className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-[#5CC0F7]/50 hover:shadow-md transition-all"
-          >
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-2xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center shrink-0 mt-0.5">
-                <Zap className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="font-heading font-bold text-base text-slate-900">
-                  Kecepatan Transaksi 2 Detik
-                </h4>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                  Antrean kantin bergerak cepat tanpa waktu terbuang untuk menghitung uang kertas dan koin.
-                </p>
-              </div>
-            </div>
-          </AnimatedCard>
-
-          {/* Prop 2 */}
-          <AnimatedCard
-            hoverEffect={true}
-            delay={0.12}
-            className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-[#5CC0F7]/50 hover:shadow-md transition-all"
-          >
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
-                <Layers className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="font-heading font-bold text-base text-slate-900">
-                  Pemisahan Rekening Payable
-                </h4>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                  Uang siswa dan saldo milik pedagang dipisahkan secara tertib dalam pembukuan koperasi.
-                </p>
-              </div>
-            </div>
-          </AnimatedCard>
-
-          {/* Prop 3 */}
-          <AnimatedCard
-            hoverEffect={true}
-            delay={0.19}
-            className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-[#5CC0F7]/50 hover:shadow-md transition-all"
-          >
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 mt-0.5">
-                <Smartphone className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="font-heading font-bold text-base text-slate-900">
-                  Ramah Paket WhatsApp
-                </h4>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                  Siswa tanpa kuota reguler tetap bisa jajan dengan mudah menggunakan perintah bot WhatsApp.
-                </p>
-              </div>
-            </div>
-          </AnimatedCard>
-
-          {/* Prop 4 */}
-          <AnimatedCard
-            hoverEffect={true}
-            delay={0.26}
-            className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-[#5CC0F7]/50 hover:shadow-md transition-all"
-          >
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 mt-0.5">
-                <Lock className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="font-heading font-bold text-base text-slate-900">
-                  Integritas Finansial ACID
-                </h4>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                  Setiap pemotongan saldo berjalan dalam transaksi database yang dapat di-rollback otomatis jika gagal.
-                </p>
-              </div>
-            </div>
-          </AnimatedCard>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          8. "A NOTE FROM THE COOPERATIVE" (Pastel Full-Width Band + Centered Paper Card)
-         ========================================================================= */}
-      <section id="catatan" className="min-h-screen flex flex-col justify-center py-16 sm:py-24 px-4 sm:px-6 bg-gradient-to-b from-[#D6EFFF]/50 via-[#EBF7FF]/80 to-[#D6EFFF]/30 border-y border-[#5CC0F7]/20 scroll-mt-20">
+      <section id="catatan" className="py-20 sm:py-28 px-4 sm:px-6 bg-gradient-to-b from-[#D6EFFF]/50 via-[#EBF7FF]/80 to-[#D6EFFF]/30 border-y border-[#5CC0F7]/20 scroll-mt-20">
         <div className="max-w-3xl mx-auto text-center">
           <AnimatedHeading
             as="h2"
             text="Catatan dari Pengurus Koperasi"
-            className="text-3xl sm:text-4xl font-heading font-bold text-slate-900 mb-8 leading-tight pb-1"
+            className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-slate-900 mb-10 leading-[1.12] pb-1"
             scrub={true}
           />
 
@@ -835,9 +882,9 @@ export default function LandingPage() {
       </section>
 
       {/* =========================================================================
-          9. "YOUR QUESTIONS, ANSWERED." (FAQ with Left Sticky Sidebar & Right Accordions)
+          10. FAQ (Left Sticky Sidebar + Right Accordions)
          ========================================================================= */}
-      <section id="faq" className="min-h-screen flex flex-col justify-center py-16 sm:py-24 px-4 sm:px-6 max-w-6xl mx-auto scroll-mt-20">
+      <section id="faq" className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto scroll-mt-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Sticky Sidebar */}
           <div className="lg:col-span-4 text-left">
@@ -950,9 +997,9 @@ export default function LandingPage() {
       </section>
 
       {/* =========================================================================
-          10. BOTTOM CALL TO ACTION
+          11. BOTTOM CALL TO ACTION (Large centered CTA like reference)
          ========================================================================= */}
-      <section className="relative py-24 px-4 sm:px-6 overflow-hidden bg-gradient-to-b from-white to-[#D6EFFF]/40 text-center">
+      <section className="relative py-28 sm:py-36 px-4 sm:px-6 overflow-hidden bg-gradient-to-b from-white to-[#D6EFFF]/40 text-center">
         <div className="absolute -top-12 left-1/4 w-72 h-72 bg-[#D6EFFF]/60 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#5CC0F7]/15 rounded-full blur-3xl -z-10" />
 
@@ -966,7 +1013,7 @@ export default function LandingPage() {
           <AnimatedHeading
             as="h2"
             text="Mulai Gunakan KantinPay Hari Ini"
-            className="text-3xl sm:text-5xl font-heading font-bold text-slate-900 tracking-tight leading-snug pb-1.5"
+            className="text-3xl sm:text-5xl lg:text-6xl font-heading font-bold text-slate-900 tracking-tight leading-snug pb-1.5"
             scrub={true}
           />
 
@@ -992,7 +1039,7 @@ export default function LandingPage() {
       </section>
 
       {/* =========================================================================
-          11. FOOTER
+          12. FOOTER
          ========================================================================= */}
       <footer className="border-t border-slate-100 bg-white py-10 pb-28 md:pb-10 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500">
