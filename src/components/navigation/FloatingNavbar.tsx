@@ -19,14 +19,14 @@ export function FloatingNavbar() {
   }, []);
 
   const navLinks = [
-    { label: "Beranda", href: "/#hero" },
     { label: "Fitur", href: "/#fitur" },
-    { label: "8 Kantin", href: "/#kantin" },
-    { label: "Keamanan", href: "/#keamanan" },
+    { label: "8 Kantin", href: "/#fitur" },
+    { label: "Catatan", href: "/#catatan" },
+    { label: "FAQ", href: "/#faq" },
   ];
 
   return (
-    <header className="fixed top-5 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
+    <header className="fixed top-5 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
       <nav
         className={cn(
           "pointer-events-auto flex items-center justify-between w-full max-w-5xl px-4 sm:px-6 py-2.5 rounded-full transition-all duration-300",
@@ -49,7 +49,7 @@ export function FloatingNavbar() {
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
-              <Link
+              <a
                 key={link.label}
                 href={link.href}
                 className={cn(
@@ -60,7 +60,7 @@ export function FloatingNavbar() {
                 )}
               >
                 {link.label}
-              </Link>
+              </a>
             );
           })}
         </div>
@@ -78,7 +78,7 @@ export function FloatingNavbar() {
             href="/login"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-heading font-semibold bg-[#5CC0F7] text-white hover:bg-[#48b1eb] shadow-xs active:scale-95 transition"
           >
-            <span>Buka Dashboard</span>
+            <span>Buka Portal</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>

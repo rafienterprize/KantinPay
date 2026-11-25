@@ -20,6 +20,7 @@ import {
   Coins,
 } from "lucide-react";
 import { PhoneMockup } from "@/components/ui/PhoneMockup";
+import { FloatingNavbar } from "@/components/navigation/FloatingNavbar";
 
 export default function LandingPage() {
   // FAQ accordion active item state
@@ -115,53 +116,13 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#FFFFFF] text-slate-800 selection:bg-[#D6EFFF]">
-      {/* =========================================================================
-          1. HEADER / NAVBAR (Clean, Editorial Top Bar matching Loaf reference)
-         ========================================================================= */}
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
-          {/* Brand Logo on Left */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-2xl bg-[#5CC0F7] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-              <Utensils className="w-4 h-4" />
-            </div>
-            <span className="font-heading font-bold text-xl tracking-tight text-slate-900">
-              Kantin<span className="text-[#5CC0F7]">Pay</span>
-            </span>
-          </Link>
-
-          {/* Center Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-xs font-heading font-semibold text-slate-600">
-            <a href="#fitur" className="hover:text-slate-900 transition-colors">
-              Fitur
-            </a>
-            <a href="#ekosistem" className="hover:text-slate-900 transition-colors">
-              8 Kantin
-            </a>
-            <a href="#catatan" className="hover:text-slate-900 transition-colors">
-              Catatan Koperasi
-            </a>
-            <a href="#faq" className="hover:text-slate-900 transition-colors">
-              FAQ
-            </a>
-          </nav>
-
-          {/* Right CTA Button */}
-          <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="inline-flex items-center justify-center px-5 py-2.5 rounded-full font-heading font-bold text-xs bg-slate-900 text-white hover:bg-slate-800 active:scale-95 transition shadow-xs"
-            >
-              <span>Buka Portal</span>
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Floating Pill Navigation */}
+      <FloatingNavbar />
 
       {/* =========================================================================
           2. HERO SECTION (Text Left, Phone Frame Right with Organic Pastel Blobs)
          ========================================================================= */}
-      <section className="relative pt-12 pb-20 sm:pt-20 sm:pb-28 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
+      <section className="relative pt-28 pb-20 sm:pt-36 sm:pb-28 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Text & CTA */}
           <div className="lg:col-span-6 text-left">
