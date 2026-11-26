@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Utensils, Search, SlidersHorizontal, Plus } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -29,8 +30,14 @@ export function AdminNavbar({
       {/* Brand Logo & Brand Name */}
       <div className="flex items-center gap-3 shrink-0">
         <Link href="/admin" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-2xl bg-[#5CC0F7] flex items-center justify-center text-white shadow-2xs group-hover:scale-105 transition-transform">
-            <Utensils className="w-5 h-5" />
+          <div className="w-10 h-10 rounded-xl overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
+            <Image
+              src="/logo.png"
+              alt="KantinPay Logo"
+              width={40}
+              height={40}
+              className="w-full h-full object-cover"
+            />
           </div>
           <span className="font-heading font-bold text-xl tracking-tight text-slate-900">
             Kantin<span className="text-[#5CC0F7]">Pay</span>

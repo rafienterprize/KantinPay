@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   Utensils,
@@ -80,8 +81,14 @@ export default function LoginPage() {
       {/* Brand Header */}
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center mb-6">
         <Link href="/" className="inline-flex items-center gap-2.5 group mb-3">
-          <div className="w-11 h-11 rounded-2xl bg-[#5CC0F7] flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
-            <Utensils className="w-5 h-5" />
+          <div className="w-11 h-11 rounded-xl overflow-hidden shadow-sm group-hover:scale-105 transition-transform">
+            <Image
+              src="/logo.png"
+              alt="KantinPay Logo"
+              width={44}
+              height={44}
+              className="w-full h-full object-cover"
+            />
           </div>
           <span className="font-heading font-bold text-2xl tracking-tight text-slate-900">
             Kantin<span className="text-[#5CC0F7]">Pay</span>

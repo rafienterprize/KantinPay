@@ -21,6 +21,10 @@ export const metadata: Metadata = {
   title: "KantinPay — School Digital Payment Ecosystem",
   description:
     "Solusi pembayaran digital sekolah yang praktis, cepat, dan terintegrasi melalui website maupun WhatsApp.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
