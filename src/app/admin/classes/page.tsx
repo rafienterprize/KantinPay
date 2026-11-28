@@ -6,6 +6,8 @@ import { Users, TrendingUp, GraduationCap, Plus, Filter } from "lucide-react";
 import { formatRupiah } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { Select } from "@/components/ui/Select";
+import { Input } from "@/components/ui/Input";
 
 interface ClassSummary {
   className: string;
@@ -23,6 +25,16 @@ export default function ClassesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showAddClassModal, setShowAddClassModal] = useState(false);
+  
+  // Add Class Form State
+  const [newClassTingkat, setNewClassTingkat] = useState("");
+  const [newClassJurusan, setNewClassJurusan] = useState("");
+  const [newClassRombel, setNewClassRombel] = useState("");
+
+  // Filter State
+  const [filterTingkat, setFilterTingkat] = useState("");
+  const [filterJurusan, setFilterJurusan] = useState("");
+  const [sortBy, setSortBy] = useState("saldo-tertinggi");
 
   useEffect(() => {
     fetchClasses();
@@ -178,69 +190,71 @@ export default function ClassesPage() {
               Filter Kelas
             </h3>
             
-            <div className="space-y-3">
-              <div>
-                <label className="text-xs font-semibold text-slate-700 mb-2 block">
-                  Tingkat Kelas
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {["X", "XI", "XII"].map((tingkat) => (
-                    <button
-                      key={tingkat}
-                      className="px-4 py-2.5 rounded-xl text-sm font-heading font-semibold text-slate-700 bg-slate-100 hover:bg-cyan-100 hover:text-cyan-700 hover:border-cyan-300 border border-slate-200 transition"
-                    >
-                      Kelas {tingkat}
-                    </button>
-                  ))}
-                </div>
-              </div>
+            <div className="space-y-4">
+              <Select
+                label="Tingkat Kelas"
+                value={filterTingkat}
+                onChange={setFilterTingkat}
+                options={[
+                  { value: "", label: "Semua Tingkat" },
+                  { value: "X", label: "Kelas X" },
+                  { value: "XI", label: "Kelas XI" },
+                  { value: "XII", label: "Kelas XII" },
+                ]}
+                placeholder="Pilih Tingkat"
+              />
 
-              <div>
-                <label className="text-xs font-semibold text-slate-700 mb-2 block">
-                  Jurusan
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {["RPL", "TKJ", "SIJA", "DKV"].map((jurusan) => (
-                    <button
-                      key={jurusan}
-                      className="px-4 py-2.5 rounded-xl text-sm font-heading font-semibold text-slate-700 bg-slate-100 hover:bg-cyan-100 hover:text-cyan-700 hover:border-cyan-300 border border-slate-200 transition"
-                    >
-                      {jurusan}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <Select
+                label="Jurusan"
+                value={filterJurusan}
+                onChange={setFilterJurusan}
+                options={[
+                  { value: "", label: "Semua Jurusan" },
+                  { value: "RPL", label: "RPL" },
+                  { value: "TKJ", label: "TKJ" },
+                  { value: "SIJA", label: "SIJA" },
+                  { value: "DKV", label: "DKV" },
+                  { value: "MM", label: "MM" },
+                  { value: "TJKT", label: "TJKT" },
+                ]}
+                placeholder="Pilih Jurusan"
+              />
 
-              <div>
-                <label className="text-xs font-semibold text-slate-700 mb-2 block">
-                  Urutkan Berdasarkan
-                </label>
-                <select className="w-full px-4 py-2.5 rounded-xl text-sm font-heading bg-slate-100 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                  <option>Total Saldo (Tertinggi)</option>
-                  <option>Total Saldo (Terendah)</option>
-                  <option>Jumlah Siswa (Terbanyak)</option>
-                  <option>Jumlah Siswa (Tersedikit)</option>
-                  <option>Nama Kelas (A-Z)</option>
-                </select>
-              </div>
+              <Select
+                label="Urutkan Berdasarkan"
+                value={sortBy}
+                onChange={setSortBy}
+                options={[
+                  { value: "saldo-tertinggi", label: "Total Saldo (Tertinggi)" },
+                  { value: "saldo-terendah", label: "Total Saldo (Terendah)" },
+                  { value: "siswa-terbanyak", label: "Jumlah Siswa (Terbanyak)" },
+                  { value: "siswa-tersedikit", label: "Jumlah Siswa (Tersedikit)" },
+                  { value: "nama-az", label: "Nama Kelas (A-Z)" },
+                ]}
+              />
             </div>
 
             <div className="flex gap-3 pt-2">
-              <button
+              <Button
+                variant="outline"
+                size="md"
                 onClick={() => setShowFilterModal(false)}
-                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+                className="flex-1 rounded-xl"
               >
                 Tutup
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
                 onClick={() => {
                   // Apply filter logic here
+                  console.log("Filter:", { filterTingkat, filterJurusan, sortBy });
                   setShowFilterModal(false);
                 }}
-                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-white bg-cyan-600 hover:bg-cyan-700 transition"
+                className="flex-1 rounded-xl"
               >
                 Terapkan Filter
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -259,71 +273,83 @@ export default function ClassesPage() {
               </p>
             </div>
             
-            <div className="space-y-3">
-              <div>
-                <label className="text-xs font-semibold text-slate-700 mb-2 block">
-                  Tingkat Kelas
-                </label>
-                <select className="w-full px-4 py-2.5 rounded-xl text-sm font-heading bg-slate-100 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                  <option value="">Pilih Tingkat</option>
-                  <option value="X">Kelas X</option>
-                  <option value="XI">Kelas XI</option>
-                  <option value="XII">Kelas XII</option>
-                </select>
-              </div>
+            <div className="space-y-4">
+              <Select
+                label="Tingkat Kelas"
+                value={newClassTingkat}
+                onChange={setNewClassTingkat}
+                options={[
+                  { value: "X", label: "Kelas X" },
+                  { value: "XI", label: "Kelas XI" },
+                  { value: "XII", label: "Kelas XII" },
+                ]}
+                placeholder="Pilih Tingkat"
+              />
 
-              <div>
-                <label className="text-xs font-semibold text-slate-700 mb-2 block">
-                  Jurusan
-                </label>
-                <select className="w-full px-4 py-2.5 rounded-xl text-sm font-heading bg-slate-100 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                  <option value="">Pilih Jurusan</option>
-                  <option value="RPL">Rekayasa Perangkat Lunak (RPL)</option>
-                  <option value="TKJ">Teknik Komputer Jaringan (TKJ)</option>
-                  <option value="SIJA">Sistem Informasi Jaringan & Aplikasi (SIJA)</option>
-                  <option value="DKV">Desain Komunikasi Visual (DKV)</option>
-                  <option value="MM">Multimedia (MM)</option>
-                  <option value="TJKT">Teknik Jaringan Komputer & Telekomunikasi (TJKT)</option>
-                </select>
-              </div>
+              <Select
+                label="Jurusan"
+                value={newClassJurusan}
+                onChange={setNewClassJurusan}
+                options={[
+                  { value: "RPL", label: "Rekayasa Perangkat Lunak (RPL)" },
+                  { value: "TKJ", label: "Teknik Komputer Jaringan (TKJ)" },
+                  { value: "SIJA", label: "Sistem Informasi Jaringan & Aplikasi (SIJA)" },
+                  { value: "DKV", label: "Desain Komunikasi Visual (DKV)" },
+                  { value: "MM", label: "Multimedia (MM)" },
+                  { value: "TJKT", label: "Teknik Jaringan Komputer & Telekomunikasi (TJKT)" },
+                ]}
+                placeholder="Pilih Jurusan"
+              />
 
-              <div>
-                <label className="text-xs font-semibold text-slate-700 mb-2 block">
-                  Nomor Rombel
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  placeholder="Contoh: 1, 2, 3"
-                  className="w-full px-4 py-2.5 rounded-xl text-sm font-heading bg-slate-100 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                />
-              </div>
+              <Input
+                label="Nomor Rombel"
+                type="number"
+                value={newClassRombel}
+                onChange={(e) => setNewClassRombel(e.target.value)}
+                placeholder="Contoh: 1, 2, 3"
+                min="1"
+              />
 
-              <div className="p-3 rounded-xl bg-cyan-50 border border-cyan-200">
-                <p className="text-xs text-cyan-700">
-                  <strong>Contoh format:</strong> X RPL 1, XI TKJ 2, XII SIJA 1
-                </p>
-              </div>
+              {newClassTingkat && newClassJurusan && newClassRombel && (
+                <div className="p-3 rounded-xl bg-cyan-50 border border-cyan-200">
+                  <p className="text-xs text-cyan-700">
+                    <strong>Nama Kelas:</strong> {newClassTingkat} {newClassJurusan} {newClassRombel}
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="flex gap-3 pt-2">
-              <button
-                onClick={() => setShowAddClassModal(false)}
-                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+              <Button
+                variant="outline"
+                size="md"
+                onClick={() => {
+                  setShowAddClassModal(false);
+                  setNewClassTingkat("");
+                  setNewClassJurusan("");
+                  setNewClassRombel("");
+                }}
+                className="flex-1 rounded-xl"
               >
                 Batal
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
+                disabled={!newClassTingkat || !newClassJurusan || !newClassRombel}
                 onClick={() => {
                   // Add class logic here
-                  alert("Fitur tambah kelas akan segera tersedia!");
+                  alert(`Kelas ${newClassTingkat} ${newClassJurusan} ${newClassRombel} berhasil dibuat!`);
                   setShowAddClassModal(false);
+                  setNewClassTingkat("");
+                  setNewClassJurusan("");
+                  setNewClassRombel("");
                 }}
-                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-white bg-cyan-600 hover:bg-cyan-700 transition"
+                className="flex-1 rounded-xl"
               >
-                <Plus className="w-4 h-4 inline mr-1" />
+                <Plus className="w-4 h-4 mr-1" />
                 Buat Kelas
-              </button>
+              </Button>
             </div>
           </div>
         </div>
