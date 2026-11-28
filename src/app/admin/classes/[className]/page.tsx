@@ -7,7 +7,8 @@ import {
   Users, 
   ArrowUpCircle,
   ChevronLeft,
-  User as UserIcon
+  User as UserIcon,
+  MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { formatRupiah } from "@/lib/utils";
@@ -110,19 +111,32 @@ export default function ClassDetailPage({ params }: { params: { className: strin
             {/* Class Leader Info */}
             {classLeader && (
               <div className="mt-4 p-4 rounded-2xl bg-white/80 border border-amber-200">
-                <div className="flex items-center gap-3">
-                  <Crown className="w-5 h-5 text-amber-500" />
-                  <div>
-                    <span className="text-xs font-semibold text-amber-700 uppercase tracking-wide">
-                      Ketua Kelas
-                    </span>
-                    <p className="font-heading font-bold text-slate-900">
-                      {classLeader.fullName}
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      NIS: {classLeader.studentId} • Saldo: {formatRupiah(classLeader.balance)}
-                    </p>
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <Crown className="w-5 h-5 text-amber-500" />
+                    <div>
+                      <span className="text-xs font-semibold text-amber-700 uppercase tracking-wide">
+                        Ketua Kelas
+                      </span>
+                      <p className="font-heading font-bold text-slate-900">
+                        {classLeader.fullName}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        NIS: {classLeader.studentId} • Saldo: {formatRupiah(classLeader.balance)}
+                      </p>
+                    </div>
                   </div>
+                  
+                  {/* Hubungi Button */}
+                  <a
+                    href={`https://wa.me/${classLeader.whatsappNumber.replace(/^0/, '62')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-heading font-semibold transition flex items-center gap-2 shrink-0"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Hubungi
+                  </a>
                 </div>
               </div>
             )}
