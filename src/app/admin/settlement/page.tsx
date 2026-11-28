@@ -27,6 +27,28 @@ export default function SettlementPage() {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showSettleAllModal, setShowSettleAllModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exportDone, setExportDone] = useState(false);
+
+  const handleDownloadCsv = () => {
+    const headers = ["Referensi", "Nama Kantin", "Jumlah Transaksi", "Total Penjualan", "Status"];
+    const rows = settlements.map((s) => [
+      s.referenceNumber,
+      `"${s.canteenName}"`,
+      s.transactionCount,
+      s.totalAmount,
+      s.status,
+    ]);
+    const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `rekap-settlement-kantinpay-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setExportDone(true);
+  };
 
   const fetchSettlements = useCallback(async () => {
     setLoading(true);
@@ -241,7 +263,7 @@ export default function SettlementPage() {
               </span>
             </div>
             <p className="text-xs text-slate-500">
-              Selesaikan pencairan dana penjualan ke seluruh rekening 8 pedagang kantin sekaligus setelah jam sekolah berakhir.
+              Selesaikan pencairan dana penjualan ke seluruh rekening {settlements.length || 8} pedagang kantin sekaligus setelah jam sekolah berakhir.
             </p>
           </div>
 
@@ -249,7 +271,10 @@ export default function SettlementPage() {
             <Button
               variant="outline"
               size="md"
-              onClick={() => alert("Ekspor laporan rekap settlement dalam format Excel/PDF dimulai.")}
+              onClick={() => {
+                setExportDone(false);
+                setShowExportModal(true);
+              }}
               className="rounded-2xl text-xs gap-1.5 flex-1 sm:flex-none border-slate-200"
             >
               <FileSpreadsheet className="w-4 h-4 text-slate-500" />
@@ -268,6 +293,63 @@ export default function SettlementPage() {
           </div>
         </div>
       </div>
+
+      {/* EXPORT REKAP POPUP MODAL */}
+      <Modal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        title="Ekspor Laporan Rekap Settlement"
+        description="Unduh laporan harian penjualan seluruh tenant kantin dalam format Excel/CSV atau cetak PDF"
+      >
+        <div className="space-y-4 py-2">
+          <div className="p-4 rounded-2xl bg-[#D6EFFF]/50 border border-[#5CC0F7]/30 flex items-center justify-between text-xs">
+            <div>
+              <span className="text-slate-600 block">Total Tenant Direkap</span>
+              <span className="font-heading font-bold text-slate-900 text-sm">
+                {settlements.length} Kantin Sekolah
+              </span>
+            </div>
+            <div className="text-right">
+              <span className="text-slate-600 block">Total Nominal</span>
+              <span className="font-heading font-bold text-[#0284c7] text-sm">
+                {formatRupiah(
+                  settlements.reduce((sum, s) => sum + s.totalAmount, 0)
+                )}
+              </span>
+            </div>
+          </div>
+
+          {exportDone && (
+            <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+              <span>Laporan CSV berhasil diunduh ke perangkat Anda!</span>
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setShowExportModal(false);
+                window.print();
+              }}
+              className="flex-1 rounded-2xl h-10 text-xs"
+            >
+              Cetak / Simpan PDF
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleDownloadCsv}
+              className="flex-1 rounded-2xl h-10 text-xs"
+            >
+              <FileSpreadsheet className="w-4 h-4 mr-1.5" />
+              Unduh Excel (.CSV)
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       {/* DETAIL & ACTION MODAL */}
       <Modal

@@ -29,6 +29,7 @@ export function ClassLeaderTopUpNotifications({
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectingLog, setRejectingLog] = useState<ClassLeaderTopUpLog | null>(null);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
     fetchLogs();
@@ -49,6 +50,7 @@ export function ClassLeaderTopUpNotifications({
 
   const handleApprove = async (logId: string) => {
     setProcessingId(logId);
+    setFeedback(null);
     try {
       const res = await fetch(`/api/admin/class-leader-topups/${logId}/approve`, {
         method: "POST",
@@ -57,17 +59,17 @@ export function ClassLeaderTopUpNotifications({
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "Gagal menyetujui top-up");
+        setFeedback({ type: "error", text: data.error || "Gagal menyetujui top-up" });
         setProcessingId(null);
         return;
       }
 
-      alert(data.message);
+      setFeedback({ type: "success", text: data.message });
       fetchLogs();
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error("Approve error:", error);
-      alert("Terjadi gangguan jaringan");
+      setFeedback({ type: "error", text: "Terjadi gangguan jaringan" });
     } finally {
       setProcessingId(null);
     }
@@ -83,6 +85,7 @@ export function ClassLeaderTopUpNotifications({
     if (!rejectingLog) return;
 
     setProcessingId(rejectingLog.id);
+    setFeedback(null);
     try {
       const res = await fetch(`/api/admin/class-leader-topups/${rejectingLog.id}/reject`, {
         method: "POST",
@@ -93,12 +96,12 @@ export function ClassLeaderTopUpNotifications({
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "Gagal menolak top-up");
+        setFeedback({ type: "error", text: data.error || "Gagal menolak top-up" });
         setProcessingId(null);
         return;
       }
 
-      alert(data.message);
+      setFeedback({ type: "success", text: data.message });
       setShowRejectModal(false);
       setRejectingLog(null);
       setRejectReason("");
@@ -106,7 +109,7 @@ export function ClassLeaderTopUpNotifications({
       if (onRefresh) onRefresh();
     } catch (error) {
       console.error("Reject error:", error);
-      alert("Terjadi gangguan jaringan");
+      setFeedback({ type: "error", text: "Terjadi gangguan jaringan" });
     } finally {
       setProcessingId(null);
     }
@@ -160,6 +163,18 @@ export function ClassLeaderTopUpNotifications({
             Verifikasi dan setujui permintaan top-up dari ketua kelas
           </p>
         </div>
+
+        {feedback && (
+          <div
+            className={`mx-4 p-3 rounded-2xl text-xs font-heading font-semibold ${
+              feedback.type === "success"
+                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                : "bg-rose-50 text-rose-700 border border-rose-200"
+            }`}
+          >
+            {feedback.text}
+          </div>
+        )}
 
         <div className="max-h-[500px] overflow-y-auto px-4 space-y-3">
           {logs.map((log) => (

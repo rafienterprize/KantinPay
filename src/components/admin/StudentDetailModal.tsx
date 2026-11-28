@@ -170,18 +170,22 @@ export function StudentDetailModal({
       const data = await res.json();
       
       if (!res.ok) {
-        alert(data.error || "Gagal menghapus akun siswa");
+        setMessage({ type: "error", text: data.error || "Gagal menghapus akun siswa" });
+        setShowDeleteConfirm(false);
         setDeleting(false);
         return;
       }
 
-      alert("Akun siswa berhasil dihapus!");
+      setMessage({ type: "success", text: "Akun siswa berhasil dihapus!" });
       setShowDeleteConfirm(false);
-      onClose();
-      window.location.reload();
+      setTimeout(() => {
+        onClose();
+        window.location.reload();
+      }, 900);
     } catch (error) {
       console.error("Delete Error:", error);
-      alert("Terjadi gangguan jaringan.");
+      setMessage({ type: "error", text: "Terjadi gangguan jaringan." });
+      setShowDeleteConfirm(false);
       setDeleting(false);
     }
   };
