@@ -5,12 +5,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Utensils } from "lucide-react";
+import { useCanteenCount } from "@/hooks/useCanteenCount";
 
 interface FooterProps {
   scrollTo?: (target: string | number | HTMLElement, options?: { offset?: number; duration?: number }) => void;
 }
 
 export function Footer({ scrollTo }: FooterProps) {
+  const canteenCount = useCanteenCount();
   const handleSmoothScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
     targetId: string
@@ -51,7 +53,7 @@ export function Footer({ scrollTo }: FooterProps) {
                 
                 {/* Description */}
                 <p className="text-white/90 text-sm sm:text-base mb-8 leading-relaxed">
-                  Satu akun untuk siswa, 8 kantin terintegrasi, dan pengelolaan keuangan koperasi sekolah yang transparan.
+                  Satu akun untuk siswa, {canteenCount} kantin terintegrasi, dan pengelolaan keuangan koperasi sekolah yang transparan.
                 </p>
 
                 {/* CTA Button */}
@@ -222,11 +224,11 @@ export function Footer({ scrollTo }: FooterProps) {
               <ul className="space-y-2.5 text-xs text-slate-600">
                 <li>
                   <a
-                    href="#fitur"
-                    onClick={(e) => handleSmoothScroll(e, "fitur")}
+                    href="#kantin"
+                    onClick={(e) => handleSmoothScroll(e, "kantin")}
                     className="hover:text-[#5CC0F7] transition cursor-pointer"
                   >
-                    8 Kantin
+                    {canteenCount} Kantin
                   </a>
                 </li>
                 <li>

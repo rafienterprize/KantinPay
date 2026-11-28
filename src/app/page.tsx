@@ -25,9 +25,11 @@ import { AnimatedHeading } from "@/components/ui/AnimatedHeading";
 import { AnimatedCard, AnimatedFadeIn } from "@/components/ui/AnimatedCard";
 import { Footer } from "@/components/ui/Footer";
 import { useLenisScroll } from "@/components/providers/SmoothScrollProvider";
+import { useCanteenCount } from "@/hooks/useCanteenCount";
 
 export default function LandingPage() {
   const { scrollTo } = useLenisScroll();
+  const canteenCount = useCanteenCount();
   // FAQ accordion active item state
   const [activeFaq, setActiveFaq] = useState<string | null>("faq-1");
   const [activeFaqCategory, setActiveFaqCategory] = useState<string>("all");
@@ -44,7 +46,7 @@ export default function LandingPage() {
           id: "faq-1",
           question: "Apa itu KantinPay dan bagaimana cara kerjanya?",
           answer:
-            "KantinPay adalah ekosistem pembayaran digital tertutup (closed-loop) khusus sekolah. Siswa menyetor tunai di koperasi sekolah untuk mendapatkan saldo digital. Saldo tersebut dapat dibelanjakan langsung di 8 kantin sekolah baik melalui website maupun WhatsApp bot.",
+            `KantinPay adalah ekosistem pembayaran digital tertutup (closed-loop) khusus sekolah. Siswa menyetor tunai di koperasi sekolah untuk mendapatkan saldo digital. Saldo tersebut dapat dibelanjakan langsung di ${canteenCount} kantin sekolah baik melalui website maupun WhatsApp bot.`,
         },
         {
           id: "faq-2",
@@ -56,7 +58,7 @@ export default function LandingPage() {
           id: "faq-3",
           question: "Berapa banyak kantin yang didukung saat ini?",
           answer:
-            "KantinPay secara resmi mengintegrasikan 8 kantin sekolah (Kantin 1 sampai Kantin 8), mulai dari kantin makanan berat, soto, mie ayam, hingga minuman segar dan aneka snack.",
+            `KantinPay secara resmi mengintegrasikan ${canteenCount} kantin sekolah (Kantin 1 sampai Kantin ${canteenCount}), mulai dari kantin makanan berat, soto, mie ayam, hingga minuman segar dan aneka snack.`,
         },
       ],
     },
@@ -90,7 +92,7 @@ export default function LandingPage() {
           id: "faq-7",
           question: "Bagaimana cara bertransaksi lewat WhatsApp Bot?",
           answer:
-            "Cukup kirim pesan 'BAYAR' ke nomor resmi WhatsApp KantinPay. Bot akan menampilkan daftar 8 kantin. Balas dengan nomor kantin pilihan dan masukkan nominal pembayaran untuk menyelesaikan transaksi.",
+            `Cukup kirim pesan 'BAYAR' ke nomor resmi WhatsApp KantinPay. Bot akan menampilkan daftar ${canteenCount} kantin. Balas dengan nomor kantin pilihan dan masukkan nominal pembayaran untuk menyelesaikan transaksi.`,
         },
         {
           id: "faq-8",
@@ -122,7 +124,7 @@ export default function LandingPage() {
   // Marquee items for the ticker strip
   const marqueeItems = [
     "PEMBAYARAN DIGITAL",
-    "8 KANTIN TERINTEGRASI",
+    `${canteenCount} KANTIN TERINTEGRASI`,
     "WHATSAPP BOT",
     "SALDO REALTIME",
     "ANTI MINUS",
@@ -294,7 +296,7 @@ export default function LandingPage() {
             {/* Paragraph Description */}
             <AnimatedFadeIn direction="up" delay={0.2}>
               <p className="mt-5 text-base sm:text-lg text-slate-600 max-w-lg leading-relaxed">
-                Solusi pembayaran digital sekolah tertutup yang praktis dan cepat. Tetap bisa bertransaksi di 8 kantin sekolah meski hanya menggunakan paket chat WhatsApp.
+                Solusi pembayaran digital sekolah tertutup yang praktis dan cepat. Tetap bisa bertransaksi di {canteenCount} kantin sekolah meski hanya menggunakan paket chat WhatsApp.
               </p>
             </AnimatedFadeIn>
 
@@ -318,7 +320,7 @@ export default function LandingPage() {
                     }}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#D6EFFF] text-slate-900 font-heading font-semibold text-sm hover:bg-[#c2e5fc] active:scale-95 transition border border-[#5CC0F7]/30 cursor-pointer"
                   >
-                    <span>Jelajahi 8 Kantin</span>
+                    <span>Jelajahi {canteenCount} Kantin</span>
                   </a>
                 </motion.div>
               </div>
@@ -368,7 +370,7 @@ export default function LandingPage() {
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
                       <span className="text-[10px] font-heading font-bold text-slate-800">
-                        Pilih 8 Kantin
+                        Pilih {canteenCount} Kantin
                       </span>
                       <span className="text-[9px] text-[#0284c7] font-heading font-semibold">
                         Lihat Semua
@@ -547,7 +549,7 @@ export default function LandingPage() {
               </div>
 
               <div className="pt-2 flex items-center justify-between text-xs text-slate-500 font-heading">
-                <span>Total Omset 8 Kantin:</span>
+                <span>Total Omset {canteenCount} Kantin:</span>
                 <span className="font-bold text-slate-900 text-sm">Rp 2.200.000</span>
               </div>
             </div>
@@ -596,7 +598,7 @@ export default function LandingPage() {
                         1. Kantin 1 (Bu Nur)<br />
                         2. Kantin 2 (Pak Joko)<br />
                         3. Kantin 3 (Ibu Siti)<br />
-                        ...s/d Kantin 8
+                        ...s/d Kantin {canteenCount}
                       </p>
                       <span className="text-[8px] text-slate-400 block text-right">09:40</span>
                     </div>
@@ -987,7 +989,7 @@ export default function LandingPage() {
           <AnimatedCard hoverEffect={true} delay={0.1}>
             <div className="bg-[#FFFDF9] rounded-3xl p-8 sm:p-12 shadow-md border border-slate-200 text-left space-y-4 relative">
               <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-sans">
-                Ide awal dari KantinPay lahir dari sebuah pengamatan sederhana di kantin sekolah kami. Setiap kali jam istirahat berbunyi, ratusan siswa berdesakan di depan 8 kantin, antre menghitung uang receh, dan banyak yang batal jajan karena waktu istirahat yang sangat terbatas.
+                Ide awal dari KantinPay lahir dari sebuah pengamatan sederhana di kantin sekolah kami. Setiap kali jam istirahat berbunyi, ratusan siswa berdesakan di depan {canteenCount} kantin, antre menghitung uang receh, dan banyak yang batal jajan karena waktu istirahat yang sangat terbatas.
               </p>
               <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-sans">
                 Kami juga menemukan fakta bahwa mayoritas siswa memang memiliki ponsel, namun sering kali kuota internet mereka habis atau hanya terbatas pada paket chat WhatsApp. Dari sanalah kami merancang ekosistem ini: sebuah sistem pembayaran tertutup yang dikelola koperasi sekolah, aman dari minus, dan bisa diakses via web maupun bot WhatsApp.

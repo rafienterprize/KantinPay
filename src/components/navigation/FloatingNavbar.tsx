@@ -13,15 +13,17 @@ import {
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useLenisScroll } from "@/components/providers/SmoothScrollProvider";
+import { useCanteenCount } from "@/hooks/useCanteenCount";
 
 export function FloatingNavbar() {
   const { scrollTo } = useLenisScroll();
+  const canteenCount = useCanteenCount();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
 
   const navLinks = [
     { label: "Fitur", id: "fitur", href: "#fitur", icon: Sparkles },
-    { label: "8 Kantin", id: "kantin", href: "#kantin", icon: Store },
+    { label: `${canteenCount} Kantin`, id: "kantin", href: "#kantin", icon: Store },
     { label: "Catatan", id: "catatan", href: "#catatan", icon: Utensils },
     { label: "FAQ", id: "faq", href: "#faq", icon: HelpCircle },
   ];

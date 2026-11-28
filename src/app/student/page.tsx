@@ -20,6 +20,7 @@ import { formatRupiah } from "@/lib/utils";
 import { Skeleton, SkeletonCard } from "@/components/ui/Skeleton";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
+import { useCanteenCount } from "@/hooks/useCanteenCount";
 import { NotificationItem, ClassLeaderTopUpLog, ClassBilling } from "@/types";
 
 interface ClassStatsData {
@@ -67,6 +68,7 @@ interface ClassStatsData {
 }
 
 export default function StudentDashboardPage() {
+  const canteenCount = useCanteenCount();
   const [user, setUser] = useState<StudentLayoutUser | null>(null);
   const [stats, setStats] = useState<ClassStatsData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -408,7 +410,7 @@ export default function StudentDashboardPage() {
                   {formatRupiah(stats.totalSpending)}
                 </h3>
                 <p className="text-[11px] text-slate-500 font-heading mt-1">
-                  Akumulasi Jajan di 8 Kantin
+                  Akumulasi Jajan di {canteenCount} Kantin
                 </p>
               </div>
             </>

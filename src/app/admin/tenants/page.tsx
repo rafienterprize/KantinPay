@@ -145,7 +145,7 @@ export default function TenantsPage() {
               Data Tenant
             </h1>
             <p className="text-xs text-slate-500">
-              Kelola 8 kantin terdaftar, monitoring penjualan harian, dan koordinasi pedagang.
+              Kelola {canteens.length || 8} kantin terdaftar, monitoring penjualan harian, dan koordinasi pedagang.
             </p>
           </div>
 
@@ -153,7 +153,9 @@ export default function TenantsPage() {
           <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-heading self-start sm:self-auto">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-slate-700 font-semibold">Status Koneksi:</span>
-            <span className="text-emerald-700 font-bold">8/8 Tenant Terhubung</span>
+            <span className="text-emerald-700 font-bold">
+              {canteens.filter((t) => t.connectionStatus === "online").length}/{canteens.length || 8} Tenant Terhubung
+            </span>
           </div>
         </div>
 

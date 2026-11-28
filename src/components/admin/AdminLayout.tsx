@@ -9,6 +9,7 @@ import { Modal } from "@/components/ui/Modal";
 import { Bell, User, CheckCircle2, ShieldCheck, Mail, Phone, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { ClassLeaderTopUpNotifications } from "./ClassLeaderTopUpNotifications";
+import { useCanteenCount } from "@/hooks/useCanteenCount";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -30,6 +31,7 @@ export function AdminLayout({
   onFilterClick,
   actionButton,
 }: AdminLayoutProps) {
+  const canteenCount = useCanteenCount();
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -166,10 +168,10 @@ export function AdminLayout({
                   <span className="text-[10px] text-slate-400">12:30 WIB</span>
                 </div>
                 <h4 className="font-heading font-semibold text-xs text-slate-800">
-                  Rekap Transaksi 8 Kantin Siap Dicairkan
+                  Rekap Transaksi {canteenCount} Kantin Siap Dicairkan
                 </h4>
                 <p className="text-xs text-slate-500">
-                  Total 8 kantin beroperasi penuh hari ini dengan akumulasi penjualan Rp2.200.000.
+                  Total {canteenCount} kantin beroperasi penuh hari ini dengan akumulasi penjualan Rp2.200.000.
                 </p>
               </div>
 

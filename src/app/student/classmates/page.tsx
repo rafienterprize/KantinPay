@@ -16,12 +16,14 @@ import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { SkeletonCard, SkeletonTable } from "@/components/ui/Skeleton";
 import { ClassLeaderTopUpModal } from "@/components/admin/ClassLeaderTopUpModal";
+import { useCanteenCount } from "@/hooks/useCanteenCount";
 
 interface ClassmateRow extends User {
   totalSpent?: number;
 }
 
 export default function ClassmatesPage() {
+  const canteenCount = useCanteenCount();
   const [user, setUser] = useState<StudentLayoutUser | null>(null);
   const [classmates, setClassmates] = useState<ClassmateRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -224,7 +226,7 @@ export default function ClassmatesPage() {
                     {formatRupiah(totalClassSpent)}
                   </h3>
                   <p className="text-[11px] text-slate-500 font-heading mt-1">
-                    Total Transaksi di 8 Kantin
+                    Total Transaksi di {canteenCount} Kantin
                   </p>
                 </div>
               </>

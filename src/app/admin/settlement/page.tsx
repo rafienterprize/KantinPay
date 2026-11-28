@@ -126,13 +126,13 @@ export default function SettlementPage() {
               Rekap Harian Tenant
             </h1>
             <p className="text-xs text-slate-500">
-              Pantau akumulasi penjualan harian 8 kantin sekolah dan lakukan pencairan dana (settlement) sore hari.
+              Pantau akumulasi penjualan harian {settlements.length || 8} kantin sekolah dan lakukan pencairan dana (settlement) sore hari.
             </p>
           </div>
 
           <div className="flex items-center gap-2 text-xs font-heading">
             <span className="px-3 py-1.5 rounded-2xl bg-[#D6EFFF] text-[#0284c7] border border-[#5CC0F7]/40 font-semibold">
-              8 Tenant Terdaftar
+              {settlements.length || 8} Tenant Terdaftar
             </span>
           </div>
         </div>

@@ -17,6 +17,7 @@ import {
 import { formatRupiah } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { SkeletonCard } from "@/components/ui/Skeleton";
+import { useCanteenCount } from "@/hooks/useCanteenCount";
 
 interface AnalyticsData {
   kpis: {
@@ -40,6 +41,7 @@ interface AnalyticsData {
 }
 
 export default function AdminDashboardPage() {
+  const canteenCount = useCanteenCount();
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -114,7 +116,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center gap-2.5 text-slate-800">
             <Sparkles className="w-4 h-4 text-[#0284c7] shrink-0" />
             <span className="font-heading font-medium">
-              more grettings: Rekap harian seluruh 8 kantin sekolah telah disinkronkan otomatis. Seluruh transaksi kasir aman.
+              more grettings: Rekap harian seluruh {canteenCount} kantin sekolah telah disinkronkan otomatis. Seluruh transaksi kasir aman.
             </span>
           </div>
           <span className="hidden sm:inline-block text-[11px] text-[#0284c7] font-heading font-semibold">
@@ -316,14 +318,14 @@ export default function AdminDashboardPage() {
                 Kelola Tenant & Settlement
               </h4>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                Pantau omset harian 8 kantin sekolah dan selesaikan pencairan dana settlement sore hari.
+                Pantau omset harian {canteenCount} kantin sekolah dan selesaikan pencairan dana settlement sore hari.
               </p>
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
                 <Link
                   href="/admin/settlement"
                   className="inline-flex items-center text-xs font-heading font-semibold text-[#5CC0F7] hover:text-[#48b1eb]"
                 >
-                  <span>Lihat Rekap Harian 8 Tenant</span>
+                  <span>Lihat Rekap Harian {canteenCount} Tenant</span>
                 </Link>
               </div>
             </div>
