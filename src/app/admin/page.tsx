@@ -60,11 +60,15 @@ export default function AdminDashboardPage() {
       })
     );
     
-    // Fetch analytics
+    // Fetch analytics (guard against non-200 / rate-limit responses so data.kpis is never undefined)
     fetch("/api/admin/analytics")
-      .then((res) => res.json())
-      .then((res) => {
-        setData(res);
+      .then(async (res) => {
+        if (!res.ok) return null;
+        const json = await res.json();
+        return json && json.kpis ? json : null;
+      })
+      .then((validData) => {
+        if (validData) setData(validData);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -126,7 +130,7 @@ export default function AdminDashboardPage() {
 
         {/* 4 KPI Cards in a row matching wireframe */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {loading || !data ? (
+          {loading || !data?.kpis ? (
             <>
               <SkeletonCard />
               <SkeletonCard />
@@ -369,7 +373,7 @@ export default function AdminDashboardPage() {
 
               {/* Visualized Bar Chart with real numbers */}
               <div className="mt-6 space-y-4">
-                {data?.chart.map((point) => {
+                {(data?.chart || []).map((point) => {
                   const maxAmount = 800000;
                   const percentage = Math.min(100, Math.round((point.amount / maxAmount) * 100));
 

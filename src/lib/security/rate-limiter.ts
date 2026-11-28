@@ -30,11 +30,11 @@ export const RATE_LIMIT_TIERS = {
     limit: 20,
     windowMs: 60 * 1000, // 20 requests / minute
   },
-  /** General API flood protection */
+  /** General API flood protection (generous for rapid dashboard navigation, strict against floods) */
   general: {
     id: "general",
-    limit: 120,
-    windowMs: 60 * 1000, // 120 requests / minute
+    limit: 300,
+    windowMs: 60 * 1000, // 300 requests / minute
   },
 } as const;
 
