@@ -105,6 +105,19 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export function getClientIp(headers: Headers): string {
+  // 1. Prioritize Cloudflare Proxy header (real visitor IP behind Cloudflare Orange Cloud)
+  const cfConnectingIp = headers.get("cf-connecting-ip");
+  if (cfConnectingIp) {
+    return cfConnectingIp.trim();
+  }
+
+  // 2. Fallback to True-Client-IP (Cloudflare Enterprise / Akamai)
+  const trueClientIp = headers.get("true-client-ip");
+  if (trueClientIp) {
+    return trueClientIp.trim();
+  }
+
+  // 3. Fallback to standard reverse proxy headers
   const forwardedFor = headers.get("x-forwarded-for");
   if (forwardedFor) {
     return forwardedFor.split(",")[0].trim();
