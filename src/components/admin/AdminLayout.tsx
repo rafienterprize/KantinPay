@@ -23,6 +23,10 @@ interface AdminLayoutProps {
   };
 }
 
+// Module-level cache prevents the notification badge from flashing during route transitions
+let cachedNotifRead: boolean | null = null;
+let cachedSeenPending = 0;
+
 export function AdminLayout({
   children,
   pageTitle = "Panel Koperasi",
@@ -36,15 +40,25 @@ export function AdminLayout({
   const [accountOpen, setAccountOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [pendingTopUpCount, setPendingTopUpCount] = useState(0);
-  const [hasReadNotifications, setHasReadNotifications] = useState(false);
-  const [seenPendingCount, setSeenPendingCount] = useState(0);
+  const [notifReady, setNotifReady] = useState(cachedNotifRead !== null);
+  const [hasReadNotifications, setHasReadNotifications] = useState(
+    cachedNotifRead ?? true
+  );
+  const [seenPendingCount, setSeenPendingCount] = useState(cachedSeenPending);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedRead = sessionStorage.getItem("admin_notif_read") === "true";
-      const savedPending = parseInt(sessionStorage.getItem("admin_notif_seen_pending") || "0", 10);
+      const savedPending = parseInt(
+        sessionStorage.getItem("admin_notif_seen_pending") || "0",
+        10
+      );
+      const parsedPending = isNaN(savedPending) ? 0 : savedPending;
+      cachedNotifRead = savedRead;
+      cachedSeenPending = parsedPending;
       setHasReadNotifications(savedRead);
-      setSeenPendingCount(isNaN(savedPending) ? 0 : savedPending);
+      setSeenPendingCount(parsedPending);
+      setNotifReady(true);
     }
     fetchCurrentUser();
     fetchNotificationCount();
@@ -59,8 +73,12 @@ export function AdminLayout({
         setPendingTopUpCount(count);
         // If new pending top-up requests arrived after last read, show badge again
         if (typeof window !== "undefined") {
-          const savedPending = parseInt(sessionStorage.getItem("admin_notif_seen_pending") || "0", 10);
+          const savedPending = parseInt(
+            sessionStorage.getItem("admin_notif_seen_pending") || "0",
+            10
+          );
           if (count > (isNaN(savedPending) ? 0 : savedPending)) {
+            cachedNotifRead = false;
             setHasReadNotifications(false);
             sessionStorage.setItem("admin_notif_read", "false");
           }
@@ -71,7 +89,9 @@ export function AdminLayout({
     }
   };
 
-  const unreadNotificationCount = hasReadNotifications
+  const unreadNotificationCount = !notifReady
+    ? 0
+    : hasReadNotifications
     ? Math.max(0, pendingTopUpCount - seenPendingCount)
     : 2 + pendingTopUpCount;
 
@@ -106,6 +126,8 @@ export function AdminLayout({
           <AdminSidebar
             onOpenNotification={() => {
               setNotificationOpen(true);
+              cachedNotifRead = true;
+              cachedSeenPending = pendingTopUpCount;
               setHasReadNotifications(true);
               setSeenPendingCount(pendingTopUpCount);
               if (typeof window !== "undefined") {
