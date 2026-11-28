@@ -22,6 +22,7 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
   const [loading, setLoading] = useState(true);
   const [className, setClassName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentUser, setCurrentUser] = useState<any>(null);
   
   // Detail Modal
   const [detailModalOpen, setDetailModalOpen] = useState(false);
@@ -37,9 +38,20 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
       const decoded = decodeURIComponent(resolvedParams.className);
       setClassName(decoded);
       fetchStudents(decoded);
+      fetchCurrentUser();
     };
     initClass();
   }, [params]);
+
+  const fetchCurrentUser = async () => {
+    try {
+      const res = await fetch("/api/auth/me");
+      const data = await res.json();
+      setCurrentUser(data.user);
+    } catch (error) {
+      console.error("Failed to fetch current user:", error);
+    }
+  };
 
   const fetchStudents = async (cls: string) => {
     setLoading(true);
@@ -214,8 +226,11 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
 
                     {/* Action */}
                     <div className="col-span-3 flex justify-end gap-2">
-                      {/* Only show Top-Up button if viewing as class leader and target is not self */}
-                      {classLeader && student.id !== classLeader.id && (
+                      {/* Show Top-Up button based on user role:
+                          - Admin: can top-up anyone
+                          - Class Leader: can top-up classmates but not self */}
+                      {((currentUser?.role === "admin") || 
+                        (classLeader && currentUser?.id === classLeader.id && student.id !== classLeader.id)) && (
                         <Button
                           variant="primary"
                           size="sm"
