@@ -198,24 +198,18 @@ export function StudentDetailModal({
         disableBackdropClick={true}
       >
       <div className="space-y-5 py-3">
-        {/* Student Identity Card - Differentiate Class Leader */}
-        <div className={`p-5 rounded-2xl border ${
-          editedStudent.isClassLeader 
-            ? "bg-amber-50 border-amber-300" 
-            : "bg-[#D6EFFF] border-[#5CC0F7]/30"
-        }`}>
+        {/* Student Identity Card */}
+        <div className="p-5 rounded-2xl border bg-[#D6EFFF]/50 border-[#5CC0F7]/30">
           {editedStudent.isClassLeader && (
-            <div className="flex items-center gap-2 mb-3 pb-3 border-b border-amber-200">
-              <Crown className="w-5 h-5 text-amber-500" />
-              <span className="text-sm font-heading font-bold text-amber-700">
-                KETUA KELAS
+            <div className="flex items-center gap-2 mb-3 pb-3 border-b border-[#5CC0F7]/20">
+              <Crown className="w-4 h-4 text-amber-500" />
+              <span className="text-xs font-heading font-bold text-[#0284c7] uppercase tracking-wider">
+                Ketua Kelas
               </span>
             </div>
           )}
           <div className="flex items-start gap-5">
-            <div className={`w-20 h-20 rounded-2xl ${
-              editedStudent.isClassLeader ? "bg-amber-500" : "bg-[#5CC0F7]"
-            } text-white font-heading font-bold text-3xl flex items-center justify-center shrink-0`}>
+            <div className="w-16 h-16 rounded-2xl bg-[#5CC0F7] text-white font-heading font-bold text-2xl flex items-center justify-center shrink-0">
               {editedStudent.fullName.slice(0, 2).toUpperCase()}
             </div>
             <div className="flex-1">
@@ -261,72 +255,37 @@ export function StudentDetailModal({
 
         {/* Contact Information */}
         <div>
-          <label className="text-sm text-slate-500 font-semibold mb-2 flex items-center gap-2">
+          <label className="text-sm text-slate-600 font-semibold mb-2 flex items-center gap-2">
             <Phone className="w-4 h-4 text-slate-400" />
             Nomor WhatsApp
           </label>
-          {editedStudent.isClassLeader ? (
-            <div className="relative">
-              <Input
-                value={editedStudent.whatsappNumber || ""}
-                onChange={(e) => setEditedStudent({ ...editedStudent, whatsappNumber: e.target.value })}
-                placeholder="08xxxxxxxxxxx"
-              />
-              <a
-                href={`https://wa.me/${editedStudent.whatsappNumber.replace(/^0/, '62')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 hover:text-blue-700 text-xs font-semibold underline"
-              >
-                Hubungi
-              </a>
-            </div>
-          ) : (
-            <Input
-              value={editedStudent.whatsappNumber || ""}
-              onChange={(e) => setEditedStudent({ ...editedStudent, whatsappNumber: e.target.value })}
-              placeholder="08xxxxxxxxxxx"
-            />
-          )}
+          <Input
+            value={editedStudent.whatsappNumber || ""}
+            onChange={(e) => setEditedStudent({ ...editedStudent, whatsappNumber: e.target.value })}
+            placeholder="08xxxxxxxxxxx"
+          />
         </div>
 
         <div>
-          <label className="text-sm text-slate-500 font-semibold mb-2 flex items-center gap-2">
+          <label className="text-sm text-slate-600 font-semibold mb-2 flex items-center gap-2">
             <Mail className="w-4 h-4 text-slate-400" />
             Email
           </label>
-          {editedStudent.isClassLeader ? (
-            <div className="relative">
-              <Input
-                type="email"
-                value={editedStudent.email || ""}
-                onChange={(e) => setEditedStudent({ ...editedStudent, email: e.target.value })}
-                placeholder="email@example.com"
-              />
-              <a
-                href={`mailto:${editedStudent.email}`}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 hover:text-blue-700 text-xs font-semibold underline"
-              >
-                Email
-              </a>
-            </div>
-          ) : (
-            <Input
-              type="email"
-              value={editedStudent.email || ""}
-              onChange={(e) => setEditedStudent({ ...editedStudent, email: e.target.value })}
-              placeholder="email@example.com"
-            />
-          )}
+          <Input
+            type="email"
+            value={editedStudent.email || ""}
+            onChange={(e) => setEditedStudent({ ...editedStudent, email: e.target.value })}
+            placeholder="email@example.com"
+          />
         </div>
 
         {/* Password Reset Section */}
-        <div className="p-4 bg-amber-50/50 rounded-2xl border border-amber-200/60">
-          <div className="flex items-center gap-2 mb-3">
-            <Lock className="w-4 h-4 text-amber-600" />
-            <h4 className="text-sm font-heading font-bold text-amber-900">Reset Password (Opsional)</h4>
+        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <div className="flex items-center gap-2 mb-2">
+            <Lock className="w-4 h-4 text-[#0284c7]" />
+            <h4 className="text-sm font-heading font-bold text-slate-900">Reset Password (Opsional)</h4>
           </div>
-          <p className="text-xs text-amber-700 mb-3">
+          <p className="text-xs text-slate-500 mb-3">
             Kosongkan jika tidak ingin mengubah password. Minimal 6 karakter.
           </p>
           
@@ -368,16 +327,16 @@ export function StudentDetailModal({
         </div>
 
         {/* Balance Information (Read-only) */}
-        <div className="p-5 bg-emerald-50 rounded-xl border border-emerald-200">
+        <div className="p-5 bg-[#D6EFFF]/50 rounded-2xl border border-[#5CC0F7]/40">
           <div className="flex items-center gap-2 mb-2">
-            <Wallet className="w-5 h-5 text-emerald-600" />
-            <span className="text-sm text-emerald-700 font-semibold">Saldo Tersedia</span>
+            <Wallet className="w-5 h-5 text-[#0284c7]" />
+            <span className="text-sm text-slate-700 font-heading font-semibold">Saldo Tersedia</span>
           </div>
-          <span className="font-heading font-bold text-3xl text-emerald-700 block">
+          <span className="font-heading font-bold text-3xl text-slate-900 block">
             {formatRupiah(editedStudent.balance)}
           </span>
-          <span className="text-sm text-emerald-600 mt-2 block">
-            Status: {editedStudent.balance >= 50000 ? "Aman ✓" : "Perlu Top Up"}
+          <span className="text-xs text-[#0284c7] font-heading font-semibold mt-2 block">
+            Status: {editedStudent.balance >= 50000 ? "Aman" : "Perlu Top Up"}
           </span>
         </div>
 

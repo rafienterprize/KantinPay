@@ -6,6 +6,7 @@ import {
   NotificationItem,
   TopUpRecord,
   ClassLeaderTopUpLog,
+  ClassBilling,
 } from "@/types";
 import bcrypt from "bcryptjs";
 
@@ -125,6 +126,21 @@ const initialUsers: User[] = [
     status: "active",
     createdAt: "2026-01-16T08:55:00Z",
     updatedAt: "2026-01-16T08:55:00Z",
+  },
+  {
+    id: "usr-stu-5d",
+    fullName: "Ashraf Pratama",
+    email: "ashraf@kantinpay.sch.id",
+    passwordHash: defaultPasswordHash,
+    role: "student",
+    whatsappNumber: "082199887723",
+    studentId: "20241023",
+    className: "XII SIJA 1",
+    isClassLeader: false,
+    balance: 60000,
+    status: "active",
+    createdAt: "2026-01-16T09:00:00Z",
+    updatedAt: "2026-01-16T09:00:00Z",
   },
   {
     id: "usr-stu-6",
@@ -729,6 +745,62 @@ const initialTransactions: Transaction[] = [
     createdAt: "2026-01-25T10:40:00Z",
   },
   {
+    id: "tx-6",
+    referenceNumber: "KP-20260125-006",
+    studentId: "usr-stu-5d",
+    studentName: "Ashraf Pratama",
+    studentNis: "20241023",
+    canteenId: "canteen-1",
+    canteenName: "Kantin 1",
+    type: "payment",
+    amount: 18000,
+    status: "success",
+    description: "Pembayaran Nasi Rames & Es Teh di Kantin 1",
+    createdAt: "2026-01-25T09:35:00Z",
+  },
+  {
+    id: "tx-7",
+    referenceNumber: "KP-20260125-007",
+    studentId: "usr-stu-5d",
+    studentName: "Ashraf Pratama",
+    studentNis: "20241023",
+    canteenId: "canteen-5",
+    canteenName: "Kantin 5",
+    type: "payment",
+    amount: 12000,
+    status: "success",
+    description: "Pembayaran Jus Alpukat di Kantin 5",
+    createdAt: "2026-01-25T12:10:00Z",
+  },
+  {
+    id: "tx-8",
+    referenceNumber: "KP-20260125-008",
+    studentId: "usr-stu-5c",
+    studentName: "Indah Permata",
+    studentNis: "20241022",
+    canteenId: "canteen-2",
+    canteenName: "Kantin 2",
+    type: "payment",
+    amount: 15000,
+    status: "success",
+    description: "Pembayaran Mie Ayam Bakso di Kantin 2",
+    createdAt: "2026-01-25T12:15:00Z",
+  },
+  {
+    id: "tx-9",
+    referenceNumber: "KP-20260125-009",
+    studentId: "usr-stu-5b",
+    studentName: "Rudi Hartono",
+    studentNis: "20241021",
+    canteenId: "canteen-3",
+    canteenName: "Kantin 3",
+    type: "payment",
+    amount: 14000,
+    status: "success",
+    description: "Pembayaran Ayam Geprek di Kantin 3",
+    createdAt: "2026-01-25T09:45:00Z",
+  },
+  {
     id: "tx-top-1",
     referenceNumber: "TOP-20260125-001",
     studentId: "usr-stu-1",
@@ -877,6 +949,7 @@ class DataStore {
   private settlements: MerchantSettlement[] = [...initialSettlements];
   private notifications: NotificationItem[] = [...initialNotifications];
   private classLeaderTopUpLogs: ClassLeaderTopUpLog[] = [];
+  private classBillings: Map<string, Omit<ClassBilling, "isFrozen">> = new Map();
 
   // Users
   getUsers(): User[] {
@@ -1068,6 +1141,14 @@ class DataStore {
       return { success: false, message: "Akun siswa tidak aktif" };
     }
 
+    // Check 1x24h overdue class billing freeze
+    if (student.className && this.isClassFrozen(student.className)) {
+      return {
+        success: false,
+        message: `Saldo kelas ${student.className} sedang dibekukan sementara karena tagihan top-up ketua kelas melewati batas 1x24 jam. Silakan selesaikan setoran ke Koperasi Sekolah.`,
+      };
+    }
+
     if (student.balance < amount) {
       return {
         success: false,
@@ -1167,11 +1248,175 @@ class DataStore {
     return this.classLeaderTopUpLogs.filter((log) => log.status === "pending");
   }
 
+  // Class Billing & 1x24h Freeze Management
+  getClassBilling(className: string): ClassBilling {
+    if (!(this.classBillings instanceof Map)) {
+      this.classBillings = new Map();
+    }
+    const existing = this.classBillings.get(className);
+    if (!existing) {
+      return {
+        className,
+        totalBilled: 0,
+        paidAmount: 0,
+        remainingAmount: 0,
+        dueAt: null,
+        isFrozen: false,
+        updatedAt: new Date().toISOString(),
+      };
+    }
+    const isFrozen =
+      existing.remainingAmount > 0 &&
+      existing.dueAt !== null &&
+      Date.now() > new Date(existing.dueAt).getTime();
+
+    return {
+      ...existing,
+      isFrozen,
+    };
+  }
+
+  getAllClassBillings(): ClassBilling[] {
+    if (!(this.classBillings instanceof Map)) {
+      this.classBillings = new Map();
+    }
+    return Array.from(this.classBillings.keys()).map((cls) => this.getClassBilling(cls));
+  }
+
+  isClassFrozen(className?: string): boolean {
+    if (!className) return false;
+    return this.getClassBilling(className).isFrozen;
+  }
+
+  payClassBilling(
+    className: string,
+    amount?: number,
+    adminId = "usr-admin-1"
+  ): { success: boolean; message: string; billing?: ClassBilling } {
+    const current = this.getClassBilling(className);
+    if (current.remainingAmount <= 0) {
+      return { success: false, message: `Kelas ${className} tidak memiliki tagihan tertunggak.` };
+    }
+
+    const payAmount =
+      amount === undefined || amount >= current.remainingAmount
+        ? current.remainingAmount
+        : Math.floor(amount);
+
+    if (payAmount <= 0) {
+      return { success: false, message: "Nominal pembayaran harus lebih besar dari Rp 0." };
+    }
+
+    const newPaid = current.paidAmount + payAmount;
+    const newRemaining = Math.max(0, current.remainingAmount - payAmount);
+    const isSettled = newRemaining === 0;
+    const now = new Date().toISOString();
+
+    this.classBillings.set(className, {
+      className,
+      totalBilled: isSettled ? 0 : current.totalBilled,
+      paidAmount: isSettled ? 0 : newPaid,
+      remainingAmount: newRemaining,
+      dueAt: isSettled ? null : current.dueAt,
+      lastPaymentAt: now,
+      updatedAt: now,
+    });
+
+    // If fully settled, mark pending top-up logs for this class as approved
+    if (isSettled) {
+      for (const log of this.classLeaderTopUpLogs) {
+        if (log.className === className && log.status === "pending") {
+          log.status = "approved";
+          log.approvedBy = adminId;
+          log.approvedAt = now;
+        }
+      }
+    }
+
+    // Notify class leader
+    const classLeader = this.users.find(
+      (u) => u.role === "student" && u.className === className && u.isClassLeader
+    );
+    if (classLeader) {
+      this.notifications.unshift({
+        id: `notif-bill-${Date.now()}`,
+        userId: classLeader.id,
+        title: isSettled ? "Tagihan Kelas Lunas" : "Pembayaran Sebagian Diterima",
+        message: isSettled
+          ? `Setoran tagihan kelas ${className} sebesar Rp${payAmount.toLocaleString("id-ID")} telah diterima Koperasi. Saldo kelas aktif normal kembali.`
+          : `Setoran sebesar Rp${payAmount.toLocaleString("id-ID")} dicatat Koperasi. Sisa tagihan kelas ${className}: Rp${newRemaining.toLocaleString("id-ID")}.`,
+        type: "success",
+        createdAt: now,
+      });
+    }
+
+    const updatedBilling = this.getClassBilling(className);
+    return {
+      success: true,
+      message: isSettled
+        ? `Tagihan kelas ${className} telah LUNAS (Rp${payAmount.toLocaleString("id-ID")}). Saldo kelas otomatis aktif kembali!`
+        : `Pembayaran sebagian Rp${payAmount.toLocaleString("id-ID")} berhasil dicatat. Sisa tagihan: Rp${newRemaining.toLocaleString("id-ID")}.`,
+      billing: updatedBilling,
+    };
+  }
+
   createClassLeaderTopUpLog(data: Omit<ClassLeaderTopUpLog, "id" | "createdAt">): ClassLeaderTopUpLog {
+    const now = new Date().toISOString();
+    const targetStudent = this.getUserById(data.targetStudentId);
+
+    // Immediately credit target student's balance so they can use it within 1x24h window
+    if (targetStudent && targetStudent.role === "student") {
+      targetStudent.balance += data.amount;
+      targetStudent.updatedAt = now;
+
+      // Record transaction
+      this.transactions.unshift({
+        id: `tx-cltop-${Date.now()}`,
+        referenceNumber: `CLTOP-${now.slice(0, 10).replace(/-/g, "")}-${Math.floor(100 + Math.random() * 900)}`,
+        studentId: targetStudent.id,
+        studentName: targetStudent.fullName,
+        studentNis: targetStudent.studentId,
+        type: "topup",
+        amount: data.amount,
+        status: "success",
+        description: `Top-up oleh Ketua Kelas ${data.classLeaderName} (${data.className})`,
+        createdAt: now,
+      });
+
+      // Notify target student
+      this.notifications.unshift({
+        id: `notif-stu-${Date.now()}`,
+        userId: targetStudent.id,
+        title: "Top-Up Saldo Masuk",
+        message: `Saldo Rp${data.amount.toLocaleString("id-ID")} ditambahkan oleh Ketua Kelas ${data.classLeaderName}. Saldo saat ini: Rp${targetStudent.balance.toLocaleString("id-ID")}.`,
+        type: "success",
+        createdAt: now,
+      });
+    }
+
+    // Update class billing & set 1x24h deadline if not already set
+    if (!(this.classBillings instanceof Map)) {
+      this.classBillings = new Map();
+    }
+    const existingBill = this.classBillings.get(data.className);
+    const deadline24h = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
+    this.classBillings.set(data.className, {
+      className: data.className,
+      totalBilled: (existingBill?.totalBilled || 0) + data.amount,
+      paidAmount: existingBill?.paidAmount || 0,
+      remainingAmount: (existingBill?.remainingAmount || 0) + data.amount,
+      dueAt: existingBill && existingBill.remainingAmount > 0 && existingBill.dueAt
+        ? existingBill.dueAt
+        : deadline24h,
+      lastPaymentAt: existingBill?.lastPaymentAt,
+      updatedAt: now,
+    });
+
     const newLog: ClassLeaderTopUpLog = {
       id: `cltop-${Date.now()}`,
       ...data,
-      createdAt: new Date().toISOString(),
+      createdAt: now,
     };
     this.classLeaderTopUpLogs.unshift(newLog);
 
@@ -1179,10 +1424,10 @@ class DataStore {
     this.notifications.unshift({
       id: `notif-${Date.now()}`,
       userId: "usr-admin-1", // Admin user ID
-      title: "Permintaan Top-Up dari Ketua Kelas",
-      message: `${data.classLeaderName} (Kelas ${data.className}) mengajukan top-up sebesar Rp${data.amount.toLocaleString("id-ID")} untuk ${data.targetStudentName} (NIS: ${data.targetStudentNis})`,
+      title: "Log Top-Up Ketua Kelas (Tagihan 1x24 Jam)",
+      message: `${data.classLeaderName} (Kelas ${data.className}) melakukan top-up Rp${data.amount.toLocaleString("id-ID")} untuk ${data.targetStudentName} (NIS: ${data.targetStudentNis}). Masuk tagihan kelas ke Koperasi.`,
       type: "info",
-      createdAt: new Date().toISOString(),
+      createdAt: now,
     });
 
     return newLog;
@@ -1198,15 +1443,14 @@ class DataStore {
       return { success: false, message: "Log sudah diproses sebelumnya" };
     }
 
-    // Get target student
+    // Approve marks the billing settled for this log's amount (balance was already credited upon top-up)
     const student = this.getUserById(log.targetStudentId);
     if (!student || student.role !== "student") {
       return { success: false, message: "Siswa tidak ditemukan" };
     }
 
-    // Update student balance
-    student.balance += log.amount;
-    student.updatedAt = new Date().toISOString();
+    // Reduce class billing by this log's amount
+    this.payClassBilling(log.className, log.amount, adminId);
 
     // Update log status
     log.status = "approved";
@@ -1280,6 +1524,20 @@ class DataStore {
       log,
     };
   }
+
+  // Ensure newly added seed users & transactions are synced into existing HMR singleton
+  syncSeedData() {
+    for (const seedUser of initialUsers) {
+      if (!this.users.some((u) => u.id === seedUser.id || u.email === seedUser.email)) {
+        this.users.push({ ...seedUser });
+      }
+    }
+    for (const seedTx of initialTransactions) {
+      if (!this.transactions.some((t) => t.id === seedTx.id)) {
+        this.transactions.push({ ...seedTx });
+      }
+    }
+  }
 }
 
 // Global singleton pattern to prevent resets during HMR in Next.js development
@@ -1288,7 +1546,16 @@ declare global {
   var __kantinpayStore: DataStore | undefined;
 }
 
-export const store = global.__kantinpayStore || new DataStore();
+const existingStore = global.__kantinpayStore;
+export const store =
+  existingStore &&
+  typeof existingStore.syncSeedData === "function" &&
+  typeof existingStore.getClassBilling === "function"
+    ? existingStore
+    : new DataStore();
+
+store.syncSeedData();
+
 if (process.env.NODE_ENV !== "production") {
   global.__kantinpayStore = store;
 }

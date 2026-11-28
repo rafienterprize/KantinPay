@@ -26,6 +26,17 @@ interface AnalyticsData {
     totalTransactionValue: number;
   };
   chart: Array<{ time: string; amount: number; count: number }>;
+  unpaidSummary?: {
+    unpaidClassesCount: number;
+    totalUnpaidAmount: number;
+    frozenClassesCount: number;
+    classes: Array<{
+      className: string;
+      remainingAmount: number;
+      dueAt: string | null;
+      isFrozen: boolean;
+    }>;
+  };
 }
 
 export default function AdminDashboardPage() {
@@ -227,28 +238,66 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* Quick Action 2 - Data Per Kelas */}
+            {/* Quick Action 2 - Data Per Kelas & Tagihan Kelas */}
             <div className="rounded-3xl bg-white p-6 border border-[#D1D1D1]/60 shadow-xs hover:border-[#5CC0F7] transition">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-heading font-bold text-[#0284c7] uppercase tracking-wider">
-                  Quick Action
+                  Quick Action • Tagihan Kelas
                 </span>
                 <div className="w-8 h-8 rounded-xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center">
                   <Users className="w-4 h-4" />
                 </div>
               </div>
               <h4 className="font-heading font-bold text-base text-slate-900">
-                Data Per Kelas
+                Data Per Kelas &amp; Tagihan Koperasi
               </h4>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                Lihat total saldo dan daftar siswa berdasarkan kelas. Ketua kelas dapat melakukan top-up untuk teman sekelasnya.
+                Pantau tagihan top-up ketua kelas yang belum disetor (tenggat 1x24 jam) serta kelola status pembayaran per kelas.
               </p>
+
+              {/* Live Unpaid Class Billing Summary */}
+              {data?.unpaidSummary && data.unpaidSummary.unpaidClassesCount > 0 ? (
+                <div className="mt-3 p-3.5 rounded-2xl bg-amber-50 border border-amber-200 space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-heading font-bold text-amber-800">
+                      {data.unpaidSummary.unpaidClassesCount} Kelas Belum Bayar
+                    </span>
+                    <span className="font-heading font-bold text-amber-900">
+                      {formatRupiah(data.unpaidSummary.totalUnpaidAmount)}
+                    </span>
+                  </div>
+                  <div className="space-y-1">
+                    {data.unpaidSummary.classes.slice(0, 3).map((cls) => (
+                      <Link
+                        key={cls.className}
+                        href={`/admin/classes/${encodeURIComponent(cls.className)}`}
+                        className="flex items-center justify-between text-[11px] bg-white/80 hover:bg-white px-2.5 py-1.5 rounded-xl border border-amber-200/70 transition"
+                      >
+                        <span className="font-heading font-semibold text-slate-800">
+                          {cls.className}{" "}
+                          {cls.isFrozen && (
+                            <span className="text-rose-600 font-bold">(Dibekukan)</span>
+                          )}
+                        </span>
+                        <span className="font-heading font-bold text-amber-700">
+                          {formatRupiah(cls.remainingAmount)}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-3 px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] font-heading font-semibold text-emerald-700">
+                  Semua tagihan kelas saat ini sudah lunas
+                </div>
+              )}
+
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
                 <Link
                   href="/admin/classes"
                   className="inline-flex items-center text-xs font-heading font-semibold text-[#5CC0F7] hover:text-[#48b1eb]"
                 >
-                  <span>Lihat Data Per Kelas</span>
+                  <span>Lihat Data &amp; Tagihan Per Kelas</span>
                 </Link>
               </div>
             </div>

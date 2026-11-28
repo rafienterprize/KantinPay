@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -30,6 +31,11 @@ export function AdminSidebar({
   const pathname = usePathname();
   const router = useRouter();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const primaryNavItems = [
     {
@@ -91,7 +97,9 @@ export function AdminSidebar({
           Menu Utama Koperasi
         </p>
         {primaryNavItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive =
+            pathname === item.href ||
+            (item.href !== "/admin" && pathname.startsWith(item.href));
           const Icon = item.icon;
 
           return (
@@ -171,9 +179,9 @@ export function AdminSidebar({
         </button>
       </div>
 
-      {/* Logout Confirmation Modal */}
-      {showLogoutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      {/* Logout Confirmation Modal rendered in portal to cover full viewport including top navbar */}
+      {mounted && showLogoutModal && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-2xl w-[90%] max-w-md p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
             {/* Icon */}
             <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-rose-100">
@@ -194,19 +202,20 @@ export function AdminSidebar({
             <div className="flex gap-3 pt-2">
               <button
                 onClick={cancelLogout}
-                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 transition cursor-pointer"
               >
                 Batal
               </button>
               <button
                 onClick={confirmLogout}
-                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-white bg-rose-600 hover:bg-rose-700 transition"
+                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-white bg-rose-600 hover:bg-rose-700 transition cursor-pointer"
               >
                 Ya, Keluar
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </aside>
   );

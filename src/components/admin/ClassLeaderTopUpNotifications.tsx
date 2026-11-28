@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { ClassLeaderTopUpLog } from "@/types";
 import { formatRupiah } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
+import { Skeleton } from "@/components/ui/Skeleton";
 import {
   Crown,
   CheckCircle,
@@ -124,9 +125,10 @@ export function ClassLeaderTopUpNotifications({
 
   if (loading) {
     return (
-      <div className="p-8 text-center">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600"></div>
-        <p className="text-sm text-slate-500 mt-3">Memuat permintaan top-up...</p>
+      <div className="p-4 space-y-3">
+        <Skeleton className="h-5 w-48" />
+        <Skeleton className="h-24 w-full rounded-2xl" />
+        <Skeleton className="h-24 w-full rounded-2xl" />
       </div>
     );
   }

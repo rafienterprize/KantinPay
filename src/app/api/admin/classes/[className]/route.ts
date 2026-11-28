@@ -19,8 +19,12 @@ export async function GET(
     const students = allStudents.filter(
       (s) => s.className === decodedClassName
     );
+    const billing = store.getClassBilling(decodedClassName);
+    const topUpLogs = store
+      .getClassLeaderTopUpLogs()
+      .filter((l) => l.className === decodedClassName);
 
-    return NextResponse.json({ students });
+    return NextResponse.json({ students, billing, topUpLogs });
   } catch (error) {
     console.error("Error fetching class students:", error);
     return NextResponse.json(

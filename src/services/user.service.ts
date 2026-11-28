@@ -38,6 +38,7 @@ export const userService = {
     email: string;
     whatsappNumber: string;
     className: string;
+    isClassLeader?: boolean;
     initialBalance?: number;
     password?: string;
   }): Promise<{ success: boolean; message: string; user?: User }> {
@@ -58,6 +59,7 @@ export const userService = {
       email: data.email,
       studentId: data.studentId,
       className: data.className,
+      isClassLeader: Boolean(data.isClassLeader),
       whatsappNumber: data.whatsappNumber,
       balance: data.initialBalance || 0,
       status: "active",

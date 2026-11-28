@@ -33,10 +33,45 @@ export function AdminLayout({
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [pendingTopUpCount, setPendingTopUpCount] = useState(0);
+  const [hasReadNotifications, setHasReadNotifications] = useState(false);
+  const [seenPendingCount, setSeenPendingCount] = useState(0);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedRead = sessionStorage.getItem("admin_notif_read") === "true";
+      const savedPending = parseInt(sessionStorage.getItem("admin_notif_seen_pending") || "0", 10);
+      setHasReadNotifications(savedRead);
+      setSeenPendingCount(isNaN(savedPending) ? 0 : savedPending);
+    }
     fetchCurrentUser();
+    fetchNotificationCount();
   }, []);
+
+  const fetchNotificationCount = async () => {
+    try {
+      const res = await fetch("/api/admin/class-leader-topups");
+      if (res.ok) {
+        const data = await res.json();
+        const count = (data.logs || []).length;
+        setPendingTopUpCount(count);
+        // If new pending top-up requests arrived after last read, show badge again
+        if (typeof window !== "undefined") {
+          const savedPending = parseInt(sessionStorage.getItem("admin_notif_seen_pending") || "0", 10);
+          if (count > (isNaN(savedPending) ? 0 : savedPending)) {
+            setHasReadNotifications(false);
+            sessionStorage.setItem("admin_notif_read", "false");
+          }
+        }
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  const unreadNotificationCount = hasReadNotifications
+    ? Math.max(0, pendingTopUpCount - seenPendingCount)
+    : 2 + pendingTopUpCount;
 
   const fetchCurrentUser = async () => {
     try {
@@ -67,8 +102,18 @@ export function AdminLayout({
         {/* Desktop Fixed Sidebar */}
         <div className="hidden md:block">
           <AdminSidebar
-            onOpenNotification={() => setNotificationOpen(true)}
+            onOpenNotification={() => {
+              setNotificationOpen(true);
+              setHasReadNotifications(true);
+              setSeenPendingCount(pendingTopUpCount);
+              if (typeof window !== "undefined") {
+                sessionStorage.setItem("admin_notif_read", "true");
+                sessionStorage.setItem("admin_notif_seen_pending", String(pendingTopUpCount));
+              }
+              fetchNotificationCount();
+            }}
             onOpenAccount={() => setAccountOpen(true)}
+            notificationCount={unreadNotificationCount}
           />
         </div>
 
@@ -102,7 +147,7 @@ export function AdminLayout({
       >
         <div className="space-y-4 py-2">
           {/* Class Leader Top-Up Notifications */}
-          <ClassLeaderTopUpNotifications />
+          <ClassLeaderTopUpNotifications onRefresh={fetchNotificationCount} />
 
           {/* Divider */}
           <div className="border-t border-slate-200 my-4"></div>

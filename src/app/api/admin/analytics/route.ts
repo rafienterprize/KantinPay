@@ -15,8 +15,18 @@ export async function GET() {
     { time: "15:00", amount: 95000, count: 8 },
   ];
 
+  const allBillings = store.getAllClassBillings();
+  const unpaidBillings = allBillings.filter((b) => b.remainingAmount > 0);
+  const unpaidSummary = {
+    unpaidClassesCount: unpaidBillings.length,
+    totalUnpaidAmount: unpaidBillings.reduce((sum, b) => sum + b.remainingAmount, 0),
+    frozenClassesCount: unpaidBillings.filter((b) => b.isFrozen).length,
+    classes: unpaidBillings,
+  };
+
   return NextResponse.json({
     kpis,
     chart: hourlyActivity,
+    unpaidSummary,
   });
 }

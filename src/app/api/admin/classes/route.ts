@@ -40,11 +40,27 @@ export async function GET(request: Request) {
       }
     });
     
-    const classes = Array.from(classMap.values()).sort((a, b) =>
-      a.className.localeCompare(b.className)
-    );
+    const classes = Array.from(classMap.values())
+      .map((cls) => ({
+        ...cls,
+        billing: store.getClassBilling(cls.className),
+      }))
+      .sort((a, b) => {
+        // Prioritize classes with unpaid billing first, then alphabetically
+        if (b.billing.remainingAmount !== a.billing.remainingAmount) {
+          return b.billing.remainingAmount - a.billing.remainingAmount;
+        }
+        return a.className.localeCompare(b.className);
+      });
 
-    return NextResponse.json({ classes });
+    const unpaidClasses = classes.filter((c) => c.billing.remainingAmount > 0);
+    const summary = {
+      unpaidClassesCount: unpaidClasses.length,
+      totalUnpaidAmount: unpaidClasses.reduce((sum, c) => sum + c.billing.remainingAmount, 0),
+      frozenClassesCount: unpaidClasses.filter((c) => c.billing.isFrozen).length,
+    };
+
+    return NextResponse.json({ classes, summary });
   } catch (error) {
     console.error("Error fetching classes:", error);
     return NextResponse.json(

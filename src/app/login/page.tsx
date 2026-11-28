@@ -286,13 +286,13 @@ export default function LoginPage() {
         maxWidth="md"
       >
         <div className="space-y-4 py-2">
-          <div className="p-4 rounded-2xl bg-[#D6EFFF] border border-[#5CC0F7]/30 flex gap-3">
+          <div className="p-4 rounded-2xl bg-[#D6EFFF]/50 border border-[#5CC0F7]/30 flex gap-3">
             <Info className="w-5 h-5 text-[#0284c7] shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm text-slate-900 font-semibold mb-2">
+              <p className="text-sm text-slate-900 font-heading font-bold mb-1.5">
                 Prosedur Reset Kata Sandi
               </p>
-              <p className="text-xs text-slate-700 leading-relaxed">
+              <p className="text-xs text-slate-600 leading-relaxed">
                 Silakan hubungi <strong>Pengurus Koperasi Sekolah</strong> melalui loket tata usaha untuk mereset kata sandi Anda. Bawa kartu identitas siswa/staff untuk verifikasi.
               </p>
             </div>
@@ -303,7 +303,7 @@ export default function LoginPage() {
               variant="outline"
               size="md"
               onClick={() => setShowForgotPasswordModal(false)}
-              className="rounded-xl flex-1"
+              className="rounded-2xl flex-1"
             >
               Tutup
             </Button>
@@ -316,9 +316,9 @@ export default function LoginPage() {
               <Button
                 variant="primary"
                 size="md"
-                className="rounded-xl w-full bg-emerald-500 hover:bg-emerald-600"
+                className="rounded-2xl w-full"
               >
-                <MessageCircle className="w-4 h-4 mr-2" />
+                <MessageCircle className="w-4 h-4 mr-1.5" />
                 WhatsApp
               </Button>
             </a>
@@ -335,16 +335,16 @@ export default function LoginPage() {
         maxWidth="md"
       >
         <div className="space-y-4 py-2">
-          <div className="p-4 rounded-2xl bg-[#D6EFFF] border border-[#5CC0F7]/30 flex gap-3">
+          <div className="p-4 rounded-2xl bg-[#D6EFFF]/50 border border-[#5CC0F7]/30 flex gap-3">
             <Info className="w-5 h-5 text-[#0284c7] shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm text-slate-900 font-semibold mb-2">
+              <p className="text-sm text-slate-900 font-heading font-bold mb-1.5">
                 Pendaftaran Akun KantinPay
               </p>
-              <p className="text-xs text-slate-700 leading-relaxed mb-3">
+              <p className="text-xs text-slate-600 leading-relaxed mb-3">
                 Pendaftaran akun siswa dan tenant kantin dikoordinasikan langsung oleh <strong>Pengurus Koperasi Sekolah</strong> melalui loket tata usaha.
               </p>
-              <ul className="text-xs text-slate-700 space-y-1.5 ml-4 list-disc">
+              <ul className="text-xs text-slate-600 space-y-1.5 ml-4 list-disc">
                 <li>Akun Siswa: Daftarkan melalui wali kelas atau tata usaha</li>
                 <li>Akun Tenant: Hubungi koordinator koperasi sekolah</li>
                 <li>Bawa dokumen identitas untuk verifikasi</li>
@@ -357,7 +357,7 @@ export default function LoginPage() {
               variant="outline"
               size="md"
               onClick={() => setShowRequestAccountModal(false)}
-              className="rounded-xl flex-1"
+              className="rounded-2xl flex-1"
             >
               Tutup
             </Button>
@@ -370,9 +370,9 @@ export default function LoginPage() {
               <Button
                 variant="primary"
                 size="md"
-                className="rounded-xl w-full bg-emerald-500 hover:bg-emerald-600"
+                className="rounded-2xl w-full"
               >
-                <MessageCircle className="w-4 h-4 mr-2" />
+                <MessageCircle className="w-4 h-4 mr-1.5" />
                 WhatsApp
               </Button>
             </a>

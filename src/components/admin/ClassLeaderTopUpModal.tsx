@@ -83,7 +83,7 @@ export function ClassLeaderTopUpModal({
 
       setMessage({
         type: "success",
-        text: `Permintaan top-up sebesar ${formatRupiah(numAmount)} untuk ${targetStudent.fullName} berhasil diajukan. Menunggu persetujuan admin.`,
+        text: `Top-up ${formatRupiah(numAmount)} untuk ${targetStudent.fullName} berhasil! Saldo langsung bertambah & tercatat sebagai tagihan 1x24 jam ke Koperasi.`,
       });
 
       setTimeout(() => {
@@ -203,7 +203,7 @@ export function ClassLeaderTopUpModal({
               </span>
             </div>
             <p className="text-xs text-emerald-600">
-              <strong>Catatan:</strong> Top-up akan menunggu persetujuan dari admin koperasi sebelum saldo benar-benar bertambah.
+              <strong>Catatan:</strong> Saldo langsung bertambah &amp; nominal masuk ke Tagihan Bayar ke Koperasi (tenggat 1x24 jam).
             </p>
           </div>
         )}
@@ -214,13 +214,13 @@ export function ClassLeaderTopUpModal({
             <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div>
               <p className="text-xs text-amber-900 font-semibold mb-1">
-                Alur Top-Up Ketua Kelas
+                Alur Top-Up Ketua Kelas (Tenggat 1x24 Jam)
               </p>
               <ul className="text-xs text-amber-700 space-y-1 ml-4 list-disc">
-                <li>Ketua kelas mengajukan permintaan top-up untuk siswa se-kelas</li>
-                <li>Permintaan masuk ke notifikasi admin koperasi</li>
-                <li>Admin memverifikasi dan menyetujui/menolak permintaan</li>
-                <li>Setelah disetujui, saldo siswa bertambah otomatis</li>
+                <li>Saldo teman (atau ketua kelas sendiri) langsung bertambah &amp; log masuk ke Admin Koperasi</li>
+                <li>Nominal otomatis masuk ke Tagihan Bayar ke Koperasi di dashboard kelas &amp; admin</li>
+                <li>Ketua kelas wajib menyetor uang ke Koperasi maksimal <strong>1x24 jam</strong></li>
+                <li>Jika lewat 1x24 jam, saldo kelas dibekukan sementara sampai dibayar lunas di Koperasi</li>
               </ul>
             </div>
           </div>

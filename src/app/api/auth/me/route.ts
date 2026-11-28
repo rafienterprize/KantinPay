@@ -20,6 +20,7 @@ export async function GET() {
           balance: user.balance,
           studentId: user.studentId,
           className: user.className,
+          isClassLeader: Boolean(user.isClassLeader),
           whatsappNumber: user.whatsappNumber,
           status: user.status,
         }

@@ -86,6 +86,17 @@ export interface ClassLeaderTopUpLog {
   createdAt: string;
 }
 
+export interface ClassBilling {
+  className: string;
+  totalBilled: number;
+  paidAmount: number;
+  remainingAmount: number;
+  dueAt: string | null;
+  isFrozen: boolean;
+  lastPaymentAt?: string;
+  updatedAt: string;
+}
+
 export type SettlementStatus = "pending" | "processing" | "settled";
 
 export interface MerchantSettlement {

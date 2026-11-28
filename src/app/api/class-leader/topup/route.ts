@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "You can only top-up students from your class" }, { status: 403 });
     }
 
-    // Create class leader top-up log with pending status
+    // Create class leader top-up log (credits balance immediately & adds to 1x24h class billing)
     const log = store.createClassLeaderTopUpLog({
       classLeaderId: user.id,
       classLeaderName: user.fullName,
@@ -47,14 +47,17 @@ export async function POST(request: NextRequest) {
       targetStudentNis: targetStudent.studentId || "",
       amount,
       previousBalance: targetStudent.balance,
-      newBalance: targetStudent.balance + amount, // Projected balance after approval
+      newBalance: targetStudent.balance + amount,
       status: "pending",
     });
 
+    const billing = store.getClassBilling(user.className || "");
+
     return NextResponse.json({
       success: true,
-      message: "Top-up request submitted successfully. Waiting for admin approval.",
+      message: "Top-up berhasil! Saldo langsung bertambah & masuk tagihan 1x24 jam ke Koperasi.",
       log,
+      billing,
     });
   } catch (error) {
     console.error("Class leader top-up error:", error);

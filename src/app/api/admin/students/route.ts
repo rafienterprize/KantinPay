@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { fullName, studentId, email, whatsappNumber, className, initialBalance } = body;
+    const { fullName, studentId, email, whatsappNumber, className, isClassLeader, initialBalance } = body;
 
     if (!fullName || !studentId || !email || !whatsappNumber || !className) {
       return NextResponse.json(
@@ -49,6 +49,7 @@ export async function POST(request: Request) {
       email,
       whatsappNumber,
       className,
+      isClassLeader: Boolean(isClassLeader),
       initialBalance: Number(initialBalance) || 0,
     });
 
