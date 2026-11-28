@@ -29,12 +29,20 @@ export function Modal({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
+    
     if (isOpen) {
+      // Lock body scroll
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      
       window.addEventListener("keydown", handleKeyDown);
     }
+    
     return () => {
+      // Unlock body scroll
       document.body.style.overflow = "unset";
+      document.body.style.paddingRight = "0px";
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
@@ -50,39 +58,44 @@ export function Modal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      onWheel={(e) => {
+        // Prevent scroll propagation to body
+        e.stopPropagation();
+      }}
+    >
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
         onClick={disableBackdropClick ? undefined : onClose}
       />
 
-      {/* Modal Box */}
+      {/* Modal Box - No scrollbar, responsive with viewport units */}
       <div
         className={cn(
-          "relative w-full rounded-3xl bg-white p-6 shadow-xl border border-slate-100 z-10 animate-in fade-in zoom-in-95 duration-200 my-8 max-h-[90vh] overflow-hidden flex flex-col",
+          "relative w-full rounded-3xl bg-white p-6 shadow-xl border border-slate-100 z-10 animate-in fade-in zoom-in-95 duration-200",
           maxWidths[maxWidth]
         )}
+        style={{
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          scrollbarWidth: 'none', /* Firefox */
+          msOverflowStyle: 'none', /* IE and Edge */
+        }}
+        onWheel={(e) => {
+          // Allow scroll within modal, prevent propagation to backdrop/body
+          e.stopPropagation();
+        }}
       >
-        {/* Custom scrollbar */}
+        {/* Hide scrollbar for Chrome, Safari and Opera */}
         <style jsx>{`
-          .modal-content::-webkit-scrollbar {
-            width: 6px;
-          }
-          .modal-content::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 10px;
-          }
-          .modal-content::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-          }
-          .modal-content::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+          div::-webkit-scrollbar {
+            display: none;
           }
         `}</style>
         
-        <div className="flex items-start justify-between mb-4 pb-2 border-b border-slate-100 shrink-0">
+        <div className="flex items-start justify-between mb-4 pb-2 border-b border-slate-100">
           <div>
             <h3 className="text-lg font-heading font-semibold text-slate-800">
               {title}
@@ -100,9 +113,7 @@ export function Modal({
             </button>
           )}
         </div>
-        <div className="modal-content overflow-y-auto flex-1 pr-2 -mr-2">
-          {children}
-        </div>
+        <div>{children}</div>
       </div>
     </div>
   );

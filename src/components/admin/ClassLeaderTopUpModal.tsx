@@ -109,7 +109,7 @@ export function ClassLeaderTopUpModal({
     >
       <div className="space-y-5 py-3">
         {/* Class Leader Info */}
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-200">
+        <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shrink-0">
               <Crown className="w-6 h-6" />
@@ -129,7 +129,7 @@ export function ClassLeaderTopUpModal({
         </div>
 
         {/* Target Student Info */}
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-200">
+        <div className="p-4 rounded-2xl bg-[#D6EFFF] border border-[#5CC0F7]/30">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-12 h-12 rounded-2xl bg-cyan-500 text-white flex items-center justify-center shrink-0">
               <UserIcon className="w-6 h-6" />

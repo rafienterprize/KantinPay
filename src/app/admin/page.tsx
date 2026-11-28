@@ -35,6 +35,7 @@ export default function AdminDashboardPage() {
   const [chartPeriod, setChartPeriod] = useState<"hari-ini" | "minggu-ini">("hari-ini");
   const [todayString, setTodayString] = useState("");
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
   useEffect(() => {
     setTodayString(
@@ -45,6 +46,8 @@ export default function AdminDashboardPage() {
         year: "numeric",
       })
     );
+    
+    // Fetch analytics
     fetch("/api/admin/analytics")
       .then((res) => res.json())
       .then((res) => {
@@ -52,6 +55,12 @@ export default function AdminDashboardPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+      
+    // Fetch current user
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((res) => setCurrentUser(res.user))
+      .catch((error) => console.error("Failed to fetch current user:", error));
   }, []);
 
   return (
@@ -73,7 +82,7 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-heading font-bold text-slate-900">
-                Greetings, Pengurus Koperasi!
+                Greetings, {currentUser?.fullName || "Admin"}!
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
                 Pantau seluruh sirkulasi pembayaran digital kantin sekolah dan saldo kasir hari ini.

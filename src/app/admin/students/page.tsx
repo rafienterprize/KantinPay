@@ -394,7 +394,7 @@ export default function StudentsPage() {
         {selectedStudent && (
           <div className="space-y-4 py-1">
             {/* Student Card Summary */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-[#D6EFFF]/50 to-white border border-[#5CC0F7]/40 flex items-center justify-between">
+            <div className="p-4 rounded-2xl bg-[#D6EFFF] border border-[#5CC0F7]/40 flex items-center justify-between">
               <div>
                 <h4 className="font-heading font-bold text-slate-900 text-sm">
                   {selectedStudent.fullName}

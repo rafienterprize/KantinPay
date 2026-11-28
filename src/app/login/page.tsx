@@ -13,9 +13,14 @@ import {
   Store,
   AlertCircle,
   CheckCircle2,
+  Info,
+  MessageCircle,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Modal } from "@/components/ui/Modal";
 import { UserRole } from "@/types";
 
 export default function LoginPage() {
@@ -27,6 +32,11 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  
+  // Modal states
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+  const [showRequestAccountModal, setShowRequestAccountModal] = useState(false);
 
   const handleRoleChange = (selectedRole: UserRole) => {
     setRole(selectedRole);
@@ -180,29 +190,51 @@ export default function LoginPage() {
 
           <Input
             label="Kata Sandi"
-            type="password"
+            type={showPassword ? "text" : "password"}
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             icon={<Lock className="w-4 h-4" />}
+            rightElement={
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="text-slate-400 hover:text-slate-600 transition focus:outline-none"
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
+              </button>
+            }
           />
 
           <div className="flex items-center justify-between text-xs pt-1">
-            <label className="flex items-center gap-2 cursor-pointer select-none text-slate-600">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="rounded border-slate-300 text-[#5CC0F7] focus:ring-[#5CC0F7]"
-              />
-              <span>Ingat Saya</span>
+            <label className="flex items-center gap-2 cursor-pointer select-none group">
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-5 h-5 rounded-lg border-2 border-slate-300 bg-white peer-checked:bg-[#0284c7] peer-checked:border-[#0284c7] transition-all duration-200 flex items-center justify-center">
+                  {rememberMe && (
+                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+              <span className="text-slate-600 font-medium group-hover:text-slate-900 transition">Ingat Saya</span>
             </label>
             <a
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                alert("Silakan hubungi Pengurus Koperasi Sekolah untuk mereset kata sandi Anda.");
+                setShowForgotPasswordModal(true);
               }}
               className="text-[#0284c7] hover:underline font-medium"
             >
@@ -229,9 +261,7 @@ export default function LoginPage() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                alert(
-                  "Pendaftaran akun siswa dan kantin dikoordinasikan langsung oleh Pengurus Koperasi Sekolah melalui loket tata usaha."
-                );
+                setShowRequestAccountModal(true);
               }}
               className="font-heading font-semibold text-[#0284c7] hover:underline"
             >
@@ -246,6 +276,109 @@ export default function LoginPage() {
           Kembali ke Halaman Utama
         </Link>
       </div>
+
+      {/* Forgot Password Modal */}
+      <Modal
+        isOpen={showForgotPasswordModal}
+        onClose={() => setShowForgotPasswordModal(false)}
+        title="Lupa Kata Sandi?"
+        description="Hubungi administrator untuk reset password"
+        maxWidth="md"
+      >
+        <div className="space-y-4 py-2">
+          <div className="p-4 rounded-2xl bg-[#D6EFFF] border border-[#5CC0F7]/30 flex gap-3">
+            <Info className="w-5 h-5 text-[#0284c7] shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm text-slate-900 font-semibold mb-2">
+                Prosedur Reset Kata Sandi
+              </p>
+              <p className="text-xs text-slate-700 leading-relaxed">
+                Silakan hubungi <strong>Pengurus Koperasi Sekolah</strong> melalui loket tata usaha untuk mereset kata sandi Anda. Bawa kartu identitas siswa/staff untuk verifikasi.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <Button
+              variant="outline"
+              size="md"
+              onClick={() => setShowForgotPasswordModal(false)}
+              className="rounded-xl flex-1"
+            >
+              Tutup
+            </Button>
+            <a
+              href="https://wa.me/6281234567890?text=Halo%2C%20saya%20ingin%20mereset%20kata%20sandi%20akun%20KantinPay%20saya"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1"
+            >
+              <Button
+                variant="primary"
+                size="md"
+                className="rounded-xl w-full bg-emerald-500 hover:bg-emerald-600"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                WhatsApp
+              </Button>
+            </a>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Request Account Modal */}
+      <Modal
+        isOpen={showRequestAccountModal}
+        onClose={() => setShowRequestAccountModal(false)}
+        title="Permintaan Akun Baru"
+        description="Informasi pendaftaran akun"
+        maxWidth="md"
+      >
+        <div className="space-y-4 py-2">
+          <div className="p-4 rounded-2xl bg-[#D6EFFF] border border-[#5CC0F7]/30 flex gap-3">
+            <Info className="w-5 h-5 text-[#0284c7] shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm text-slate-900 font-semibold mb-2">
+                Pendaftaran Akun KantinPay
+              </p>
+              <p className="text-xs text-slate-700 leading-relaxed mb-3">
+                Pendaftaran akun siswa dan tenant kantin dikoordinasikan langsung oleh <strong>Pengurus Koperasi Sekolah</strong> melalui loket tata usaha.
+              </p>
+              <ul className="text-xs text-slate-700 space-y-1.5 ml-4 list-disc">
+                <li>Akun Siswa: Daftarkan melalui wali kelas atau tata usaha</li>
+                <li>Akun Tenant: Hubungi koordinator koperasi sekolah</li>
+                <li>Bawa dokumen identitas untuk verifikasi</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <Button
+              variant="outline"
+              size="md"
+              onClick={() => setShowRequestAccountModal(false)}
+              className="rounded-xl flex-1"
+            >
+              Tutup
+            </Button>
+            <a
+              href="https://wa.me/6281234567890?text=Halo%2C%20saya%20ingin%20mendaftar%20akun%20KantinPay%20baru"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1"
+            >
+              <Button
+                variant="primary"
+                size="md"
+                className="rounded-xl w-full bg-emerald-500 hover:bg-emerald-600"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                WhatsApp
+              </Button>
+            </a>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

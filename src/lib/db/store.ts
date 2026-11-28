@@ -16,7 +16,7 @@ const adminPasswordHash = bcrypt.hashSync("admin123", 10);
 const initialUsers: User[] = [
   {
     id: "usr-admin-1",
-    fullName: "Pengurus Koperasi Sekolah",
+    fullName: "Admin Koperasi",
     email: "admin@kantinpay.sch.id",
     passwordHash: adminPasswordHash,
     role: "admin",

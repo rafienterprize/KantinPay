@@ -75,7 +75,7 @@ export default function ClassesPage() {
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-heading font-semibold text-cyan-600 uppercase tracking-wider">
+                <span className="text-xs font-heading font-semibold text-[#0284c7] uppercase tracking-wider">
                   Manajemen Per Kelas
                 </span>
               </div>
@@ -126,12 +126,12 @@ export default function ClassesPage() {
             {filteredClasses.map((classData) => (
               <div
                 key={classData.className}
-                className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xs hover:border-cyan-500 hover:shadow-md transition-all"
+                className="rounded-3xl bg-white p-6 border border-[#D1D1D1]/60 shadow-xs hover:border-[#5CC0F7] hover:shadow-md transition-all"
               >
                 {/* Header with Class Name and Status */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-600 flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center shrink-0">
                       <GraduationCap className="w-6 h-6" />
                     </div>
                     <div>
@@ -191,7 +191,7 @@ export default function ClassesPage() {
                   
                   <Link
                     href={`/admin/classes/${encodeURIComponent(classData.className)}`}
-                    className="ml-auto px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-heading font-semibold transition flex items-center gap-1.5"
+                    className="ml-auto px-4 py-2 rounded-xl bg-[#0284c7] hover:bg-[#0369a1] text-white text-xs font-heading font-semibold transition flex items-center gap-1.5"
                   >
                     <Users className="w-3.5 h-3.5" />
                     Lihat Detail Siswa

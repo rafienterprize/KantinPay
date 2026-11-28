@@ -201,8 +201,8 @@ export function StudentDetailModal({
         {/* Student Identity Card - Differentiate Class Leader */}
         <div className={`p-5 rounded-2xl border ${
           editedStudent.isClassLeader 
-            ? "bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-300" 
-            : "bg-gradient-to-br from-[#D6EFFF]/50 to-white border-[#5CC0F7]/30"
+            ? "bg-amber-50 border-amber-300" 
+            : "bg-[#D6EFFF] border-[#5CC0F7]/30"
         }`}>
           {editedStudent.isClassLeader && (
             <div className="flex items-center gap-2 mb-3 pb-3 border-b border-amber-200">
@@ -368,7 +368,7 @@ export function StudentDetailModal({
         </div>
 
         {/* Balance Information (Read-only) */}
-        <div className="p-5 bg-gradient-to-r from-emerald-50 to-emerald-100/50 rounded-xl border border-emerald-200">
+        <div className="p-5 bg-emerald-50 rounded-xl border border-emerald-200">
           <div className="flex items-center gap-2 mb-2">
             <Wallet className="w-5 h-5 text-emerald-600" />
             <span className="text-sm text-emerald-700 font-semibold">Saldo Tersedia</span>

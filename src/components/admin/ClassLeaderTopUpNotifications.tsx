@@ -163,7 +163,7 @@ export function ClassLeaderTopUpNotifications({
           {logs.map((log) => (
             <div
               key={log.id}
-              className="p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 space-y-3"
+              className="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-3"
             >
               {/* Class Leader Info */}
               <div className="flex items-center gap-3 pb-3 border-b border-amber-200/60">

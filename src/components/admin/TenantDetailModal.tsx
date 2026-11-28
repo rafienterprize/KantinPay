@@ -175,7 +175,7 @@ export function TenantDetailModal({
       >
         <div className="space-y-5 py-3">
           {/* Tenant Identity Card */}
-          <div className="p-5 rounded-2xl bg-gradient-to-br from-[#D6EFFF]/50 to-white border border-[#5CC0F7]/30">
+          <div className="p-5 rounded-2xl bg-[#D6EFFF] border border-[#5CC0F7]/30">
             <div className="flex items-start gap-5">
               <div className="w-20 h-20 rounded-2xl bg-[#5CC0F7] text-white font-heading font-bold text-3xl flex items-center justify-center shrink-0">
                 <Store className="w-10 h-10" />
@@ -287,7 +287,7 @@ export function TenantDetailModal({
 
           {/* Sales Information (Read-only) */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-5 bg-gradient-to-r from-emerald-50 to-emerald-100/50 rounded-xl border border-emerald-200">
+            <div className="p-5 bg-emerald-50 rounded-xl border border-emerald-200">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="w-5 h-5 text-emerald-600" />
                 <span className="text-sm text-emerald-700 font-semibold">Penjualan Hari Ini</span>
@@ -297,7 +297,7 @@ export function TenantDetailModal({
               </span>
             </div>
 
-            <div className="p-5 bg-gradient-to-r from-cyan-50 to-cyan-100/50 rounded-xl border border-cyan-200">
+            <div className="p-5 bg-[#D6EFFF] rounded-xl border border-[#5CC0F7]/30">
               <div className="flex items-center gap-2 mb-2">
                 <Receipt className="w-5 h-5 text-cyan-600" />
                 <span className="text-sm text-cyan-700 font-semibold">Jumlah Transaksi</span>

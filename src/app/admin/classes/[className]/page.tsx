@@ -105,7 +105,7 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
           </div>
 
           {/* Class Summary Card */}
-          <div className="p-6 rounded-3xl bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-200">
+          <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xs">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <h1 className="text-3xl font-heading font-bold text-slate-900">
@@ -159,9 +159,9 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
           </div>
 
           {/* Students List */}
-          <div className="rounded-3xl bg-white border border-slate-200 shadow-xs overflow-hidden">
+          <div className="rounded-3xl bg-white border border-[#D1D1D1]/60 shadow-xs overflow-hidden">
             {/* Table Header */}
-            <div className="bg-cyan-50 border-b border-cyan-100 px-6 py-3.5 grid grid-cols-12 text-xs font-heading font-bold text-slate-700 uppercase tracking-wider">
+            <div className="bg-[#D6EFFF] border-b border-[#5CC0F7]/30 px-6 py-3.5 grid grid-cols-12 text-xs font-heading font-bold text-slate-700 uppercase tracking-wider">
               <div className="col-span-6">Nama Siswa</div>
               <div className="col-span-3 text-right sm:text-left">Saldo</div>
               <div className="col-span-3 text-right">Aksi</div>
@@ -170,7 +170,7 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
             {/* Table Body */}
             {loading ? (
               <div className="p-12 text-center">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600"></div>
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#0284c7]"></div>
                 <p className="text-sm text-slate-500 mt-3">Memuat data siswa...</p>
               </div>
             ) : filteredStudents.length === 0 ? (
@@ -189,7 +189,7 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
                       <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 ${
                         student.isClassLeader 
                           ? "bg-amber-100 text-amber-600" 
-                          : "bg-cyan-100 text-cyan-600"
+                          : "bg-[#D6EFFF] text-[#0284c7]"
                       }`}>
                         {student.isClassLeader ? (
                           <Crown className="w-5 h-5" />
@@ -238,7 +238,7 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
                             setTopUpTargetStudent(student);
                             setTopUpModalOpen(true);
                           }}
-                          className="rounded-2xl px-3 py-1.5 h-8 text-xs bg-amber-500 hover:bg-amber-600"
+                          className="rounded-2xl px-3 py-1.5 h-8 text-xs bg-[#0284c7] hover:bg-[#0369a1]"
                         >
                           <ArrowUpCircle className="w-3.5 h-3.5 mr-1" />
                           Top-Up
@@ -251,7 +251,7 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
                           setDetailStudent(student);
                           setDetailModalOpen(true);
                         }}
-                        className="rounded-2xl px-3 py-1.5 h-8 text-xs"
+                        className="rounded-2xl px-3 py-1.5 h-8 text-xs bg-[#0284c7] hover:bg-[#0369a1]"
                       >
                         <ArrowUpCircle className="w-3.5 h-3.5 mr-1" />
                         Detail

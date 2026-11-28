@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { AdminNavbar } from "./AdminNavbar";
 import { AdminSidebar } from "./AdminSidebar";
@@ -32,6 +32,21 @@ export function AdminLayout({
 }: AdminLayoutProps) {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
+
+  const fetchCurrentUser = async () => {
+    try {
+      const res = await fetch("/api/auth/me");
+      const data = await res.json();
+      setCurrentUser(data.user);
+    } catch (error) {
+      console.error("Failed to fetch current user:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col selection:bg-[#D6EFFF]">
@@ -136,17 +151,17 @@ export function AdminLayout({
       <Modal
         isOpen={accountOpen}
         onClose={() => setAccountOpen(false)}
-        title="Profil Pengurus Koperasi"
+        title={`Profil ${currentUser?.fullName || "Admin"}`}
         description="Informasi akun pengelola sistem KantinPay"
       >
         <div className="py-2 space-y-4">
           <div className="flex items-center gap-4 p-4 rounded-2xl bg-[#D6EFFF]/40 border border-[#5CC0F7]/30">
             <div className="w-12 h-12 rounded-2xl bg-[#5CC0F7] text-white flex items-center justify-center font-bold text-lg font-heading">
-              KP
+              {currentUser?.fullName?.slice(0, 2).toUpperCase() || "AD"}
             </div>
             <div>
               <h4 className="font-heading font-bold text-slate-900 text-sm">
-                Pengurus Koperasi Sekolah
+                {currentUser?.fullName || "Admin"}
               </h4>
               <p className="text-xs text-slate-500">Administrator Utama Kasir & Keuangan</p>
             </div>
@@ -158,7 +173,9 @@ export function AdminLayout({
                 <Mail className="w-3.5 h-3.5 text-slate-400" />
                 Email
               </span>
-              <span className="font-semibold text-slate-800">admin@kantinpay.sch.id</span>
+              <span className="font-semibold text-slate-800">
+                {currentUser?.email || "admin@kantinpay.sch.id"}
+              </span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-slate-100">
               <span className="text-slate-500 flex items-center gap-2">
