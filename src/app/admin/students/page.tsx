@@ -23,8 +23,10 @@ import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 import { Badge } from "@/components/ui/Badge";
 import { SkeletonTable } from "@/components/ui/Skeleton";
+import { Select } from "@/components/ui/Select";
 import { formatRupiah } from "@/lib/utils";
 import { User } from "@/types";
+import { StudentDetailModal } from "@/components/admin/StudentDetailModal";
 
 export default function StudentsPage() {
   const [students, setStudents] = useState<User[]>([]);
@@ -58,6 +60,10 @@ export default function StudentsPage() {
   });
   const [addLoading, setAddLoading] = useState(false);
   const [addError, setAddError] = useState("");
+
+  // Detail Modal state
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [detailStudent, setDetailStudent] = useState<User | null>(null);
 
   const fetchStudents = useCallback(async () => {
     setLoading(true);
@@ -216,53 +222,44 @@ export default function StudentsPage() {
         {/* Three Filter Controls matching wireframe */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {/* Filter 1: Kelas */}
-          <div className="p-3 bg-white rounded-2xl border border-slate-200 flex items-center justify-between">
-            <label className="text-xs font-heading font-semibold text-slate-500">
-              Filter Kelas:
-            </label>
-            <select
-              value={classFilter}
-              onChange={(e) => setClassFilter(e.target.value)}
-              className="text-xs font-heading font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer"
-            >
-              <option value="all">Semua Kelas</option>
-              <option value="XII">Kelas XII</option>
-              <option value="XI">Kelas XI</option>
-              <option value="X">Kelas X</option>
-            </select>
-          </div>
+          <Select
+            value={classFilter}
+            onChange={(value) => setClassFilter(value)}
+            options={[
+              { value: "all", label: "Semua Kelas" },
+              { value: "XII", label: "Kelas XII" },
+              { value: "XI", label: "Kelas XI" },
+              { value: "X", label: "Kelas X" },
+            ]}
+            placeholder="Filter Kelas"
+            className="w-full"
+          />
 
           {/* Filter 2: Status */}
-          <div className="p-3 bg-white rounded-2xl border border-slate-200 flex items-center justify-between">
-            <label className="text-xs font-heading font-semibold text-slate-500">
-              Filter Status:
-            </label>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="text-xs font-heading font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer"
-            >
-              <option value="all">Semua Status</option>
-              <option value="active">Aktif</option>
-              <option value="inactive">Nonaktif</option>
-            </select>
-          </div>
+          <Select
+            value={statusFilter}
+            onChange={(value) => setStatusFilter(value)}
+            options={[
+              { value: "all", label: "Semua Status" },
+              { value: "active", label: "Aktif" },
+              { value: "inactive", label: "Nonaktif" },
+            ]}
+            placeholder="Filter Status"
+            className="w-full"
+          />
 
           {/* Filter 3: Rentang Saldo */}
-          <div className="p-3 bg-white rounded-2xl border border-slate-200 flex items-center justify-between">
-            <label className="text-xs font-heading font-semibold text-slate-500">
-              Filter Saldo:
-            </label>
-            <select
-              value={balanceFilter}
-              onChange={(e) => setBalanceFilter(e.target.value)}
-              className="text-xs font-heading font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer"
-            >
-              <option value="all">Semua Saldo</option>
-              <option value="low">&lt; Rp 50.000</option>
-              <option value="high">≥ Rp 100.000</option>
-            </select>
-          </div>
+          <Select
+            value={balanceFilter}
+            onChange={(value) => setBalanceFilter(value)}
+            options={[
+              { value: "all", label: "Semua Saldo" },
+              { value: "low", label: "< Rp 50.000" },
+              { value: "high", label: "≥ Rp 100.000" },
+            ]}
+            placeholder="Filter Saldo"
+            className="w-full"
+          />
         </div>
 
         {/* Student Data Table matching wireframe (10 rows, table header, data siswa row, Sisa Saldo, Top Up) */}
@@ -288,7 +285,11 @@ export default function StudentsPage() {
               {students.map((student) => (
                 <div
                   key={student.id}
-                  className="px-6 py-3.5 grid grid-cols-12 items-center hover:bg-slate-50/80 transition duration-150"
+                  onClick={() => {
+                    setDetailStudent(student);
+                    setDetailModalOpen(true);
+                  }}
+                  className="px-6 py-3.5 grid grid-cols-12 items-center hover:bg-slate-50/80 transition duration-150 cursor-pointer"
                 >
                   {/* Student Info */}
                   <div className="col-span-6 sm:col-span-6 flex items-center gap-3">
@@ -325,7 +326,10 @@ export default function StudentsPage() {
                     <Button
                       variant="primary"
                       size="sm"
-                      onClick={() => handleOpenTopUp(student)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenTopUp(student);
+                      }}
                       className="rounded-2xl px-3.5 py-1.5 h-8 text-xs font-heading shadow-2xs"
                     >
                       <ArrowUpCircle className="w-3.5 h-3.5 mr-1" />
@@ -528,18 +532,19 @@ export default function StudentsPage() {
               <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
                 Kelas
               </label>
-              <select
+              <Select
                 value={newStudent.className}
-                onChange={(e) => setNewStudent({ ...newStudent, className: e.target.value })}
-                className="w-full rounded-2xl border border-[#D1D1D1] bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-[#5CC0F7] focus:outline-none"
-              >
-                <option value="X RPL 1">X RPL 1</option>
-                <option value="X TKJ 1">X TKJ 1</option>
-                <option value="XI RPL 1">XI RPL 1</option>
-                <option value="XI SIJA 1">XI SIJA 1</option>
-                <option value="XII SIJA 1">XII SIJA 1</option>
-                <option value="XII SIJA 2">XII SIJA 2</option>
-              </select>
+                onChange={(value) => setNewStudent({ ...newStudent, className: value })}
+                options={[
+                  { value: "X RPL 1", label: "X RPL 1" },
+                  { value: "X TKJ 1", label: "X TKJ 1" },
+                  { value: "XI RPL 1", label: "XI RPL 1" },
+                  { value: "XI SIJA 1", label: "XI SIJA 1" },
+                  { value: "XII SIJA 1", label: "XII SIJA 1" },
+                  { value: "XII SIJA 2", label: "XII SIJA 2" },
+                ]}
+                icon={<GraduationCap className="w-4 h-4" />}
+              />
             </div>
           </div>
 
@@ -595,6 +600,13 @@ export default function StudentsPage() {
           </div>
         </form>
       </Modal>
+
+      {/* STUDENT DETAIL MODAL */}
+      <StudentDetailModal
+        isOpen={detailModalOpen}
+        onClose={() => setDetailModalOpen(false)}
+        student={detailStudent}
+      />
     </AdminLayout>
   );
 }

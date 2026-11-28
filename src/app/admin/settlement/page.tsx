@@ -25,6 +25,8 @@ export default function SettlementPage() {
   const [selectedSettlement, setSelectedSettlement] = useState<MerchantSettlement | null>(null);
   const [processLoading, setProcessLoading] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [showSettleAllModal, setShowSettleAllModal] = useState(false);
 
   const fetchSettlements = useCallback(async () => {
     setLoading(true);
@@ -93,17 +95,15 @@ export default function SettlementPage() {
   };
 
   const handleSettleAll = async () => {
-    if (confirm("Apakah Anda yakin ingin memproses pencairan serentak untuk seluruh tenant berstatus pending?")) {
-      for (const s of settlements.filter((x) => x.status !== "settled")) {
-        await fetch("/api/admin/settlement", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ settlementId: s.id, action: "settle" }),
-        });
-      }
-      fetchSettlements();
-      alert("Seluruh settlement harian berhasil diselesaikan!");
+    setShowSettleAllModal(false);
+    for (const s of settlements.filter((x) => x.status !== "settled")) {
+      await fetch("/api/admin/settlement", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ settlementId: s.id, action: "settle" }),
+      });
     }
+    fetchSettlements();
   };
 
   return (
@@ -111,7 +111,7 @@ export default function SettlementPage() {
       pageTitle="Rekap Settlement"
       searchTerm={searchTerm}
       onSearchChange={setSearchTerm}
-      onFilterClick={() => alert("Filter settlement dibuka.")}
+      onFilterClick={() => setShowFilterModal(true)}
     >
       <div className="space-y-6">
         {/* Top Header Card: Rekap Harian Tenant matching wireframe */}
@@ -259,7 +259,7 @@ export default function SettlementPage() {
             <Button
               variant="primary"
               size="md"
-              onClick={handleSettleAll}
+              onClick={() => setShowSettleAllModal(true)}
               className="rounded-2xl text-xs px-6 flex-1 sm:flex-none shadow-xs"
             >
               <CheckCircle2 className="w-4 h-4 mr-1.5" />
@@ -351,6 +351,62 @@ export default function SettlementPage() {
           </div>
         )}
       </Modal>
+
+      {/* Filter Modal */}
+      {showFilterModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-[90%] max-w-md p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+            <h3 className="text-lg font-heading font-bold text-slate-900">
+              Filter Settlement
+            </h3>
+            
+            <p className="text-sm text-slate-600">
+              Fitur filter akan segera tersedia untuk menyaring data berdasarkan status, tenant, dan periode tertentu.
+            </p>
+
+            <button
+              onClick={() => setShowFilterModal(false)}
+              className="w-full px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-white bg-[#5CC0F7] hover:bg-[#38bdf8] transition"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Settle All Confirmation Modal */}
+      {showSettleAllModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-[90%] max-w-md p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-blue-100">
+              <CheckCircle2 className="w-6 h-6 text-blue-600" />
+            </div>
+
+            <h3 className="text-center text-lg font-heading font-bold text-slate-900">
+              Konfirmasi Pencairan Serentak
+            </h3>
+
+            <p className="text-center text-sm text-slate-600 leading-relaxed">
+              Apakah Anda yakin ingin memproses pencairan serentak untuk seluruh tenant berstatus pending?
+            </p>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={() => setShowSettleAllModal(false)}
+                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleSettleAll}
+                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-white bg-[#5CC0F7] hover:bg-[#38bdf8] transition"
+              >
+                Ya, Proses Semua
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }

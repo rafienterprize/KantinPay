@@ -538,6 +538,22 @@ class DataStore {
     return newUser;
   }
 
+  updateCanteen(id: string, updates: Partial<Canteen>): Canteen | null {
+    const index = this.canteens.findIndex((c) => c.id === id);
+    if (index === -1) return null;
+    this.canteens[index] = {
+      ...this.canteens[index],
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    return this.canteens[index];
+  }
+  deleteStudent(id: string): boolean {
+    const index = this.users.findIndex((u) => u.id === id);
+    if (index === -1) return false;
+    this.users.splice(index, 1);
+    return true;
+  }
   updateStudent(id: string, updates: Partial<User>): User | null {
     const index = this.users.findIndex((u) => u.id === id);
     if (index === -1) return null;
@@ -777,3 +793,5 @@ export const store = global.__kantinpayStore || new DataStore();
 if (process.env.NODE_ENV !== "production") {
   global.__kantinpayStore = store;
 }
+
+

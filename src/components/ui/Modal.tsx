@@ -10,7 +10,9 @@ interface ModalProps {
   title: string;
   description?: string;
   children: React.ReactNode;
-  maxWidth?: "sm" | "md" | "lg";
+  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl";
+  showCloseButton?: boolean;
+  disableBackdropClick?: boolean;
 }
 
 export function Modal({
@@ -20,6 +22,8 @@ export function Modal({
   description,
   children,
   maxWidth = "md",
+  showCloseButton = true,
+  disableBackdropClick = false,
 }: ModalProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -41,6 +45,8 @@ export function Modal({
     sm: "max-w-sm",
     md: "max-w-md",
     lg: "max-w-lg",
+    xl: "max-w-xl",
+    "2xl": "max-w-2xl",
   };
 
   return (
@@ -48,7 +54,7 @@ export function Modal({
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
+        onClick={disableBackdropClick ? undefined : onClose}
       />
 
       {/* Modal Box */}
@@ -67,12 +73,14 @@ export function Modal({
               <p className="text-xs text-slate-500 mt-0.5">{description}</p>
             )}
           </div>
-          <button
-            onClick={onClose}
-            className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          {showCloseButton && (
+            <button
+              onClick={onClose}
+              className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
         <div>{children}</div>
       </div>
