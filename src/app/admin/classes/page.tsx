@@ -126,7 +126,7 @@ export default function ClassesPage() {
                   {/* View Details Hint */}
                   <div className="mt-4 text-center">
                     <span className="text-xs text-cyan-600 font-semibold group-hover:underline">
-                      Lihat Detail Siswa →
+                      Lihat Detail Siswa
                     </span>
                   </div>
                 </div>

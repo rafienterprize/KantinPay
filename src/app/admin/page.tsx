@@ -188,9 +188,9 @@ export default function AdminDashboardPage() {
           )}
         </div>
 
-        {/* Bottom Section matching wireframe: Left: 2 Quick Action cards; Right: Grafik Aktivitas */}
+        {/* Bottom Section matching wireframe: Left: 3 Quick Action cards; Right: Grafik Aktivitas */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Column: 2 Quick Action Cards */}
+          {/* Left Column: 3 Quick Action Cards */}
           <div className="lg:col-span-5 space-y-4">
             {/* Quick Action 1 */}
             <div className="rounded-3xl bg-white p-6 border border-[#D1D1D1]/60 shadow-xs hover:border-[#5CC0F7] transition">
@@ -218,7 +218,33 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* Quick Action 2 */}
+            {/* Quick Action 2 - Data Per Kelas */}
+            <div className="rounded-3xl bg-white p-6 border border-[#D1D1D1]/60 shadow-xs hover:border-[#5CC0F7] transition">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-heading font-bold text-[#0284c7] uppercase tracking-wider">
+                  Quick Action
+                </span>
+                <div className="w-8 h-8 rounded-xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center">
+                  <Users className="w-4 h-4" />
+                </div>
+              </div>
+              <h4 className="font-heading font-bold text-base text-slate-900">
+                Data Per Kelas
+              </h4>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Lihat total saldo dan daftar siswa berdasarkan kelas. Ketua kelas dapat melakukan top-up untuk teman sekelasnya.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                <Link
+                  href="/admin/classes"
+                  className="inline-flex items-center text-xs font-heading font-semibold text-[#5CC0F7] hover:text-[#48b1eb]"
+                >
+                  <span>Lihat Data Per Kelas</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Quick Action 3 */}
             <div className="rounded-3xl bg-white p-6 border border-[#D1D1D1]/60 shadow-xs hover:border-[#5CC0F7] transition">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-heading font-bold text-[#0284c7] uppercase tracking-wider">
