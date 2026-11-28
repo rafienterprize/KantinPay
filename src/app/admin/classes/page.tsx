@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
-import { Users, TrendingUp, GraduationCap, Plus, Filter } from "lucide-react";
+import { Users, TrendingUp, GraduationCap, Plus, Filter, MessageCircle } from "lucide-react";
 import { formatRupiah } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
@@ -16,6 +16,7 @@ interface ClassSummary {
   classLeader?: {
     id: string;
     name: string;
+    whatsapp?: string;
   };
 }
 
@@ -121,62 +122,82 @@ export default function ClassesPage() {
             Tidak ada data kelas.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredClasses.map((classData) => (
-              <Link
+              <div
                 key={classData.className}
-                href={`/admin/classes/${encodeURIComponent(classData.className)}`}
-                className="block"
+                className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xs hover:border-cyan-500 hover:shadow-md transition-all"
               >
-                <div className="rounded-3xl bg-white p-6 border border-slate-200 shadow-xs hover:border-cyan-500 hover:shadow-md transition-all cursor-pointer group">
-                  {/* Class Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-600 flex items-center justify-center">
-                        <GraduationCap className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <h3 className="font-heading font-bold text-lg text-slate-900 group-hover:text-cyan-600 transition">
-                          {classData.className}
-                        </h3>
+                {/* Header with Class Name and Status */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-600 flex items-center justify-center shrink-0">
+                      <GraduationCap className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-heading font-bold text-base text-slate-900">
+                        {classData.className}
+                      </h3>
+                      {classData.classLeader && (
                         <p className="text-xs text-slate-500">
-                          {classData.totalStudents} Siswa
+                          Ketua: {classData.classLeader.name}
                         </p>
-                      </div>
+                      )}
                     </div>
                   </div>
+                  
+                  {/* Online Status Badge */}
+                  <span className="px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-xs font-heading font-semibold flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    Aktif
+                  </span>
+                </div>
 
-                  {/* Class Leader Badge */}
-                  {classData.classLeader && (
-                    <div className="mb-3 p-2 rounded-xl bg-amber-50 border border-amber-200">
-                      <p className="text-xs text-amber-700">
-                        <span className="font-semibold">Ketua Kelas:</span>{" "}
-                        {classData.classLeader.name}
-                      </p>
-                    </div>
-                  )}
+                {/* Description */}
+                <p className="text-xs text-slate-600 mb-4 leading-relaxed">
+                  Kelas {classData.className} — Total {classData.totalStudents} siswa terdaftar
+                </p>
 
-                  {/* Total Balance */}
-                  <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100/50 border border-emerald-200">
-                    <div className="flex items-center gap-2 mb-1">
-                      <TrendingUp className="w-4 h-4 text-emerald-600" />
-                      <span className="text-xs text-emerald-700 font-semibold">
-                        Total Saldo Kelas
-                      </span>
-                    </div>
-                    <span className="font-heading font-bold text-2xl text-emerald-700 block">
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 gap-3 p-4 rounded-2xl bg-slate-50 mb-4">
+                  <div>
+                    <span className="text-xs text-slate-500 block mb-1">Total Saldo Kelas</span>
+                    <span className="font-heading font-bold text-base text-slate-900">
                       {formatRupiah(classData.totalBalance)}
                     </span>
                   </div>
-
-                  {/* View Details Hint */}
-                  <div className="mt-4 text-center">
-                    <span className="text-xs text-cyan-600 font-semibold group-hover:underline">
-                      Lihat Detail Siswa
+                  <div className="text-right">
+                    <span className="text-xs text-slate-500 block mb-1">Jumlah Siswa</span>
+                    <span className="font-heading font-bold text-base text-slate-900">
+                      {classData.totalStudents} Siswa
                     </span>
                   </div>
                 </div>
-              </Link>
+
+                {/* Action Buttons */}
+                <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-100">
+                  {classData.classLeader && (
+                    <a
+                      href={`https://wa.me/${classData.classLeader.whatsapp?.replace(/^0/, '62')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-slate-500 hover:text-cyan-600 transition flex items-center gap-1.5"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      Hubungi Ketua Kelas
+                    </a>
+                  )}
+                  
+                  <Link
+                    href={`/admin/classes/${encodeURIComponent(classData.className)}`}
+                    className="ml-auto px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-heading font-semibold transition flex items-center gap-1.5"
+                  >
+                    <Users className="w-3.5 h-3.5" />
+                    Lihat Detail Siswa
+                  </Link>
+                </div>
+              </div>
             ))}
           </div>
         )}

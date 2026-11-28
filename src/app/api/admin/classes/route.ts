@@ -35,6 +35,7 @@ export async function GET(request: Request) {
         classData.classLeader = {
           id: student.id,
           name: student.fullName,
+          whatsapp: student.whatsappNumber,
         };
       }
     });
