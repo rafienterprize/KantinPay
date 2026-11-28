@@ -134,9 +134,9 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-slate-800 selection:bg-[#D6EFFF] pb-24 md:pb-0 relative">
+    <div className="min-h-screen bg-[#FFFFFF] text-slate-800 selection:bg-[#D6EFFF] pb-24 md:pb-0 relative overflow-x-clip">
       {/* Full Page Animated Background - Cleaner distribution */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
         
         {/* ===== TOP SECTION (0-1000px) ===== */}
         

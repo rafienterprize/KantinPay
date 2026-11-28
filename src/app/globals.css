@@ -21,6 +21,12 @@
   --foreground: #1E293B;
 }
 
+html,
+body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
 body {
   background-color: #F8FAFC;
   color: #1E293B;
@@ -65,10 +71,10 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   transform: scale(0.97);
 }
 
-/* Subtle scrollbars */
+/* Subtle vertical scrollbar, hide horizontal scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
-  height: 6px;
+  height: 0px;
 }
 ::-webkit-scrollbar-track {
   background: #F1F5F9;
