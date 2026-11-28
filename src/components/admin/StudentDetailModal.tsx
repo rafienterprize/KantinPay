@@ -20,6 +20,7 @@ import {
   Eye,
   EyeOff,
   Trash2,
+  Crown,
 } from "lucide-react";
 
 interface StudentDetailModalProps {
@@ -197,10 +198,24 @@ export function StudentDetailModal({
         disableBackdropClick={true}
       >
       <div className="space-y-5 py-3">
-        {/* Student Identity Card */}
-        <div className="p-5 rounded-2xl bg-gradient-to-br from-[#D6EFFF]/50 to-white border border-[#5CC0F7]/30">
+        {/* Student Identity Card - Differentiate Class Leader */}
+        <div className={`p-5 rounded-2xl border ${
+          editedStudent.isClassLeader 
+            ? "bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-300" 
+            : "bg-gradient-to-br from-[#D6EFFF]/50 to-white border-[#5CC0F7]/30"
+        }`}>
+          {editedStudent.isClassLeader && (
+            <div className="flex items-center gap-2 mb-3 pb-3 border-b border-amber-200">
+              <Crown className="w-5 h-5 text-amber-500" />
+              <span className="text-sm font-heading font-bold text-amber-700">
+                KETUA KELAS
+              </span>
+            </div>
+          )}
           <div className="flex items-start gap-5">
-            <div className="w-20 h-20 rounded-2xl bg-[#5CC0F7] text-white font-heading font-bold text-3xl flex items-center justify-center shrink-0">
+            <div className={`w-20 h-20 rounded-2xl ${
+              editedStudent.isClassLeader ? "bg-amber-500" : "bg-[#5CC0F7]"
+            } text-white font-heading font-bold text-3xl flex items-center justify-center shrink-0`}>
               {editedStudent.fullName.slice(0, 2).toUpperCase()}
             </div>
             <div className="flex-1">
@@ -250,11 +265,29 @@ export function StudentDetailModal({
             <Phone className="w-4 h-4 text-slate-400" />
             Nomor WhatsApp
           </label>
-          <Input
-            value={editedStudent.whatsappNumber || ""}
-            onChange={(e) => setEditedStudent({ ...editedStudent, whatsappNumber: e.target.value })}
-            placeholder="08xxxxxxxxxxx"
-          />
+          {editedStudent.isClassLeader ? (
+            <div className="relative">
+              <Input
+                value={editedStudent.whatsappNumber || ""}
+                onChange={(e) => setEditedStudent({ ...editedStudent, whatsappNumber: e.target.value })}
+                placeholder="08xxxxxxxxxxx"
+              />
+              <a
+                href={`https://wa.me/${editedStudent.whatsappNumber.replace(/^0/, '62')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 hover:text-blue-700 text-xs font-semibold underline"
+              >
+                Hubungi
+              </a>
+            </div>
+          ) : (
+            <Input
+              value={editedStudent.whatsappNumber || ""}
+              onChange={(e) => setEditedStudent({ ...editedStudent, whatsappNumber: e.target.value })}
+              placeholder="08xxxxxxxxxxx"
+            />
+          )}
         </div>
 
         <div>
@@ -262,12 +295,29 @@ export function StudentDetailModal({
             <Mail className="w-4 h-4 text-slate-400" />
             Email
           </label>
-          <Input
-            type="email"
-            value={editedStudent.email || ""}
-            onChange={(e) => setEditedStudent({ ...editedStudent, email: e.target.value })}
-            placeholder="email@example.com"
-          />
+          {editedStudent.isClassLeader ? (
+            <div className="relative">
+              <Input
+                type="email"
+                value={editedStudent.email || ""}
+                onChange={(e) => setEditedStudent({ ...editedStudent, email: e.target.value })}
+                placeholder="email@example.com"
+              />
+              <a
+                href={`mailto:${editedStudent.email}`}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 hover:text-blue-700 text-xs font-semibold underline"
+              >
+                Email
+              </a>
+            </div>
+          ) : (
+            <Input
+              type="email"
+              value={editedStudent.email || ""}
+              onChange={(e) => setEditedStudent({ ...editedStudent, email: e.target.value })}
+              placeholder="email@example.com"
+            />
+          )}
         </div>
 
         {/* Password Reset Section */}
