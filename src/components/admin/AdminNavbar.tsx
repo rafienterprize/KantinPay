@@ -46,9 +46,9 @@ export function AdminNavbar({
       </div>
 
       {/* Right Controls: Search, Filter, and Action Button */}
-      <div className="flex items-center gap-2.5 sm:gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
         {/* Search bar */}
-        <div className="w-44 sm:w-64 md:w-80">
+        <div className="w-32 sm:w-64 md:w-80">
           <Input
             value={searchTerm}
             onChange={(e) => onSearchChange?.(e.target.value)}
@@ -63,7 +63,7 @@ export function AdminNavbar({
           variant="outline"
           size="sm"
           onClick={onFilterClick}
-          className="rounded-2xl border-slate-200 text-xs px-3.5 h-10 gap-1.5"
+          className="rounded-2xl border-slate-200 text-xs px-3 sm:px-3.5 h-10 gap-1.5 shrink-0"
         >
           <SlidersHorizontal className="w-3.5 h-3.5 text-slate-500" />
           <span className="hidden sm:inline">filter</span>
@@ -75,10 +75,10 @@ export function AdminNavbar({
             variant="primary"
             size="sm"
             onClick={actionButton.onClick}
-            className="rounded-2xl text-xs px-4 h-10 gap-1.5 shadow-2xs"
+            className="rounded-2xl text-xs px-3 sm:px-4 h-10 gap-1.5 shadow-2xs shrink-0"
           >
             <Plus className="w-4 h-4" />
-            <span>{actionButton.label}</span>
+            <span className="hidden sm:inline">{actionButton.label}</span>
           </Button>
         )}
       </div>

@@ -217,117 +217,60 @@ export function FloatingNavbar() {
       </div>
 
       {/* =========================================================================
-          3. MOBILE FIXED BOTTOM NAVIGATION (5 Tabs, Thumb Zone, Safe Area Inset)
+          3. MOBILE FIXED BOTTOM NAVIGATION (5 Tabs, Smooth Sliding Pill, Safe Area)
          ========================================================================= */}
       <nav
         aria-label="Mobile Bottom Navigation"
-        className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-lg border-t border-[#D1D1D1]/60 shadow-[0_-4px_24px_rgba(0,0,0,0.06)] px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
+        className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white/92 backdrop-blur-lg border-t border-[#D1D1D1]/60 shadow-[0_-4px_24px_rgba(0,0,0,0.06)] px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
       >
-        <div className="grid grid-cols-5 items-center max-w-md mx-auto">
-          {/* Tab 1: Home */}
-          <motion.button
-            whileTap={{ scale: 0.92 }}
-            onClick={(e) => handleSmoothScroll(e, "top")}
-            className={cn(
-              "flex flex-col items-center justify-center min-h-[46px] py-1 rounded-xl transition-all cursor-pointer select-none",
-              activeSection === ""
-                ? "text-[#5CC0F7]"
-                : "text-slate-500 hover:text-slate-800"
-            )}
-          >
-            <Utensils className="w-5 h-5" />
-            <span
-              className={cn(
-                "text-[10px] font-heading mt-0.5 leading-none",
-                activeSection === "" ? "font-bold text-[#5CC0F7]" : "font-medium"
-              )}
-            >
-              Home
-            </span>
-            {activeSection === "" && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#5CC0F7] mt-0.5" />
-            )}
-          </motion.button>
-
-          {/* Tab 2: Fitur */}
-          <motion.button
-            whileTap={{ scale: 0.92 }}
-            onClick={(e) => handleSmoothScroll(e, "fitur")}
-            className={cn(
-              "flex flex-col items-center justify-center min-h-[46px] py-1 rounded-xl transition-all cursor-pointer select-none",
-              activeSection === "fitur"
-                ? "text-[#5CC0F7]"
-                : "text-slate-500 hover:text-slate-800"
-            )}
-          >
-            <Sparkles className="w-5 h-5" />
-            <span
-              className={cn(
-                "text-[10px] font-heading mt-0.5 leading-none",
-                activeSection === "fitur" ? "font-bold text-[#5CC0F7]" : "font-medium"
-              )}
-            >
-              Fitur
-            </span>
-            {activeSection === "fitur" && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#5CC0F7] mt-0.5" />
-            )}
-          </motion.button>
-
-          {/* Tab 3: 8 Kantin */}
-          <motion.button
-            whileTap={{ scale: 0.92 }}
-            onClick={(e) => handleSmoothScroll(e, "kantin")}
-            className={cn(
-              "flex flex-col items-center justify-center min-h-[46px] py-1 rounded-xl transition-all cursor-pointer select-none",
-              activeSection === "kantin"
-                ? "text-[#5CC0F7]"
-                : "text-slate-500 hover:text-slate-800"
-            )}
-          >
-            <Store className="w-5 h-5" />
-            <span
-              className={cn(
-                "text-[10px] font-heading mt-0.5 leading-none",
-                activeSection === "kantin" ? "font-bold text-[#5CC0F7]" : "font-medium"
-              )}
-            >
-              Kantin
-            </span>
-            {activeSection === "kantin" && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#5CC0F7] mt-0.5" />
-            )}
-          </motion.button>
-
-          {/* Tab 4: FAQ */}
-          <motion.button
-            whileTap={{ scale: 0.92 }}
-            onClick={(e) => handleSmoothScroll(e, "faq")}
-            className={cn(
-              "flex flex-col items-center justify-center min-h-[46px] py-1 rounded-xl transition-all cursor-pointer select-none",
-              activeSection === "faq"
-                ? "text-[#5CC0F7]"
-                : "text-slate-500 hover:text-slate-800"
-            )}
-          >
-            <HelpCircle className="w-5 h-5" />
-            <span
-              className={cn(
-                "text-[10px] font-heading mt-0.5 leading-none",
-                activeSection === "faq" ? "font-bold text-[#5CC0F7]" : "font-medium"
-              )}
-            >
-              FAQ
-            </span>
-            {activeSection === "faq" && (
-              <span className="w-1.5 h-1.5 rounded-full bg-[#5CC0F7] mt-0.5" />
-            )}
-          </motion.button>
+        <div className="grid grid-cols-5 items-center gap-1 max-w-md mx-auto">
+          {[
+            { id: "", target: "top", label: "Home", icon: Utensils },
+            { id: "fitur", target: "fitur", label: "Fitur", icon: Sparkles },
+            { id: "kantin", target: "kantin", label: `${canteenCount} Kantin`, icon: Store },
+            { id: "faq", target: "faq", label: "FAQ", icon: HelpCircle },
+          ].map((tab) => {
+            const isActive = activeSection === tab.id;
+            const Icon = tab.icon;
+            return (
+              <motion.button
+                key={tab.target}
+                whileTap={{ scale: 0.9 }}
+                onClick={(e) => handleSmoothScroll(e, tab.target)}
+                className={cn(
+                  "relative flex flex-col items-center justify-center min-h-[48px] py-1.5 rounded-2xl transition-colors cursor-pointer select-none",
+                  isActive ? "text-[#0284c7]" : "text-slate-500 hover:text-slate-800"
+                )}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="landingMobileNavPill"
+                    className="absolute inset-0 rounded-2xl bg-[#D6EFFF] border border-[#5CC0F7]/35 shadow-2xs"
+                    transition={{ type: "spring", stiffness: 420, damping: 30 }}
+                  />
+                )}
+                <Icon
+                  className={cn(
+                    "w-5 h-5 relative z-10 transition-transform duration-200",
+                    isActive && "-translate-y-0.5 stroke-[2.3px]"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "text-[10px] font-heading mt-0.5 leading-none relative z-10",
+                    isActive ? "font-bold text-[#0284c7]" : "font-medium"
+                  )}
+                >
+                  {tab.label}
+                </span>
+              </motion.button>
+            );
+          })}
 
           {/* Tab 5: Portal */}
           <Link
             href="/login"
-            className="flex flex-col items-center justify-center min-h-[46px] py-1 rounded-xl transition-all cursor-pointer select-none text-slate-500 hover:text-[#5CC0F7] active:scale-95"
+            className="relative flex flex-col items-center justify-center min-h-[48px] py-1.5 rounded-2xl transition-all cursor-pointer select-none text-slate-500 hover:text-[#5CC0F7] active:scale-90"
           >
             <UserCircle className="w-5 h-5" />
             <span className="text-[10px] font-heading font-medium mt-0.5 leading-none">

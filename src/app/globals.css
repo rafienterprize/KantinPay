@@ -71,7 +71,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   transform: scale(0.97);
 }
 
-/* Subtle vertical scrollbar, hide horizontal scrollbar */
+/* Subtle vertical scrollbar on desktop, hidden scrollbars on mobile */
 ::-webkit-scrollbar {
   width: 6px;
   height: 0px;
@@ -85,6 +85,32 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+@media (max-width: 767px) {
+  html,
+  body,
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
 }
 
 /* Lenis Smooth Scrolling */

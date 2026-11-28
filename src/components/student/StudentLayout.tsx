@@ -132,9 +132,9 @@ export function StudentLayout({
         </div>
 
         {/* Right Controls: Search, Filter, Action Button (Identical to AdminNavbar) */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           {/* Search bar */}
-          <div className="w-40 sm:w-64 md:w-80">
+          <div className="w-32 sm:w-64 md:w-80">
             <Input
               value={searchTerm}
               onChange={(e) => onSearchChange?.(e.target.value)}
@@ -309,8 +309,16 @@ export function StudentLayout({
         </main>
       </div>
 
-      {/* Mobile Native Bottom Tab Bar */}
-      <BottomTabBar role="student" />
+      {/* Mobile Native Bottom Tab Bar with Smooth Sliding Pill */}
+      <BottomTabBar
+        role="student"
+        notificationCount={notificationCount}
+        onOpenNotification={() => {
+          setNotificationOpen(true);
+          setHasReadNotif(true);
+        }}
+        onOpenAccount={() => setAccountOpen(true)}
+      />
 
       {/* Notification Modal */}
       <Modal
@@ -495,6 +503,20 @@ export function StudentLayout({
                 Aktif & Terverifikasi
               </span>
             </div>
+          </div>
+
+          {/* Mobile Logout Button inside Account Modal */}
+          <div className="pt-3 border-t border-slate-100 md:hidden">
+            <button
+              onClick={() => {
+                setAccountOpen(false);
+                setShowLogoutModal(true);
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-heading font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 transition cursor-pointer"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Keluar Portal</span>
+            </button>
           </div>
         </div>
       </Modal>
