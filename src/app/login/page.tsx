@@ -21,7 +21,11 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
+import { CloudflareTurnstile } from "@/components/security/CloudflareTurnstile";
 import { UserRole } from "@/types";
+
+const TURNSTILE_SITE_KEY =
+  process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || "";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -33,6 +37,8 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   
   // Modal states
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
@@ -58,19 +64,30 @@ export default function LoginPage() {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setErrorMessage("Silakan selesaikan verifikasi keamanan Cloudflare terlebih dahulu.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({
+          email,
+          password,
+          role,
+          turnstileToken: turnstileToken || undefined,
+        }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
         setErrorMessage(data.error || "Gagal masuk ke dalam sistem.");
+        setTurnstileResetKey((prev) => prev + 1);
         setLoading(false);
         return;
       }
@@ -82,6 +99,7 @@ export default function LoginPage() {
       }, 600);
     } catch {
       setErrorMessage("Terjadi gangguan jaringan. Silakan coba kembali.");
+      setTurnstileResetKey((prev) => prev + 1);
       setLoading(false);
     }
   };
@@ -242,11 +260,21 @@ export default function LoginPage() {
             </a>
           </div>
 
+          {TURNSTILE_SITE_KEY && (
+            <CloudflareTurnstile
+              siteKey={TURNSTILE_SITE_KEY}
+              action="login"
+              resetTrigger={turnstileResetKey}
+              onVerify={setTurnstileToken}
+            />
+          )}
+
           <Button
             type="submit"
             variant="primary"
             size="lg"
             loading={loading}
+            disabled={Boolean(TURNSTILE_SITE_KEY) && !turnstileToken}
             className="w-full mt-4"
           >
             <span>Masuk Sekarang</span>
