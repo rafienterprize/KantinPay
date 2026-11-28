@@ -164,7 +164,7 @@ export function FloatingNavbar() {
             })}
           </div>
 
-          {/* Actions (Login / Portal) with Tap feedback */}
+          {/* Actions (Login only) with Tap feedback */}
           <div className="flex items-center gap-2">
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
               <Link
@@ -173,14 +173,6 @@ export function FloatingNavbar() {
               >
                 <UserCircle className="w-4 h-4 text-slate-400" />
                 Masuk Akun
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center px-4 py-2 rounded-full text-xs font-heading font-semibold bg-[#5CC0F7] text-white hover:bg-[#48b1eb] shadow-xs transition"
-              >
-                <span>Buka Portal</span>
               </Link>
             </motion.div>
           </div>

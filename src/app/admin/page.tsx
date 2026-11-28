@@ -34,6 +34,7 @@ export default function AdminDashboardPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [chartPeriod, setChartPeriod] = useState<"hari-ini" | "minggu-ini">("hari-ini");
   const [todayString, setTodayString] = useState("");
+  const [showFilterModal, setShowFilterModal] = useState(false);
 
   useEffect(() => {
     setTodayString(
@@ -58,7 +59,7 @@ export default function AdminDashboardPage() {
       pageTitle="Dashboard Koperasi"
       searchTerm={searchTerm}
       onSearchChange={setSearchTerm}
-      onFilterClick={() => alert("Filter aktivitas koperasi dibuka.")}
+      onFilterClick={() => setShowFilterModal(true)}
     >
       <div className="space-y-6">
         {/* Greetings Section matching wireframe */}
@@ -321,6 +322,28 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Filter Modal */}
+      {showFilterModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-[90%] max-w-md p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+            <h3 className="text-lg font-heading font-bold text-slate-900">
+              Filter Aktivitas Koperasi
+            </h3>
+            
+            <p className="text-sm text-slate-600">
+              Fitur filter akan segera tersedia untuk menyaring data berdasarkan periode, jenis transaksi, dan kantin tertentu.
+            </p>
+
+            <button
+              onClick={() => setShowFilterModal(false)}
+              className="w-full px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-white bg-[#5CC0F7] hover:bg-[#38bdf8] transition"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }

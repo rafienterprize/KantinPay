@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -11,6 +11,7 @@ import {
   User,
   LayoutDashboard,
   LogOut,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,7 @@ export function AdminSidebar({
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const primaryNavItems = [
     {
@@ -56,11 +58,22 @@ export function AdminSidebar({
   ];
 
   const handleLogout = async () => {
-    if (confirm("Apakah Anda yakin ingin keluar dari akun admin koperasi?")) {
-      await fetch("/api/auth/logout", { method: "POST" });
-      router.push("/login");
-      router.refresh();
-    }
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
+    setShowLogoutModal(false);
+    handleLogout();
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutModal(false);
   };
 
   return (
@@ -143,13 +156,51 @@ export function AdminSidebar({
         </button>
 
         <button
-          onClick={handleLogout}
+          onClick={handleLogoutClick}
           className="w-full flex items-center gap-3 px-3.5 py-2 rounded-2xl text-xs font-heading font-semibold text-rose-600 hover:bg-rose-50 transition text-left cursor-pointer"
         >
           <LogOut className="w-4 h-4 text-rose-500" />
           <span>Keluar Portal</span>
         </button>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-[90%] max-w-md p-6 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+            {/* Icon */}
+            <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-rose-100">
+              <AlertTriangle className="w-6 h-6 text-rose-600" />
+            </div>
+
+            {/* Title */}
+            <h3 className="text-center text-lg font-heading font-bold text-slate-900">
+              Konfirmasi Keluar
+            </h3>
+
+            {/* Description */}
+            <p className="text-center text-sm text-slate-600 leading-relaxed">
+              Apakah Anda yakin ingin keluar dari akun admin koperasi?
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={cancelLogout}
+                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+              >
+                Batal
+              </button>
+              <button
+                onClick={confirmLogout}
+                className="flex-1 px-4 py-2.5 rounded-xl font-heading font-semibold text-sm text-white bg-rose-600 hover:bg-rose-700 transition"
+              >
+                Ya, Keluar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }

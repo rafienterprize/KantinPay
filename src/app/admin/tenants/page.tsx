@@ -17,10 +17,12 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
 import { Modal } from "@/components/ui/Modal";
 import { Badge } from "@/components/ui/Badge";
 import { formatRupiah } from "@/lib/utils";
 import { Canteen } from "@/types";
+import { TenantDetailModal } from "@/components/admin/TenantDetailModal";
 
 export default function TenantsPage() {
   const [canteens, setCanteens] = useState<Canteen[]>([]);
@@ -43,6 +45,10 @@ export default function TenantsPage() {
   });
   const [addLoading, setAddLoading] = useState(false);
   const [addError, setAddError] = useState("");
+
+  // Detail Modal state
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [detailTenant, setDetailTenant] = useState<Canteen | null>(null);
 
   const fetchCanteens = useCallback(async () => {
     setLoading(true);
@@ -154,70 +160,60 @@ export default function TenantsPage() {
         {/* Three Filter Controls matching wireframe */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {/* Filter 1: Kategori */}
-          <div className="p-3 bg-white rounded-2xl border border-slate-200 flex items-center justify-between">
-            <label className="text-xs font-heading font-semibold text-slate-500">
-              Kategori:
-            </label>
-            <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="text-xs font-heading font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer"
-            >
-              <option value="all">Semua Kategori</option>
-              <option value="Makanan">Makanan</option>
-              <option value="Minuman">Minuman</option>
-              <option value="Snack">Snack</option>
-            </select>
-          </div>
+          <Select
+            value={categoryFilter}
+            onChange={(value) => setCategoryFilter(value)}
+            options={[
+              { value: "all", label: "Semua Kategori" },
+              { value: "Makanan", label: "Makanan" },
+              { value: "Minuman", label: "Minuman" },
+              { value: "Snack", label: "Snack" },
+            ]}
+            placeholder="Kategori"
+            className="w-full"
+          />
 
           {/* Filter 2: Status Buka */}
-          <div className="p-3 bg-white rounded-2xl border border-slate-200 flex items-center justify-between">
-            <label className="text-xs font-heading font-semibold text-slate-500">
-              Status Buka:
-            </label>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="text-xs font-heading font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer"
-            >
-              <option value="all">Semua Status</option>
-              <option value="active">Buka / Aktif</option>
-              <option value="closed">Tutup</option>
-            </select>
-          </div>
+          <Select
+            value={statusFilter}
+            onChange={(value) => setStatusFilter(value)}
+            options={[
+              { value: "all", label: "Semua Status" },
+              { value: "active", label: "Buka / Aktif" },
+              { value: "closed", label: "Tutup" },
+            ]}
+            placeholder="Status Buka"
+            className="w-full"
+          />
 
           {/* Filter 3: Koneksi */}
-          <div className="p-3 bg-white rounded-2xl border border-slate-200 flex items-center justify-between">
-            <label className="text-xs font-heading font-semibold text-slate-500">
-              Koneksi Mesin:
-            </label>
-            <select
-              value={connectionFilter}
-              onChange={(e) => setConnectionFilter(e.target.value)}
-              className="text-xs font-heading font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer"
-            >
-              <option value="all">Semua Koneksi</option>
-              <option value="online">Online</option>
-              <option value="offline">Offline</option>
-            </select>
-          </div>
+          <Select
+            value={connectionFilter}
+            onChange={(value) => setConnectionFilter(value)}
+            options={[
+              { value: "all", label: "Semua Koneksi" },
+              { value: "online", label: "Online" },
+              { value: "offline", label: "Offline" },
+            ]}
+            placeholder="Koneksi Mesin"
+            className="w-full"
+          />
         </div>
 
         {/* Sort by (left) and Box / List view toggle (right) matching wireframe */}
         <div className="flex items-center justify-between gap-4 py-1">
           {/* Sort By matching wireframe */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-white border border-slate-200 text-xs font-heading">
-            <span className="text-slate-500 font-semibold">Sort by:</span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="bg-transparent font-bold text-slate-800 focus:outline-none cursor-pointer"
-            >
-              <option value="name">Nama Kantin (Urut 1 - 8)</option>
-              <option value="sales">Penjualan Tertinggi</option>
-              <option value="transactions">Transaksi Terbanyak</option>
-            </select>
-          </div>
+          <Select
+            value={sortBy}
+            onChange={(value) => setSortBy(value)}
+            options={[
+              { value: "name", label: "Nama Kantin (Urut 1 - 8)" },
+              { value: "sales", label: "Penjualan Tertinggi" },
+              { value: "transactions", label: "Transaksi Terbanyak" },
+            ]}
+            placeholder="Sort by"
+            className="w-auto min-w-[200px]"
+          />
 
           {/* Box / List view toggle matching wireframe */}
           <div className="flex items-center gap-1 p-1 bg-white rounded-2xl border border-slate-200">
@@ -268,7 +264,11 @@ export default function TenantsPage() {
             {canteens.map((canteen) => (
               <div
                 key={canteen.id}
-                className="rounded-3xl bg-white p-6 border border-[#D1D1D1]/60 shadow-xs hover:border-[#5CC0F7] transition flex flex-col justify-between"
+                onClick={() => {
+                  setDetailTenant(canteen);
+                  setDetailModalOpen(true);
+                }}
+                className="rounded-3xl bg-white p-6 border border-[#D1D1D1]/60 shadow-xs hover:border-[#5CC0F7] transition flex flex-col justify-between cursor-pointer"
               >
                 <div>
                   <div className="flex items-start justify-between gap-3 mb-2">
@@ -342,7 +342,11 @@ export default function TenantsPage() {
             {canteens.map((canteen) => (
               <div
                 key={canteen.id}
-                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/80 transition"
+                onClick={() => {
+                  setDetailTenant(canteen);
+                  setDetailModalOpen(true);
+                }}
+                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50/80 transition cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-2xl bg-[#D6EFFF] text-[#0284c7] font-heading font-bold text-xs flex items-center justify-center shrink-0">
@@ -423,20 +427,19 @@ export default function TenantsPage() {
           />
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
-              Kategori Menu Utama
-            </label>
-            <select
+            <Select
+              label="Kategori Menu Utama"
               value={newTenant.category}
-              onChange={(e) => setNewTenant({ ...newTenant, category: e.target.value })}
-              className="w-full rounded-2xl border border-[#D1D1D1] bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-[#5CC0F7] focus:outline-none"
-            >
-              <option value="Makanan Berat">Makanan Berat</option>
-              <option value="Mie & Bakso">Mie & Bakso</option>
-              <option value="Minuman Segar">Minuman Segar</option>
-              <option value="Snack & Gorengan">Snack & Gorengan</option>
-              <option value="Kue & Bakery">Kue & Bakery</option>
-            </select>
+              onChange={(value) => setNewTenant({ ...newTenant, category: value })}
+              options={[
+                { value: "Makanan Berat", label: "Makanan Berat" },
+                { value: "Mie & Bakso", label: "Mie & Bakso" },
+                { value: "Minuman Segar", label: "Minuman Segar" },
+                { value: "Snack & Gorengan", label: "Snack & Gorengan" },
+                { value: "Kue & Bakery", label: "Kue & Bakery" },
+              ]}
+              icon={<Utensils className="w-4 h-4" />}
+            />
           </div>
 
           <Input
@@ -468,6 +471,14 @@ export default function TenantsPage() {
           </div>
         </form>
       </Modal>
+    
+      {/* TENANT DETAIL MODAL */}
+      <TenantDetailModal
+        isOpen={detailModalOpen}
+        onClose={() => setDetailModalOpen(false)}
+        tenant={detailTenant}
+      />
     </AdminLayout>
   );
 }
+

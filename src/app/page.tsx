@@ -132,15 +132,145 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-slate-800 selection:bg-[#D6EFFF] pb-24 md:pb-0 overflow-x-hidden">
+    <div className="min-h-screen bg-[#FFFFFF] text-slate-800 selection:bg-[#D6EFFF] pb-24 md:pb-0 relative">
+      {/* Full Page Animated Background - Cleaner distribution */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+        
+        {/* ===== TOP SECTION (0-1000px) ===== */}
+        
+        {/* Large Gradient Blobs - Well spaced */}
+        <div className="absolute -top-10 -left-20 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-[#D6EFFF]/30 to-[#5CC0F7]/15 blur-3xl animate-float-slow" />
+        <div className="absolute top-40 -right-10 w-[350px] h-[350px] rounded-full bg-gradient-to-bl from-[#38bdf8]/20 to-transparent blur-3xl animate-float-slow animation-delay-2000" />
+        
+        {/* Dot Grid - Top Left */}
+        <div className="absolute top-32 left-16 w-56 h-56 animate-float-diagonal">
+          <div className="grid grid-cols-6 gap-4">
+            {Array.from({ length: 36 }).map((_, i) => (
+              <div key={`dot-tl-${i}`} className="w-1.5 h-1.5 rounded-full bg-[#5CC0F7]/25 animate-pulse-move" style={{ animationDelay: `${i * 0.1}s` }} />
+            ))}
+          </div>
+        </div>
+
+        {/* Dashed Circle - Top Right */}
+        <svg className="absolute top-60 right-40 w-44 h-44 animate-rotate-slow" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="80" fill="none" stroke="#5CC0F7" strokeWidth="2" strokeDasharray="10 10" opacity="0.25" />
+        </svg>
+
+        {/* Wavy Lines - Top Left */}
+        <svg className="absolute top-[450px] left-20 w-36 h-20 opacity-25 animate-float-horizontal" viewBox="0 0 200 100">
+          <path d="M0,50 Q25,30 50,50 T100,50 T150,50 T200,50" fill="none" stroke="#5CC0F7" strokeWidth="2.5">
+            <animate attributeName="d" dur="4s" repeatCount="indefinite"
+              values="M0,50 Q25,30 50,50 T100,50 T150,50 T200,50;
+                      M0,50 Q25,70 50,50 T100,50 T150,50 T200,50;
+                      M0,50 Q25,30 50,50 T100,50 T150,50 T200,50" />
+          </path>
+          <path d="M0,65 Q25,45 50,65 T100,65 T150,65 T200,65" fill="none" stroke="#5CC0F7" strokeWidth="2.5">
+            <animate attributeName="d" dur="4s" begin="0.5s" repeatCount="indefinite"
+              values="M0,65 Q25,45 50,65 T100,65 T150,65 T200,65;
+                      M0,65 Q25,85 50,65 T100,65 T150,65 T200,65;
+                      M0,65 Q25,45 50,65 T100,65 T150,65 T200,65" />
+          </path>
+        </svg>
+
+        {/* Small Elements - Top */}
+        <div className="absolute top-[380px] right-1/4 w-6 h-6 rounded-full border-2 border-[#38bdf8]/20 animate-bounce-subtle" />
+        <svg className="absolute top-80 right-16 w-16 h-16 opacity-15 animate-float" viewBox="0 0 100 100">
+          <path d="M10,10 L10,45 L45,45" fill="none" stroke="#5CC0F7" strokeWidth="3" strokeLinecap="round" />
+        </svg>
+
+        {/* ===== MIDDLE SECTION (1000-2000px) ===== */}
+        
+        {/* Large Gradient Blobs - Middle */}
+        <div className="absolute top-[1100px] right-20 w-[380px] h-[380px] rounded-full bg-gradient-to-tl from-[#D6EFFF]/35 to-transparent blur-3xl animate-float-slow animation-delay-3000" />
+        <div className="absolute top-[1500px] left-10 w-[420px] h-[420px] rounded-full bg-gradient-to-br from-[#5CC0F7]/25 to-transparent blur-3xl animate-float-slow animation-delay-1000" />
+
+        {/* Dot Grid - Middle Right */}
+        <div className="absolute top-[1250px] right-24 w-48 h-48 animate-wave-vertical">
+          <div className="grid grid-cols-5 gap-4">
+            {Array.from({ length: 25 }).map((_, i) => (
+              <div key={`dot-mr-${i}`} className="w-1.5 h-1.5 rounded-full bg-[#38bdf8]/20 animate-pulse-move" style={{ animationDelay: `${i * 0.12}s` }} />
+            ))}
+          </div>
+        </div>
+
+        {/* Dashed Circle - Middle Left */}
+        <svg className="absolute top-[1400px] left-32 w-52 h-52 animate-rotate-slow-reverse" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="85" fill="none" stroke="#38bdf8" strokeWidth="2" strokeDasharray="8 8" opacity="0.22" />
+        </svg>
+
+        {/* Wavy Lines - Middle Right */}
+        <svg className="absolute top-[1650px] right-28 w-36 h-20 opacity-22 animate-float-horizontal animation-delay-2000" viewBox="0 0 200 100">
+          <path d="M0,50 Q25,30 50,50 T100,50 T150,50 T200,50" fill="none" stroke="#38bdf8" strokeWidth="2.5">
+            <animate attributeName="d" dur="5s" repeatCount="indefinite"
+              values="M0,50 Q25,30 50,50 T100,50 T150,50 T200,50;
+                      M0,50 Q25,65 50,50 T100,50 T150,50 T200,50;
+                      M0,50 Q25,30 50,50 T100,50 T150,50 T200,50" />
+          </path>
+          <path d="M0,65 Q25,45 50,65 T100,65 T150,65 T200,65" fill="none" stroke="#38bdf8" strokeWidth="2.5">
+            <animate attributeName="d" dur="5s" begin="0.7s" repeatCount="indefinite"
+              values="M0,65 Q25,45 50,65 T100,65 T150,65 T200,65;
+                      M0,65 Q25,80 50,65 T100,65 T150,65 T200,65;
+                      M0,65 Q25,45 50,65 T100,65 T150,65 T200,65" />
+          </path>
+        </svg>
+
+        {/* Small Elements - Middle */}
+        <div className="absolute top-[1300px] left-1/3 w-14 h-1 bg-[#5CC0F7]/25 rounded-full animate-float-horizontal animation-delay-1000" />
+        <div className="absolute top-[1550px] right-1/4 w-7 h-7 rounded-full border-2 border-[#5CC0F7]/18 animate-bounce-subtle animation-delay-2000" />
+
+        {/* ===== BOTTOM SECTION (2000-3200px) ===== */}
+        
+        {/* Large Gradient Blobs - Bottom */}
+        <div className="absolute top-[2200px] left-1/4 w-[400px] h-[400px] rounded-full bg-gradient-to-tr from-[#38bdf8]/22 to-transparent blur-3xl animate-float-slow animation-delay-4000" />
+        <div className="absolute top-[2800px] right-16 w-[360px] h-[360px] rounded-full bg-gradient-to-bl from-[#D6EFFF]/30 to-transparent blur-3xl animate-float-slow animation-delay-2000" />
+
+        {/* Dot Grid - Bottom Left */}
+        <div className="absolute top-[2400px] left-20 w-52 h-52 animate-float-diagonal animation-delay-3000">
+          <div className="grid grid-cols-6 gap-3.5">
+            {Array.from({ length: 30 }).map((_, i) => (
+              <div key={`dot-bl-${i}`} className="w-1.5 h-1.5 rounded-full bg-[#D6EFFF]/35 animate-pulse-move" style={{ animationDelay: `${i * 0.11}s` }} />
+            ))}
+          </div>
+        </div>
+
+        {/* Dashed Circle - Bottom Right */}
+        <svg className="absolute top-[2650px] right-36 w-48 h-48 animate-rotate-slow" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="78" fill="none" stroke="#5CC0F7" strokeWidth="2" strokeDasharray="10 10" opacity="0.24" />
+        </svg>
+
+        {/* Wavy Lines - Bottom Center */}
+        <svg className="absolute top-[2950px] left-1/3 w-36 h-20 opacity-25 animate-float-horizontal animation-delay-3000" viewBox="0 0 200 100">
+          <path d="M0,50 Q25,30 50,50 T100,50 T150,50 T200,50" fill="none" stroke="#5CC0F7" strokeWidth="2.5">
+            <animate attributeName="d" dur="4.5s" repeatCount="indefinite"
+              values="M0,50 Q25,30 50,50 T100,50 T150,50 T200,50;
+                      M0,50 Q25,68 50,50 T100,50 T150,50 T200,50;
+                      M0,50 Q25,30 50,50 T100,50 T150,50 T200,50" />
+          </path>
+          <path d="M0,65 Q25,45 50,65 T100,65 T150,65 T200,65" fill="none" stroke="#5CC0F7" strokeWidth="2.5">
+            <animate attributeName="d" dur="4.5s" begin="0.6s" repeatCount="indefinite"
+              values="M0,65 Q25,45 50,65 T100,65 T150,65 T200,65;
+                      M0,65 Q25,83 50,65 T100,65 T150,65 T200,65;
+                      M0,65 Q25,45 50,65 T100,65 T150,65 T200,65" />
+          </path>
+        </svg>
+
+        {/* Small Elements - Bottom */}
+        <svg className="absolute top-[2500px] right-20 w-18 h-18 opacity-16 animate-wave-vertical animation-delay-1000" viewBox="0 0 100 100">
+          <path d="M10,10 L10,50 L50,50" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
+        </svg>
+        <div className="absolute top-[2750px] left-1/4 w-5 h-5 rounded-full bg-[#5CC0F7]/15 animate-bounce-subtle animation-delay-3000" />
+        <div className="absolute top-[3050px] right-1/3 w-12 h-1 bg-[#38bdf8]/22 rounded-full animate-float-horizontal animation-delay-4000" />
+
+      </div>
+
       {/* Floating Pill Navigation */}
       <FloatingNavbar />
 
       {/* =========================================================================
           1. HERO SECTION (Text Left, Phone Frame Right with Organic Pastel Blobs)
          ========================================================================= */}
-      <section className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center pt-28 pb-16 sm:pt-32 sm:pb-20 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <section className="relative min-h-[calc(100vh-80px)] flex flex-col justify-center pt-28 pb-16 sm:pt-32 sm:pb-20 px-4 sm:px-6 max-w-6xl mx-auto z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
           {/* Left Column: Text & CTA */}
           <div className="lg:col-span-6 text-left">
             {/* Pill tag matching reference */}
@@ -202,8 +332,8 @@ export default function LandingPage() {
           {/* Right Column: Phone Mockup with the User's Frame and Organic Pastel Blobs */}
           <div className="lg:col-span-6 flex justify-center relative">
             {/* Soft Organic Pastel Blobs behind the phone */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-br from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/50 rounded-[56px] -rotate-3 -z-10 blur-xs" />
-            <div className="absolute top-1/3 -right-6 w-36 h-36 bg-[#5CC0F7]/20 rounded-full blur-2xl -z-10" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-br from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/50 rounded-[56px] -rotate-3 blur-sm" style={{ zIndex: -1 }} />
+            <div className="absolute top-1/3 -right-6 w-36 h-36 bg-[#5CC0F7]/20 rounded-full blur-2xl" style={{ zIndex: -1 }} />
 
             {/* Motion Animated Card Wrapper */}
             <AnimatedCard hoverEffect={true} delay={0.15}>
@@ -342,8 +472,8 @@ export default function LandingPage() {
           3. SPLIT SECTION — Text Left, Cooperative Ledger Card Right
              (Referensi: "Crafting brand experiences" layout)
          ========================================================================= */}
-      <section id="fitur" className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto scroll-mt-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <section id="fitur" className="relative py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto scroll-mt-20 z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center relative z-10">
           {/* Left: Large headline + sub-text */}
           <div className="space-y-6">
             <AnimatedHeading
@@ -429,11 +559,11 @@ export default function LandingPage() {
           4. SPLIT SECTION — Phone Left, Service List Right
              (Referensi: "Deep into brand experience" layout — image kiri, list kanan)
          ========================================================================= */}
-      <section id="kantin" className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100 scroll-mt-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <section id="kantin" className="relative py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100 scroll-mt-20 z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center relative z-10">
           {/* Left: Phone showing WhatsApp Bot */}
           <div className="flex justify-center relative order-2 lg:order-1">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-tr from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/60 rounded-[56px] rotate-2 -z-10 blur-xs" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-tr from-[#D6EFFF] via-[#EBF7FF] to-[#D6EFFF]/60 rounded-[56px] rotate-2 blur-sm" style={{ zIndex: -1 }} />
 
             <AnimatedCard hoverEffect={true} delay={0.1}>
               <PhoneMockup>
@@ -536,7 +666,7 @@ export default function LandingPage() {
           5. CENTERED HEADING + VERTICAL STACKED CARDS
              (Referensi: "Helping brands thrive" layout — heading di tengah, item cards vertikal)
          ========================================================================= */}
-      <section className="py-20 sm:py-28 px-4 sm:px-6 max-w-5xl mx-auto border-t border-slate-100">
+      <section className="relative py-20 sm:py-28 px-4 sm:px-6 max-w-5xl mx-auto border-t border-slate-100 z-10">
         <div className="text-center mb-14">
           <AnimatedHeading
             as="h2"
@@ -647,11 +777,11 @@ export default function LandingPage() {
           7. SPLIT — Phone Left, Bullet Points Right (Payment Speed)
              (Referensi: tetap zig-zag, tapi lebih spaced)
          ========================================================================= */}
-      <section className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto">
+      <section className="relative py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Phone Left: Easy Payment Screen */}
           <div className="flex justify-center relative order-2 lg:order-1">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-br from-[#D6EFFF]/60 via-[#EBF7FF] to-[#D6EFFF]/40 rounded-[56px] -rotate-2 -z-10 blur-xs" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-br from-[#D6EFFF]/60 via-[#EBF7FF] to-[#D6EFFF]/40 rounded-[56px] -rotate-2 blur-sm" style={{ zIndex: -1 }} />
 
             <AnimatedCard hoverEffect={true} delay={0.1}>
               <PhoneMockup>
@@ -750,7 +880,7 @@ export default function LandingPage() {
       {/* =========================================================================
           8. HISTORY PHONE + TEXT (zig-zag: Text Left, Phone Right)
          ========================================================================= */}
-      <section className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100">
+      <section className="relative py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-100 z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Left: Text */}
           <div className="space-y-5">
@@ -774,7 +904,7 @@ export default function LandingPage() {
 
           {/* Right: Phone History View */}
           <div className="flex justify-center relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-tr from-[#EBF7FF] via-[#D6EFFF] to-[#EBF7FF] rounded-[56px] rotate-3 -z-10 blur-xs" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-96 sm:w-96 sm:h-[480px] bg-gradient-to-tr from-[#EBF7FF] via-[#D6EFFF] to-[#EBF7FF] rounded-[56px] rotate-3 blur-sm" style={{ zIndex: -1 }} />
 
             <AnimatedCard hoverEffect={true} delay={0.1}>
               <PhoneMockup>
@@ -845,7 +975,7 @@ export default function LandingPage() {
           9. CATATAN KOPERASI (Full-Width Pastel Band + Centered Paper Card)
              (Referensi: "Kind words, big ego boost" testimonial style)
          ========================================================================= */}
-      <section id="catatan" className="py-20 sm:py-28 px-4 sm:px-6 bg-gradient-to-b from-[#D6EFFF]/50 via-[#EBF7FF]/80 to-[#D6EFFF]/30 border-y border-[#5CC0F7]/20 scroll-mt-20">
+      <section id="catatan" className="relative py-20 sm:py-28 px-4 sm:px-6 bg-gradient-to-b from-[#D6EFFF]/50 via-[#EBF7FF]/80 to-[#D6EFFF]/30 border-y border-[#5CC0F7]/20 scroll-mt-20 z-10">
         <div className="max-w-3xl mx-auto text-center">
           <AnimatedHeading
             as="h2"
@@ -886,7 +1016,7 @@ export default function LandingPage() {
       {/* =========================================================================
           10. FAQ (Left Sticky Sidebar + Right Accordions)
          ========================================================================= */}
-      <section id="faq" className="py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto scroll-mt-20">
+      <section id="faq" className="relative py-20 sm:py-28 px-4 sm:px-6 max-w-6xl mx-auto scroll-mt-20 z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Sticky Sidebar */}
           <div className="lg:col-span-4 text-left">
