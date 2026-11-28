@@ -17,7 +17,7 @@ import Link from "next/link";
 import { StudentDetailModal } from "@/components/admin/StudentDetailModal";
 import { ClassLeaderTopUpModal } from "@/components/admin/ClassLeaderTopUpModal";
 
-export default function ClassDetailPage({ params }: { params: { className: string } }) {
+export default function ClassDetailPage({ params }: { params: Promise<{ className: string }> }) {
   const [students, setStudents] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [className, setClassName] = useState("");
@@ -32,10 +32,14 @@ export default function ClassDetailPage({ params }: { params: { className: strin
   const [topUpTargetStudent, setTopUpTargetStudent] = useState<User | null>(null);
 
   useEffect(() => {
-    const decoded = decodeURIComponent(params.className);
-    setClassName(decoded);
-    fetchStudents(decoded);
-  }, [params.className]);
+    const initClass = async () => {
+      const resolvedParams = await params;
+      const decoded = decodeURIComponent(resolvedParams.className);
+      setClassName(decoded);
+      fetchStudents(decoded);
+    };
+    initClass();
+  }, [params]);
 
   const fetchStudents = async (cls: string) => {
     setLoading(true);
