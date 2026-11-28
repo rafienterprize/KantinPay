@@ -170,11 +170,7 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
                 {filteredStudents.map((student) => (
                   <div
                     key={student.id}
-                    onClick={() => {
-                      setDetailStudent(student);
-                      setDetailModalOpen(true);
-                    }}
-                    className="px-6 py-4 grid grid-cols-12 items-center hover:bg-slate-50 transition cursor-pointer"
+                    className="px-6 py-4 grid grid-cols-12 items-center"
                   >
                     {/* Student Info */}
                     <div className="col-span-6 flex items-center gap-3">
@@ -223,8 +219,7 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
                         <Button
                           variant="primary"
                           size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
+                          onClick={() => {
                             setTopUpTargetStudent(student);
                             setTopUpModalOpen(true);
                           }}
@@ -237,8 +232,7 @@ export default function ClassDetailPage({ params }: { params: Promise<{ classNam
                       <Button
                         variant="primary"
                         size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={() => {
                           setDetailStudent(student);
                           setDetailModalOpen(true);
                         }}
