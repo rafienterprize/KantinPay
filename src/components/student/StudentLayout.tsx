@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -60,6 +60,9 @@ interface StudentLayoutProps {
   pendingTopUps?: ClassLeaderTopUpLog[];
 }
 
+// Module-level cache prevents sidebar text/role from blinking between route transitions
+let cachedStudentUser: StudentLayoutUser | null = null;
+
 export function StudentLayout({
   children,
   pageTitle = "Dashboard Siswa",
@@ -77,6 +80,18 @@ export function StudentLayout({
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [hasReadNotif, setHasReadNotif] = useState(false);
+  const [stableUser, setStableUser] = useState<StudentLayoutUser | null>(
+    user ?? cachedStudentUser
+  );
+
+  useEffect(() => {
+    if (user) {
+      cachedStudentUser = user;
+      setStableUser(user);
+    }
+  }, [user]);
+
+  const activeUser = user ?? stableUser;
 
   const menuItems = [
     {
@@ -95,15 +110,16 @@ export function StudentLayout({
       label: "Data Siswa",
       href: "/student/classmates",
       icon: Users,
-      badge: user?.className ? "Kelas" : "Siswa",
+      badge: activeUser?.className ? "Kelas" : "Siswa",
     },
   ];
 
   const pendingCount = pendingTopUps.filter((l) => l.status === "pending").length;
-  const rawNotificationCount = notifications.length + (user?.isClassLeader ? pendingCount : 0);
+  const rawNotificationCount = notifications.length + (activeUser?.isClassLeader ? pendingCount : 0);
   const notificationCount = hasReadNotif ? 0 : rawNotificationCount;
 
   const handleLogout = async () => {
+    cachedStudentUser = null;
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/login");
     router.refresh();
@@ -181,7 +197,7 @@ export function StudentLayout({
             {/* Top Navigation Items */}
             <div className="space-y-1.5 overflow-y-auto">
               <p className="px-3 py-1 text-[10px] font-heading font-semibold text-slate-400 uppercase tracking-wider">
-                {user?.isClassLeader ? "Menu Ketua Kelas" : "Menu Utama Siswa"}
+                {activeUser?.isClassLeader ? "Menu Ketua Kelas" : "Menu Utama Siswa"}
               </p>
 
               {menuItems.map((item) => {
@@ -225,16 +241,16 @@ export function StudentLayout({
               })}
 
               {/* Class Category Indicator Pill */}
-              {user?.className && (
+              {activeUser?.className && (
                 <div className="mt-4 mx-1 p-3 rounded-2xl bg-[#D6EFFF]/40 border border-[#5CC0F7]/30 space-y-1">
                   <div className="flex items-center gap-1.5 text-[10px] font-heading font-semibold text-[#0284c7] uppercase tracking-wider">
                     <GraduationCap className="w-3.5 h-3.5" />
                     <span>Kategori Kelas</span>
                   </div>
                   <p className="text-xs font-heading font-bold text-slate-900">
-                    {user.className}
+                    {activeUser.className}
                   </p>
-                  {user.isClassLeader && (
+                  {activeUser.isClassLeader && (
                     <span className="inline-flex items-center gap-1 text-[10px] font-heading font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
                       <Crown className="w-3 h-3" />
                       Ketua Kelas
@@ -277,7 +293,7 @@ export function StudentLayout({
                   <span>Account</span>
                 </div>
                 <span className="text-[10px] text-slate-400">
-                  {user?.isClassLeader ? "Ketua" : "Siswa"}
+                  {activeUser?.isClassLeader ? "Ketua" : "Siswa"}
                 </span>
               </button>
 
