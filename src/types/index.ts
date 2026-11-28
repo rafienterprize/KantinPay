@@ -11,6 +11,7 @@ export interface User {
   whatsappNumber: string;
   studentId?: string; // NIS / Nomor Induk Siswa
   className?: string; // Kelas
+  isClassLeader?: boolean; // Flag untuk ketua kelas
   balance: number;
   status: AccountStatus;
   createdAt: string;
@@ -67,6 +68,24 @@ export interface TopUpRecord {
   createdAt: string;
 }
 
+export interface ClassLeaderTopUpLog {
+  id: string;
+  classLeaderId: string;
+  classLeaderName: string;
+  className: string;
+  targetStudentId: string;
+  targetStudentName: string;
+  targetStudentNis: string;
+  amount: number;
+  previousBalance: number;
+  newBalance: number;
+  status: "pending" | "approved" | "rejected";
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
+  createdAt: string;
+}
+
 export type SettlementStatus = "pending" | "processing" | "settled";
 
 export interface MerchantSettlement {
@@ -88,7 +107,7 @@ export interface NotificationItem {
   userId: string;
   title: string;
   message: string;
-  type: "info" | "success" | "warning";
+  type: "info" | "success" | "warning" | "error";
   readAt?: string;
   createdAt: string;
 }
@@ -101,6 +120,7 @@ export interface SessionUser {
   balance?: number;
   studentId?: string;
   className?: string;
+  isClassLeader?: boolean;
   whatsappNumber?: string;
   canteenId?: string;
 }

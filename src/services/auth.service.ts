@@ -26,6 +26,7 @@ export const authService = {
       balance: user.balance,
       studentId: user.studentId,
       className: user.className,
+      isClassLeader: user.isClassLeader,
       whatsappNumber: user.whatsappNumber,
     };
 

@@ -5,6 +5,7 @@ import {
   MerchantSettlement,
   NotificationItem,
   TopUpRecord,
+  ClassLeaderTopUpLog,
 } from "@/types";
 import bcrypt from "bcryptjs";
 
@@ -34,6 +35,7 @@ const initialUsers: User[] = [
     whatsappNumber: "082199887701",
     studentId: "20241001",
     className: "XII SIJA 1",
+    isClassLeader: true,
     balance: 85000,
     status: "active",
     createdAt: "2026-01-15T09:00:00Z",
@@ -48,6 +50,7 @@ const initialUsers: User[] = [
     whatsappNumber: "082199887702",
     studentId: "20241002",
     className: "XII SIJA 2",
+    isClassLeader: true,
     balance: 120000,
     status: "active",
     createdAt: "2026-01-15T09:05:00Z",
@@ -94,6 +97,34 @@ const initialUsers: User[] = [
     status: "active",
     createdAt: "2026-01-16T08:45:00Z",
     updatedAt: "2026-01-16T08:45:00Z",
+  },
+  {
+    id: "usr-stu-5b",
+    fullName: "Rudi Hartono",
+    email: "rudi@kantinpay.sch.id",
+    passwordHash: defaultPasswordHash,
+    role: "student",
+    whatsappNumber: "082199887721",
+    studentId: "20241021",
+    className: "XII SIJA 1",
+    balance: 35000,
+    status: "active",
+    createdAt: "2026-01-16T08:50:00Z",
+    updatedAt: "2026-01-16T08:50:00Z",
+  },
+  {
+    id: "usr-stu-5c",
+    fullName: "Indah Permata",
+    email: "indah@kantinpay.sch.id",
+    passwordHash: defaultPasswordHash,
+    role: "student",
+    whatsappNumber: "082199887722",
+    studentId: "20241022",
+    className: "XII SIJA 1",
+    balance: 42000,
+    status: "active",
+    createdAt: "2026-01-16T08:55:00Z",
+    updatedAt: "2026-01-16T08:55:00Z",
   },
   {
     id: "usr-stu-6",
@@ -501,6 +532,7 @@ class DataStore {
   private topups: TopUpRecord[] = [];
   private settlements: MerchantSettlement[] = [...initialSettlements];
   private notifications: NotificationItem[] = [...initialNotifications];
+  private classLeaderTopUpLogs: ClassLeaderTopUpLog[] = [];
 
   // Users
   getUsers(): User[] {
@@ -780,6 +812,129 @@ class DataStore {
   // Notifications
   getNotifications(): NotificationItem[] {
     return [...this.notifications];
+  }
+
+  // Class Leader Top-Up Logs
+  getClassLeaderTopUpLogs(): ClassLeaderTopUpLog[] {
+    return [...this.classLeaderTopUpLogs];
+  }
+
+  getPendingClassLeaderTopUps(): ClassLeaderTopUpLog[] {
+    return this.classLeaderTopUpLogs.filter((log) => log.status === "pending");
+  }
+
+  createClassLeaderTopUpLog(data: Omit<ClassLeaderTopUpLog, "id" | "createdAt">): ClassLeaderTopUpLog {
+    const newLog: ClassLeaderTopUpLog = {
+      id: `cltop-${Date.now()}`,
+      ...data,
+      createdAt: new Date().toISOString(),
+    };
+    this.classLeaderTopUpLogs.unshift(newLog);
+
+    // Create notification for admin
+    this.notifications.unshift({
+      id: `notif-${Date.now()}`,
+      userId: "usr-admin-1", // Admin user ID
+      title: "Permintaan Top-Up dari Ketua Kelas",
+      message: `${data.classLeaderName} (Kelas ${data.className}) mengajukan top-up sebesar Rp${data.amount.toLocaleString("id-ID")} untuk ${data.targetStudentName} (NIS: ${data.targetStudentNis})`,
+      type: "info",
+      createdAt: new Date().toISOString(),
+    });
+
+    return newLog;
+  }
+
+  approveClassLeaderTopUp(logId: string, adminId: string): { success: boolean; message: string; log?: ClassLeaderTopUpLog } {
+    const log = this.classLeaderTopUpLogs.find((l) => l.id === logId);
+    if (!log) {
+      return { success: false, message: "Log tidak ditemukan" };
+    }
+
+    if (log.status !== "pending") {
+      return { success: false, message: "Log sudah diproses sebelumnya" };
+    }
+
+    // Get target student
+    const student = this.getUserById(log.targetStudentId);
+    if (!student || student.role !== "student") {
+      return { success: false, message: "Siswa tidak ditemukan" };
+    }
+
+    // Update student balance
+    student.balance += log.amount;
+    student.updatedAt = new Date().toISOString();
+
+    // Update log status
+    log.status = "approved";
+    log.approvedBy = adminId;
+    log.approvedAt = new Date().toISOString();
+
+    // Create notification for student
+    this.notifications.unshift({
+      id: `notif-${Date.now()}-student`,
+      userId: student.id,
+      title: "Top-Up Saldo Berhasil",
+      message: `Saldo sebesar Rp${log.amount.toLocaleString("id-ID")} berhasil ditambahkan oleh ketua kelas ${log.classLeaderName}. Saldo saat ini: Rp${student.balance.toLocaleString("id-ID")}`,
+      type: "success",
+      createdAt: new Date().toISOString(),
+    });
+
+    // Create notification for class leader
+    const classLeader = this.getUserById(log.classLeaderId);
+    if (classLeader) {
+      this.notifications.unshift({
+        id: `notif-${Date.now()}-leader`,
+        userId: classLeader.id,
+        title: "Top-Up Disetujui",
+        message: `Top-up untuk ${log.targetStudentName} sebesar Rp${log.amount.toLocaleString("id-ID")} telah disetujui oleh koperasi.`,
+        type: "success",
+        createdAt: new Date().toISOString(),
+      });
+    }
+
+    return {
+      success: true,
+      message: `Top-up untuk ${log.targetStudentName} sebesar Rp${log.amount.toLocaleString("id-ID")} berhasil disetujui!`,
+      log,
+    };
+  }
+
+  rejectClassLeaderTopUp(logId: string, adminId: string, reason?: string): { success: boolean; message: string; log?: ClassLeaderTopUpLog } {
+    const log = this.classLeaderTopUpLogs.find((l) => l.id === logId);
+    if (!log) {
+      return { success: false, message: "Log tidak ditemukan" };
+    }
+
+    if (log.status !== "pending") {
+      return { success: false, message: "Log sudah diproses sebelumnya" };
+    }
+
+    // Update log status
+    log.status = "rejected";
+    log.approvedBy = adminId;
+    log.approvedAt = new Date().toISOString();
+    if (reason) {
+      log.rejectionReason = reason;
+    }
+
+    // Create notification for class leader
+    const classLeader = this.getUserById(log.classLeaderId);
+    if (classLeader) {
+      this.notifications.unshift({
+        id: `notif-${Date.now()}-leader`,
+        userId: classLeader.id,
+        title: "Top-Up Ditolak",
+        message: `Top-up untuk ${log.targetStudentName} sebesar Rp${log.amount.toLocaleString("id-ID")} ditolak oleh koperasi.${reason ? ` Alasan: ${reason}` : ""}`,
+        type: "error",
+        createdAt: new Date().toISOString(),
+      });
+    }
+
+    return {
+      success: true,
+      message: `Top-up untuk ${log.targetStudentName} berhasil ditolak.`,
+      log,
+    };
   }
 }
 

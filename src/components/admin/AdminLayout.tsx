@@ -8,6 +8,7 @@ import { BottomTabBar } from "@/components/navigation/BottomTabBar";
 import { Modal } from "@/components/ui/Modal";
 import { Bell, User, CheckCircle2, ShieldCheck, Mail, Phone, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { ClassLeaderTopUpNotifications } from "./ClassLeaderTopUpNotifications";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -82,36 +83,51 @@ export function AdminLayout({
         onClose={() => setNotificationOpen(false)}
         title="Notifikasi Koperasi"
         description="Pemberitahuan aktivitas transaksi dan sistem KantinPay"
+        maxWidth="lg"
       >
-        <div className="space-y-3 py-2">
-          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-            <div className="flex items-center justify-between">
-              <Badge variant="primary" size="sm">
-                Rekap Harian
-              </Badge>
-              <span className="text-[10px] text-slate-400">12:30 WIB</span>
-            </div>
-            <h4 className="font-heading font-semibold text-xs text-slate-800">
-              Rekap Transaksi 8 Kantin Siap Dicairkan
-            </h4>
-            <p className="text-xs text-slate-500">
-              Total 8 kantin beroperasi penuh hari ini dengan akumulasi penjualan Rp2.200.000.
-            </p>
-          </div>
+        <div className="space-y-4 py-2">
+          {/* Class Leader Top-Up Notifications */}
+          <ClassLeaderTopUpNotifications />
 
-          <div className="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200/70 space-y-1">
-            <div className="flex items-center justify-between">
-              <Badge variant="success" size="sm">
-                Top-up
-              </Badge>
-              <span className="text-[10px] text-slate-400">08:30 WIB</span>
+          {/* Divider */}
+          <div className="border-t border-slate-200 my-4"></div>
+
+          {/* General Notifications */}
+          <div className="px-4">
+            <h3 className="font-heading font-bold text-sm text-slate-900 mb-3">
+              Notifikasi Umum
+            </h3>
+            <div className="space-y-3">
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+                <div className="flex items-center justify-between">
+                  <Badge variant="primary" size="sm">
+                    Rekap Harian
+                  </Badge>
+                  <span className="text-[10px] text-slate-400">12:30 WIB</span>
+                </div>
+                <h4 className="font-heading font-semibold text-xs text-slate-800">
+                  Rekap Transaksi 8 Kantin Siap Dicairkan
+                </h4>
+                <p className="text-xs text-slate-500">
+                  Total 8 kantin beroperasi penuh hari ini dengan akumulasi penjualan Rp2.200.000.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200/70 space-y-1">
+                <div className="flex items-center justify-between">
+                  <Badge variant="success" size="sm">
+                    Top-up
+                  </Badge>
+                  <span className="text-[10px] text-slate-400">08:30 WIB</span>
+                </div>
+                <h4 className="font-heading font-semibold text-xs text-slate-800">
+                  Top Up Siswa Berhasil
+                </h4>
+                <p className="text-xs text-slate-500">
+                  Top up saldo siswa Nurul Hidayah (XII SIJA 2) sebesar Rp100.000 sukses dicatat.
+                </p>
+              </div>
             </div>
-            <h4 className="font-heading font-semibold text-xs text-slate-800">
-              Top Up Siswa Berhasil
-            </h4>
-            <p className="text-xs text-slate-500">
-              Top up saldo siswa Nurul Hidayah (XII SIJA 2) sebesar Rp100.000 sukses dicatat.
-            </p>
           </div>
         </div>
       </Modal>

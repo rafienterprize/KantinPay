@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   LogOut,
   AlertTriangle,
+  GraduationCap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -42,6 +43,12 @@ export function AdminSidebar({
       href: "/admin/students",
       icon: Users,
       badge: "Siswa",
+    },
+    {
+      label: "Data Per Kelas",
+      href: "/admin/classes",
+      icon: GraduationCap,
+      badge: "Kelas",
     },
     {
       label: "Data Tenant",
