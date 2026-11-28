@@ -34,6 +34,7 @@ export function BottomTabBar({ role = "admin" }: BottomTabBarProps) {
 
   const studentTabs = [
     { label: "Dashboard", href: "/student", icon: LayoutDashboard },
+    { label: "Bayar", href: "/student/pay", icon: CreditCard },
     { label: "Data Siswa", href: "/student/classmates", icon: Users },
   ];
 
@@ -54,7 +55,12 @@ export function BottomTabBar({ role = "admin" }: BottomTabBarProps) {
 
   return (
     <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-[#D1D1D1]/60 shadow-[0_-2px_10px_rgba(0,0,0,0.04)] pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-1.5">
-      <div className={cn("grid h-12 max-w-lg mx-auto px-2", tabs.length === 2 ? "grid-cols-2" : "grid-cols-5")}>
+      <div
+        className={cn(
+          "grid h-12 max-w-lg mx-auto px-2",
+          tabs.length === 3 ? "grid-cols-3" : tabs.length === 2 ? "grid-cols-2" : "grid-cols-5"
+        )}
+      >
         {tabs.map((tab) => {
           const isActive =
             pathname === tab.href ||

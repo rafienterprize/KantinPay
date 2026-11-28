@@ -23,6 +23,7 @@ import {
   Calendar,
   Wallet,
   GraduationCap,
+  CreditCard,
 } from "lucide-react";
 import { cn, formatRupiah } from "@/lib/utils";
 import { Input } from "@/components/ui/Input";
@@ -83,6 +84,12 @@ export function StudentLayout({
       href: "/student",
       icon: LayoutDashboard,
       badge: null,
+    },
+    {
+      label: "Bayar Kantin",
+      href: "/student/pay",
+      icon: CreditCard,
+      badge: "Bayar",
     },
     {
       label: "Data Siswa",

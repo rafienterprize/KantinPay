@@ -15,6 +15,7 @@ import {
   Crown,
   Award,
   Clock,
+  CreditCard,
 } from "lucide-react";
 import { formatRupiah } from "@/lib/utils";
 import { Skeleton, SkeletonCard } from "@/components/ui/Skeleton";
@@ -421,6 +422,32 @@ export default function StudentDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column: Quick Actions + Top Spenders Leaderboard */}
           <div className="lg:col-span-5 space-y-4">
+            {/* Quick Action: Bayar Kantin via Website (Available for ALL students) */}
+            <div className="rounded-3xl bg-white p-6 border border-[#D1D1D1]/60 shadow-xs hover:border-[#5CC0F7] transition">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-heading font-bold text-[#0284c7] uppercase tracking-wider">
+                  Quick Action • Pembayaran Web
+                </span>
+                <div className="w-8 h-8 rounded-xl bg-[#D6EFFF] text-[#0284c7] flex items-center justify-center">
+                  <CreditCard className="w-4 h-4" />
+                </div>
+              </div>
+              <h4 className="font-heading font-bold text-base text-slate-900">
+                Bayar Kantin Lewat Website
+              </h4>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Bayar jajan langsung ke {canteenCount} kantin sekolah dari website tanpa harus lewat WhatsApp, lengkap dengan struk digital instan.
+              </p>
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                <Link
+                  href="/student/pay"
+                  className="inline-flex items-center text-xs font-heading font-semibold text-[#5CC0F7] hover:text-[#48b1eb]"
+                >
+                  <span>Buka Halaman Bayar Kantin</span>
+                </Link>
+              </div>
+            </div>
+
             {/* Quick Action for Ketua Kelas vs Siswa Biasa */}
             {user?.isClassLeader ? (
               <div className="rounded-3xl bg-white p-6 border border-[#D1D1D1]/60 shadow-xs hover:border-[#5CC0F7] transition">
